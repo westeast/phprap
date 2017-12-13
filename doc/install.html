@@ -86,6 +86,11 @@ RewriteRule ^(.*)$ index.php?r=/$1 [QSA,PT,L]
     <span class="hljs-string">try_files $uri $uri/ /index.php?r=$uri&$args</span>
 }</code></pre>
 
+                            <h4>虚拟主机</h4>
+                            <p>虚拟主机不能绑定域名到<code>public</code>目录，打开<code>public/index.php</code>文件，将<code>define('ROOT_PATH', __DIR__ . '/..')</code>修改为<code>define('ROOT_PATH', __DIR__)</code>，将<code>define('WEB_PATH', ROOT_PATH . '/public')</code>修改为<code>define('WEB_PATH', ROOT_PATH)</code>，然后将<code>public</code>目录里的文件全部移到根目录下(即<code>public</code>的上级目录)
+                            </p>
+
+
                             <p><a name="step5"></a></p>
                             <h3>运行安装程序</h3>
                             <p>打开浏览器，访问域名，会自动跳转到安装界面运行安装程序</p>

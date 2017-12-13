@@ -55,7 +55,7 @@
                             <h3>虚拟主机不能绑定域名到public目录怎么办?</h3>
                             <p>
                             <ul>
-                                <li>打开<code>public/index.php</code>文件，将<code>define('ROOT_PATH', __DIR__ . '/..')</code>修改为<code>define('ROOT_PATH', __DIR__ )</code>，将<code>define('WEB_PATH', ROOT_PATH . '/public')</code>修改为<code>define('WEB_PATH', ROOT_PATH)</code></li>
+                                <li>打开<code>public/index.php</code>文件，将<code>define('ROOT_PATH', __DIR__ . '/..')</code>修改为<code>define('ROOT_PATH', __DIR__)</code>，将<code>define('WEB_PATH', ROOT_PATH . '/public')</code>修改为<code>define('WEB_PATH', ROOT_PATH)</code></li>
                                 <li>将<code>public</code>目录里的文件全部移到根目录下(即<code>public</code>的上级目录)</li>
                             </ul>
                             </p>
