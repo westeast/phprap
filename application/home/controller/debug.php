@@ -15,6 +15,7 @@ class debug extends controller {
     {
         $api     = request::post('api', []);
         $request = request::post('request', []);
+        $header = request::post('header', []);
 
         if(!$url = $api['url']){
 
@@ -36,7 +37,7 @@ class debug extends controller {
             }
         }
 
-        $curl = new curl($url, $method, $data);
+        $curl = new curl($url, $method, $data, $header);
 
         if($info = $curl->getInfo()){
 
