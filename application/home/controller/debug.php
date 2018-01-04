@@ -15,6 +15,7 @@ class debug extends controller {
     {
         $api     = request::post('api', []);
         $request = request::post('request', []);
+        $header = request::post('header', []);
 
         if(!$url = $api['url']){
 
@@ -29,6 +30,7 @@ class debug extends controller {
         }
 
         $data = [];
+        $header_data = [];
 
         foreach ($request as $k=>$v){
             foreach ($v as $k1=>$v1){
@@ -36,7 +38,11 @@ class debug extends controller {
             }
         }
 
-        $curl = new curl($url, $method, $data);
+        foreach ($header['value'] as $k1=>$v1){
+            $header_data[] = $header['key'][$k1].':'.$v1;
+        }
+
+        $curl = new curl($url, $method, $data, $header_data);
 
         if($info = $curl->getInfo()){
 
