@@ -264,7 +264,7 @@
         });
 
         // 删除参数
-        $("body").on('click', '.js_deleteBtn',function () {
+        $("body").on('click', '.js_deleteBtn',function (event) {
             // 阻止事件冒泡
             event.stopPropagation();
             $(this).closest('tr').remove();
