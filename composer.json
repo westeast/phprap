@@ -1,29 +1,40 @@
 {
-    "name": "gouguoyin/gophp",
-    "description": "The GoPHP Framework.",
-    "keywords": ["php framework", "gophp framework"],
-    "license": "MIT",
+    "name": "yiisoft/yii2-app-basic",
+    "description": "Yii 2 Basic Project Template",
+    "keywords": ["phprap", "framework", "basic", "project template"],
+    "homepage": "http://www.phprap.com/",
     "type": "project",
-    "authors": [
-      {
-        "name": "gouguoyin",
-        "email": "phper@gouguoyin.cn"
-      }
-    ],
-    "homepage": "http://www.gocmf.com/",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+        "forum": "http://www.yiiframework.com/forum/",
+        "wiki": "http://www.yiiframework.com/wiki/",
+        "irc": "irc://irc.freenode.net/yii",
+        "source": "https://github.com/yiisoft/yii2"
+    },
+    "minimum-stability": "stable",
     "require": {
-        "smarty/smarty": "~3.1"
+        "php": ">=5.4.0",
+        "fxp/composer-asset-plugin": "^1.2.0",
+        "yiisoft/yii2": "~2.0.5",
+        "yiisoft/yii2-swiftmailer": "~2.0.0",
+        "yiisoft/yii2-smarty": "^2.0",
+        "php-curl-class/php-curl-class": "^8.0"
     },
-    "autoload": {
-      "psr-4": {
-        "app\\": "application/",
-        "gophp\\": "gophp/library/"
-      }
+    "require-dev": {
+        "yiisoft/yii2-debug": "~2.0.0",
+        "yiisoft/yii2-gii": "~2.0.0"
     },
-    "repositories": {
-       "packagist": {
-          "type": "composer",
-          "url": "https://packagist.phpcomposer.com"
+
+    "config": {
+        "process-timeout": 1800
+    },
+
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         }
-    }
+    ]
+
 }

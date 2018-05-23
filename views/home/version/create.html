@@ -1,0 +1,148 @@
+{{include_file name='home/public/header' title='版本管理'}}
+<style>
+    body {
+        background-color: #ffffff;
+    }
+    .container {
+        min-height: 200px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <!-- /.row -->
+    <div class="row">
+        <form id="js_addVersionForm" role="form" action="{{url('')}}" method="post">
+            <input type="hidden" name="csrf-phprap" value="{{csrf_token()}}" />
+
+            {{if $version->id}}
+            <div class="form-group">
+                <label class="control-label">版本名称</label>
+                <input type="text" class="form-control js_name" name="StoreVersion[name]" value="{{$version->name}}" placeholder="由数字和小数点组成，如1.0" datatype="version" nullmsg="请输入初始版本号" errormsg="版本号不合法">
+            </div>
+
+            <div class="form-group">
+                <label>基于版本</label>
+                <input type="text" readonly class="form-control" datatype="*1-250" value="{{if $version->parent_id}}{{$version->parent->name}}{{else}}初始版本{{/if}}">
+            </div>
+
+            {{else}}
+            <div class="form-group">
+                <label class="control-label">版本名称</label>
+                <input type="text" class="form-control js_name" name="StoreVersion[name]" value="{{$version->nextName}}" placeholder="由数字和小数点组成，如1.0" datatype="version" nullmsg="请输入初始版本号" errormsg="版本号不合法">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">基于版本</label>
+
+                <div class="input-group">
+
+                    <input type="text" class="form-control js_selectVersionBtn" placeholder="请输入要复制的版本号，支持模糊查询" datatype="*1-50" nullmsg="请输入要复制的版本号" value="{{$version->project->lastVersion->name}}">
+                    <input class="js_versionId" type="hidden" name='StoreVersion[parent_id]' datatype="n" nullmsg="请选择要复制的版本号" value="">
+
+                    <span class="input-group-btn">
+                        <button class="btn btn-default js_cleanVersionBtn" type="button" data-toggle="tooltip" data-title="清空"><i class="fa fa-times"></i>
+                        </button>
+                    </span>
+                </div>
+
+            </div>
+
+            {{/if}}
+
+            <div class="form-group">
+                <label class="control-label">版本描述</label>
+                <textarea class="form-control" rows="3" placeholder="版本更新摘要，必填" datatype="*1-250" nullmsg="请输入版本描述" name="StoreVersion[remark]">{{$version->remark}}</textarea>
+            </div>
+
+            <input type="hidden" id="js_submit" value="提交">
+
+        </form>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#wrapper -->
+<script src="{{STATIC_URL}}/plugins/bootstrap/js/bootstrap3-typeahead.min.js"></script>
+
+<script>
+
+    $(function(){
+
+        var selectVersionBtn = $('.js_selectVersionBtn');
+        var versionIdInput   = $(".js_versionId");
+
+        //选择版本
+        selectVersionBtn.typeahead({
+            autoSelect: true,
+            source: function (name, process) {
+
+                var url = "{{url('home/version/select', ['project_id' => $version->project_id])}}";
+
+                $.get(url, { "name": name }, function (data) {
+
+                    return process(data);
+                });
+
+            },
+            afterSelect: function (item) {
+                versionIdInput.val(item.id);
+                selectVersionBtn.attr("readonly","readonly");
+            },
+
+            items: 4, //显示8条
+            delay: 100, //延迟时间
+
+        });
+
+        // 清除已选
+        $('.js_cleanVersionBtn').click(function () {
+            versionIdInput.val('');
+            selectVersionBtn.removeAttr("readonly").val('').focus();
+        });
+
+        // 添加项目表单验证
+        $("#js_addVersionForm").Validform({
+
+            tiptype:function(msg,o){
+
+                if(!o.obj.is("form")){
+
+                    if(3 == o.type){
+                        alert(msg, 'error');
+                    }
+
+                }
+            },
+
+            label:"label",
+
+            btnSubmit: '#js_submit',
+
+            tipSweep:true,
+
+            ajaxPost:true,
+
+            callback:function(json){
+
+                if(200 == json.code){
+                    alert(json.msg, 'success', function () {
+                        parent.location.reload();
+                    });
+                }else{
+                    if(json.field == 'name'){
+                        $(".js_name").focus();
+                    }
+                    alert(json.msg, 'error');
+                }
+
+            }
+        });
+
+    });
+
+</script>
+
+{{include_file name='home/public/footer'}}

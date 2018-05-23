@@ -1,0 +1,94 @@
+{{include_file name='home/public/header' title='模块管理'}}
+<style>
+    body {
+        background-color: #ffffff;
+    }
+    .container {
+        min-height: 200px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <!-- /.row -->
+    <div class="row">
+        <form id="js_addModuleForm" role="form" action="{{url('')}}" method="post">
+
+            <input type="hidden" name="csrf-phprap" value="{{csrf_token()}}" />
+
+            <div class="form-group">
+                <label class="control-label">模块名称</label>
+                <input type="text" class="form-control js_title" name="StoreModule[title]" value="{{$module->title}}" placeholder="必填" datatype="*" nullmsg="请输入模块名称">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">模块描述</label>
+                <textarea class="form-control js_remark" name="StoreModule[remark]" placeholder="必填" datatype="*1-250" nullmsg="请输入模块描述">{{$module->remark}}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">模块排序
+                    <a data-toggle="tooltip" data-placement="right" title="排序数字越大越靠前，相同数字越先创建越靠前" class="btn-show-tips">
+                        <i class="fa fa-info-circle"></i>
+                    </a>
+                </label>
+                <input type="text" class="form-control js_sort" name="StoreModule[sort]" value="{{$module->sort|default:0}}" placeholder="排序数字越大越靠前" datatype="n" nullmsg="请输入排序数字" errormsg="必须是数字">
+            </div>
+
+            <input type="hidden" id="js_submit" value="提交">
+
+        </form>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#wrapper -->
+
+<script>
+
+    $(function(){
+
+        // 添加表单验证
+        $("#js_addModuleForm").Validform({
+
+
+            tiptype:function(msg,o){
+
+                if(!o.obj.is("form")){
+
+                    if(3 == o.type){
+                        alert(msg, 'error');
+                    }
+
+                }
+            },
+
+            label:"label",
+
+            btnSubmit: '#js_submit',
+
+            tipSweep:true,
+
+            ajaxPost:true,
+
+            callback:function(json){
+
+                if(200 == json.code){
+                    alert(json.msg, 'success', function () {
+                        parent.location.reload();
+                    });
+                }else{
+
+                    alert(json.msg, 'error');
+                }
+
+            }
+        });
+
+    });
+
+</script>
+
+{{include_file name='home/public/footer'}}

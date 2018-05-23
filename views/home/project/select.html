@@ -1,0 +1,243 @@
+{{include_file name='home/public/header' title='选择项目'}}
+
+<style>
+
+    .panel-body {
+        height: 80px;
+        overflow: hidden;
+    }
+
+    .panel-footer {
+        font-size: 12px;
+        padding: 10px 15px;
+        background-color: #f5f5f5;
+        border-top: 1px solid #ddd;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        height: 40px;
+    }
+
+    .project-add,.project-search {
+        height: 160px;
+        overflow: hidden;
+        text-align:center;
+        line-height:120px;
+        font-size: 36px;
+    }
+
+    .panel:hover  {
+        background-color:#EFEFEF;
+        cursor: pointer;
+        background:#fff;
+        color:#333;
+        filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);/*ie*/
+        -moz-box-shadow: 2px 2px 10px #909090;/*firefox*/
+        -webkit-box-shadow: 2px 2px 10px #909090;/*safari或chrome*/
+        box-shadow:2px 2px 10px #909090;/*opera或ie9*/
+    }
+    .head-btn {
+        float: right;
+    }
+    .head-btn a {
+        text-decoration : none;
+        margin: 0 0 0 10px;
+    }
+
+    #page-wrapper {
+        position: inherit;
+        margin: 0;
+        padding: 0 30px;
+        border-left: 1px solid #e7e7e7;
+    }
+    .drag-sort{
+        cursor: move;
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <div class="nav-box">
+    {{include_file name='home/public/nav'}}
+    </div>
+    <!-- Page Content -->
+    <div id="page-wrapper" style="min-height: 680px;">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">我创建的项目</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+
+            <!-- /.col-lg-4 -->
+            {{foreach $model->MyCreated as $model}}
+            <div class="col-lg-3 view-project js_viewProject pannel-project" data-url="{{url('home/project/show', ['token' => $model->lastVersion->token])}}">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <span class="head-title">
+                        <!--<a href="javascript:void(0);" class="drag-sort fa hidden-xs fa-navicon"></a>-->
+                         {{$model->title}}
+                    </span>
+                        <span class="head-btn">
+                            <a class="fa hidden-xs fa-pencil" data-toggle="tooltip" data-placement="top" data-modal="#js_addProjectModal"data-height="380" data-title="编辑项目" data-src="{{url('update', ['id' => $model->id])}}"></a>
+
+                            <a class="fa hidden-xs fa-trash-o" data-toggle="tooltip" data-placement="top" data-modal="#js_deleteProjectModal" data-height="230" data-title="删除项目" data-src="{{url('delete', ['id' => $model->id])}}"></a>
+
+                            <a class="fa hidden-xs fa-exchange" data-toggle="tooltip" data-placement="top" data-title="转让项目" data-url="{{url('transfer', ['id' => $model->id])}}"></a>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <p>{{$model->remark}}</p>
+                    </div>
+                    <div class="panel-footer">
+                        <span class="fl"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{$model->creater->name}}</span>
+                        <span class="fr"><i class="fa fa-history fa-fw" aria-hidden="true"></i> {{$model->friendUpdateAt}}更新</span>
+                    </div>
+                </div>
+            </div>
+            {{/foreach}}
+
+            <div class="col-lg-3 hidden-xs" data-modal="#js_addProjectModal" data-height="380" data-title="添加项目" data-src="{{url('create')}}">
+                <div class="panel panel-default">
+
+                    <div class="panel-body project-add">
+                        <p class="fa fa-plus">添加项目</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">我加入的项目</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+        <div class="row">
+
+
+            <div class="col-lg-3">
+                <div class="panel panel-default">
+
+                    <div class="panel-body project-search js_searchProject">
+                        <p class="fa fa-search">搜索项目</p>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.col-lg-4 -->
+
+            <!-- /#page-wrapper -->
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 添加/编辑项目模态框 -->
+<div class="modal fade" id="js_addProjectModal" tabindex="1" role="dialog">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">编辑项目</h4>
+            </div>
+            <div class="modal-body">
+
+                <iframe scrolling="no" src=""></iframe>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary js_submit">提交</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 删除项目模态框 -->
+<div class="modal fade" id="js_deleteProjectModal" tabindex="2" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form role="form" action="" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">确定删除此项目吗？</h4>
+                </div>
+                <div class="modal-body">
+
+                    <iframe scrolling="no" src=""></iframe>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-danger js_submit">删除</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+    </div><!-- /.modal-dialog -->
+</div>
+
+<!-- 转让项目模态框 -->
+<div class="modal fade" id="js_transferProjectModal" tabindex="-9" role="dialog">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">转让项目</h4>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="js_transferProjectIframe" scrolling="no" src=""></iframe>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary js_submit">提交</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    $(function(){
+
+        //查看项目
+        $(".js_viewProject").click(function (event) {
+
+            event.stopPropagation();
+            window.location.href = $(this).data('url');
+
+        });
+
+        //搜索项目
+        $(".js_searchProject").click(function(){
+
+            window.location.href = "{{url('project/search')}}";
+
+        });
+
+    });
+</script>
+
+{{include_file name='home/public/footer'}}

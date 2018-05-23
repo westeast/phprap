@@ -1,0 +1,32 @@
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+
+        <ul class="nav" id="side-menu">
+
+            <li>
+                <a href="{{url('admin/home/index')}}" {{if $active == 'home'}}class="active"{{/if}}><i class="fa fa-home fa-fw"></i> 管理主页</a>
+            </li>
+
+            <li>
+                <a href="{{url('project')}}" {{if $active == 'confi1g'}}class="active"{{/if}}><i class="fa fa-folder-open fa-fw"></i> 项目管理</a>
+            </li>
+            <li>
+                <a href="{{url('admin/member')}}" {{if $active == 'member'}}class="active"{{/if}}><i class="fa fa-user fa-fw"></i> 用户管理</a>
+            </li>
+
+            <li>
+                <a href="{{url('history/login')}}" {{if $active == 'config3'}}class="active"{{/if}}><i class="fa fa-history fa-fw"></i> 登录历史</a>
+            </li>
+
+            <li>
+                <a href="{{url('admin//db/index')}}" {{if $active == 'config4'}}class="active"{{/if}}><i class="fa fa-database fa-fw"></i> 数据备份</a>
+            </li>
+
+            <li>
+                <a href="{{url('admin/setting/base')}}" {{if $active == 'config'}}class="active"{{/if}}><i class="fa fa-gear fa-fw"></i> 系统设置</a>
+            </li>
+
+        </ul>
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>

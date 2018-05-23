@@ -1,0 +1,253 @@
+{{include_file name='home/public/header' title='项目主页'}}
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    {{include_file name='home/public/nav' sidebar='home/project/sidebar'}}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-header">
+                    <h1>项目主页 </h1>
+                    <div class="opt-btn">
+
+                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_addProjectBtn" data-toggle="tooltip" title="编辑项目" data-placement="bottom" data-modal="#js_addProjectModal" data-title="编辑项目" data-height="380" data-src="{{url('update', ['id' => $project->id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
+
+                        <a href="" class="btn hidden-xs btn-sm btn-warning" data-toggle="tooltip" title="导出当前版本" data-placement="bottom"><i class="fa fa-fw fa-download"></i>导出</a>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+
+            <div class="col-lg-12">
+
+                <div class="panel panel-default">
+
+                    {{include_file name='home/project/tab'}}
+
+                    <div class="panel-body">
+                        <div class="row">
+
+                            <div class="col-lg-12">
+
+                                <!-- /.panel -->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-bar-chart-o fa-fw"></i> 项目信息
+
+                                    </div>
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <p class="text-muted"><label>项目名称：</label>{{$project->title}}</p>
+                                                <p class="text-muted"><label>项目创建人：</label>{{$project->creater->name}}({{$project->creater->email}})</p>
+                                                <p class="text-muted"><label>搜索状态：</label>{{$project->allowSearchText}}</p>
+                                                <p class="text-muted"><label>创建时间：</label>{{$project->created_at}}</p>
+                                                <p class="text-muted"><label>更新时间：</label>{{$project->updated_at}}</p>
+
+                                                <p class="text-muted"><label>项目描述：</label><span style="word-break:break-all">{{$project->remark}}</span></p>
+                                            </div>
+                                            <!-- /.col-lg-4 (nested) -->
+                                            <div class="col-lg-6">
+                                                <div id="total-project" style="height:200px;"></div>
+
+                                            </div>
+                                            <!-- /.col-lg-8 (nested) -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+                                <!-- /.panel -->
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-lg-12">
+
+                                <!-- /.panel -->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-bar-chart-o fa-fw"></i> 版本信息
+
+                                    </div>
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                {{$parent_name = $project->currentVersion->parent->name}}
+                                                <p class="text-muted"><label>当前版本：</label>
+                                                    V{{$project->currentVersion->name}}
+
+                                                    {{if $project->currentVersion->parent->id == 0}}
+                                                    (<code>初始版本</code>)
+                                                    {{/if}}
+                                                </p>
+                                                <p class="text-muted"><label>基于版本：</label>
+                                                    {{if $parent_name}}
+                                                    V{{$parent_name}}
+                                                    {{else}}
+                                                    初始版本
+                                                    {{/if}}
+                                                </p>
+                                                <p class="text-muted"><label>版本创建人：</label>{{$project->currentVersion->creater->name}}({{$project->currentVersion->creater->email}})</p>
+                                                <p class="text-muted"><label>创建时间：</label>{{$project->currentVersion->created_at}}</p>
+                                                <p class="text-muted"><label>更新时间：</label>{{$project->currentVersion->updated_at}}</p>
+
+                                                <p class="text-muted"><label>版本描述：</label><span style="word-break:break-all">{{$project->currentVersion->remark}}</span></p>
+                                            </div>
+                                            <!-- /.col-lg-4 (nested) -->
+                                            <div class="col-lg-6">
+                                                <div id="total-version" style="height:200px;"></div>
+
+                                            </div>
+                                            <!-- /.col-lg-8 (nested) -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+                                <!-- /.panel -->
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+        <!-- /.row -->
+
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<hr>
+<p class="text-center">{{config('copyright')}}</p>
+
+<!-- 编辑项目模态框 -->
+<div class="modal fade" id="js_addProjectModal" tabindex="-9" role="dialog">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">编辑项目</h4>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="js_addProjectIframe" scrolling="no" src="{{url('project/create', ['id' => $project->id])}}"></iframe>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary js_submit">提交</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="http://capital.juzifenqi.com/static/js/echarts.min.js?v=1.0"></script>
+
+<script>
+    $(function(){
+
+        // 基于准备好的dom，初始化echarts实例
+        var totalProject = echarts.init(document.getElementById('total-project'));
+
+        var option = {
+
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series : [
+                {
+                    name: '数据统计',
+                    type: 'pie',
+                    radius : '85%',
+                    center: ['40%', '50%'],
+                    data:[
+                        {value:335, name:'版本数量'},
+                        {value:310, name:'环境数量'},
+                        {value:234, name:'模块数量'},
+                        {value:135, name:'接口数量'},
+                        {value:1548, name:'成员数量'}
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        totalProject.setOption(option);
+
+        // 基于准备好的dom，初始化echarts实例
+        var totalVersion = echarts.init(document.getElementById('total-version'));
+
+        var option = {
+
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series : [
+                {
+                    name: '数据统计',
+                    type: 'pie',
+                    radius : '85%',
+                    center: ['40%', '50%'],
+                    data:[
+                        {value:335, name:'版本数量'},
+                        {value:310, name:'环境数量'},
+                        {value:234, name:'模块数量'},
+                        {value:135, name:'接口数量'},
+                        {value:1548, name:'成员数量'}
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        totalVersion.setOption(option);
+
+    });
+
+</script>
+
+
+{{include_file name='home/public/footer'}}
