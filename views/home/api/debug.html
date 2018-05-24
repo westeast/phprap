@@ -303,19 +303,8 @@
     </div><!-- /.modal-dialog -->
 </div>
 
-<script src="{{STATIC_URL}}/plugins/bootstrap/js/bootstrap3-typeahead.min.js"></script>
 <script>
-    var selectHeader = function () {
-        var selectMemberBtn = $('.js_selectHeaderBtn');
-        var localArrayData = ['Accept', 'Accept-Charset', 'Accept-Encoding', 'Accept-Language', 'Accept-Ranges', 'Authorization', 'Cache-Control', 'Connection','Cookie','Content-Length','Content-Type','Referer','User-Agent'];
 
-        selectMemberBtn.typeahead({
-            source: localArrayData,
-            items: 8, //显示8条
-            delay: 100, //延迟时间
-
-        });
-    }
 
     $(function () {
 
@@ -396,8 +385,6 @@
 
         });
 
-        //选择header
-        selectHeader();
     });
 </script>
 {{include_file name='home/public/footer'}}

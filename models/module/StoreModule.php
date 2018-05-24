@@ -19,7 +19,7 @@ class StoreModule extends Module
         return [
             [['project_id', 'version_id', 'title'], 'required', 'on' => ['create', 'update']],
             [['project_id', 'version_id', 'creater_id', 'status', 'sort'], 'integer'],
-            [['title', 'remark'], 'string', 'max' => 255],
+            [['title', 'remark'], 'string', 'max' => 50, 'message' => '项目标题不能超过50个字符'],
             ['title', 'validateTitle'],
             [['created_at', 'updated_at'], 'safe'],
             [['created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],

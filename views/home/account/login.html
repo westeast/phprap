@@ -60,7 +60,7 @@
         </div>
 
         <hr>
-        <p class="text-center">{{config('site_copyright')}}</p>
+        <p class="text-center">{{config('copyright')}}</p>
     </div>
 
     <script>
@@ -90,6 +90,7 @@
             });
 
             // 登录框验证
+            var submitObj = $(".js_submit");
             $("#js_loginForm").Validform({
 
                 tiptype:function(msg,o){
@@ -112,17 +113,25 @@
 
                 ajaxPost:true,
 
+                beforeSubmit: function () {
+
+                    submitObj.attr("disabled", "disabled");
+                },
+
                 callback:function(json){
 
                     if(200 == json.code){
+
                         alert(json.msg, 'success', function () {
                             window.location.reload();
                         });
+
                     }else{
+
                         reloadCode();
+                        submitObj.removeAttr("disabled");
                         alert(json.msg, 'error');
                     }
-
 
                 }
             });
@@ -132,24 +141,4 @@
 
     </script>
 
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{{STATIC_URL}}/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!--<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
-    <script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
-
-    <script src="{{STATIC_URL}}/plugins/artDialog/dist/dialog.js"></script>
-
-    <script src="{{STATIC_URL}}/plugins/validform/datatype.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="{{STATIC_URL}}/js/app.js?v={{config('site_version')}}"></script>
-
-
-</body>
-
-</html>
+    {{include_file name='home/public/footer'}}

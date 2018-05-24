@@ -182,7 +182,7 @@ textarea {resize: none;} /*禁止拖拽*/
         margin-top: 51px;
     }
     #page-wrapper {
-        min-height: 620px;
+        min-height: 600px;
         position: inherit;
         margin: 0 0 0 250px;
         padding: 0 30px;
