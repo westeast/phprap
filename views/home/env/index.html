@@ -114,6 +114,9 @@
             confirm('您确定要删除该环境吗？',function () {
                 var url = thisObj.data('url');
                 var csrf = "{{csrf_token()}}";
+
+                thisObj.attr("disabled", "disabled");
+
                 $.post(url,{ 'csrf-phprap':csrf }, function (json) {
 
                     if(200 == json.code){
@@ -124,7 +127,9 @@
 
                     }else{
 
+                        thisObj.removeAttr("disabled");
                         alert(json.msg, 'error');
+
                     }
                 });
             });

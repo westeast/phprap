@@ -58,8 +58,9 @@
     $(function(){
 
         // 添加项目表单验证
+        var modalObj  = $(window.parent.document).find('#js_addEnvModal');
+        var submitObj = modalObj.find(":submit");
         $("#js_addEnvForm").Validform({
-
 
             tiptype:function(msg,o){
 
@@ -80,15 +81,24 @@
 
             ajaxPost:true,
 
+            beforeSubmit: function () {
+
+                submitObj.attr("disabled", "disabled");
+            },
+
             callback:function(json){
 
                 if(200 == json.code){
+
                     alert(json.msg, 'success', function () {
                         parent.location.reload();
                     });
+
                 }else{
 
+                    submitObj.removeAttr("disabled");
                     alert(json.msg, 'error');
+
                 }
 
             }
