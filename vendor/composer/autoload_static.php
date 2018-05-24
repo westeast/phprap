@@ -4,39 +4,105 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit30f134d1f77d6850c0259a142c1864c4
+class ComposerStaticInit64ef05c9fe4d23466906586e3f2963af
 {
     public static $files = array (
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'f084d01b0a599f67676cffef638aa95b' => __DIR__ . '/..' . '/smarty/smarty/libs/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'g' => 
+        'y' => 
         array (
-            'gophp\\' => 6,
+            'yii\\swiftmailer\\' => 16,
+            'yii\\smarty\\' => 11,
+            'yii\\gii\\' => 8,
+            'yii\\debug\\' => 10,
+            'yii\\composer\\' => 13,
+            'yii\\bootstrap\\' => 14,
+            'yii\\' => 4,
         ),
-        'a' => 
+        'c' => 
         array (
-            'app\\' => 4,
+            'cebe\\markdown\\' => 14,
+        ),
+        'F' => 
+        array (
+            'Fxp\\Composer\\AssetPlugin\\' => 25,
+        ),
+        'C' => 
+        array (
+            'Curl\\' => 5,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'gophp\\' => 
+        'yii\\swiftmailer\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/gophp/library',
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-swiftmailer',
         ),
-        'app\\' => 
+        'yii\\smarty\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/application',
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-smarty/src',
+        ),
+        'yii\\gii\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-gii/src',
+        ),
+        'yii\\debug\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-debug',
+        ),
+        'yii\\composer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-composer',
+        ),
+        'yii\\bootstrap\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-bootstrap/src',
+        ),
+        'yii\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2',
+        ),
+        'cebe\\markdown\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cebe/markdown',
+        ),
+        'Fxp\\Composer\\AssetPlugin\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fxp/composer-asset-plugin',
+        ),
+        'Curl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-curl-class/php-curl-class/src/Curl',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'H' => 
+        array (
+            'HTMLPurifier' => 
+            array (
+                0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
+            ),
+        ),
+        'D' => 
+        array (
+            'Diff' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpspec/php-diff/lib',
+            ),
         ),
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit30f134d1f77d6850c0259a142c1864c4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit30f134d1f77d6850c0259a142c1864c4::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit64ef05c9fe4d23466906586e3f2963af::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit64ef05c9fe4d23466906586e3f2963af::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit64ef05c9fe4d23466906586e3f2963af::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }
