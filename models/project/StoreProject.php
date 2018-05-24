@@ -16,8 +16,6 @@ use app\models\Project;
  * @property string $remark 项目备注
  * @property int $allow_search 是否允许搜索
  * @property int $status 启用状态
- * @property string $created_at
- * @property string $updated_at
  */
 class StoreProject extends Project
 {

@@ -46,7 +46,7 @@ class Project extends Model
      */
     public function getCreater()
     {
-        return $this->hasOne(User::className(),['id'=>'creater_id'])->orderBy(['id' => SORT_DESC]);
+        return $this->hasOne(User::className(),['id'=>'creater_id']);
     }
 
     /**
@@ -208,20 +208,24 @@ class Project extends Model
      * 判断是否是项目创建者
      * @return bool
      */
-    public function isCreater()
+    public function isCreater($user_id = 0)
     {
 
-        return $this->creater_id == Yii::$app->user->identity->id ? true : false;
+        $user_id = $user_id ? $user_id : Yii::$app->user->identity->id;
+
+        return $this->creater_id == $user_id ? true : false;
     }
 
     /**
      * 判断是否是项目参与者
      * @return bool
      */
-    public function isJoiner()
+    public function isJoiner($user_id = 0)
     {
 
-        $query = Member::find()->where(['project_id' => $this->id, 'user_id' => Yii::$app->user->identity->id]);
+        $user_id = $user_id ? $user_id : Yii::$app->user->identity->id;
+
+        $query = Member::find()->where(['project_id' => $this->id, 'user_id' => $user_id]);
 
         return $query->exists() ? true : false;
     }
@@ -231,16 +235,19 @@ class Project extends Model
      * @param $rule
      * @return bool
      */
-    public function hasRule($rule)
+    public function hasRule($rule, $user_id = 0)
     {
+
+        $user_id = $user_id ? $user_id : Yii::$app->user->identity->id;
+
         // 项目创建者拥有该项目所有权限
-        if($this->isCreater()){
+        if($this->isCreater($user_id)){
             return true;
         }
 
-        $member = Member::findOne(['project_id' => $this->id, 'user_id' => Yii::$app->user->identity->id]);
+        $member = Member::findOne(['project_id' => $this->id, 'user_id' => $user_id]);
 
-        if($this->isJoiner() && $member->hasRule('project', $rule)){
+        if($this->isJoiner($user_id) && $member->hasRule('project', $rule)){
             return true;
         }
 

@@ -90,7 +90,7 @@
 
                             <a class="fa hidden-xs fa-trash-o" data-toggle="tooltip" data-placement="top" data-modal="#js_deleteProjectModal" data-height="230" data-title="删除项目" data-src="{{url('delete', ['id' => $model->id])}}"></a>
 
-                            <a class="fa hidden-xs fa-exchange" data-toggle="tooltip" data-placement="top" data-title="转让项目" data-url="{{url('transfer', ['id' => $model->id])}}"></a>
+                            <a class="fa hidden-xs fa-exchange" data-toggle="tooltip" data-placement="top" data-modal="#js_transferProjectModal" data-height="300" data-title="转让项目" data-src="{{url('transfer', ['id' => $model->id])}}"></a>
                         </span>
                     </div>
                     <div class="panel-body">
@@ -204,7 +204,7 @@
             </div>
             <div class="modal-body">
 
-                <iframe id="js_transferProjectIframe" scrolling="no" src=""></iframe>
+                <iframe scrolling="no" src=""></iframe>
 
             </div>
             <div class="modal-footer">

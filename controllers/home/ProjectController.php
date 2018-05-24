@@ -3,6 +3,7 @@ namespace app\controllers\home;
 
 
 use app\models\member\SearchMember;
+use app\models\project\SearchProject;
 use Yii;
 use yii\web\Response;
 use yii\db\Exception;
@@ -60,9 +61,22 @@ class ProjectController extends PublicController
     public function actionSearch()
     {
 
-        $model = Project::findModel();
+        $model = SearchProject::findModel()->search(Yii::$app->request->queryParams);
 
         return $this->display('search', ['model' => $model]);
+
+    }
+
+    /**
+     * 转让项目
+     * @return string
+     */
+    public function actionTransfer($id)
+    {
+
+        $model = SearchProject::findModel($id);
+
+        return $this->display('transfer', ['model' => $model]);
 
     }
 
@@ -171,17 +185,6 @@ class ProjectController extends PublicController
         }
 
         return $this->display('create', ['model' => $project]);
-
-    }
-
-    /**
-     * 转移项目
-     * @return string
-     */
-    public function actionTransfer()
-    {
-
-        return $this->display('transfer');
 
     }
 

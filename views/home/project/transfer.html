@@ -1,4 +1,4 @@
-{{include_file name='public/header' title='项目管理'}}
+{{include_file name='home/public/header' title='项目转让'}}
 <style>
     body {
         background-color: #ffffff;
@@ -12,8 +12,7 @@
 
     <!-- /.row -->
     <div class="row">
-        <form id="js_transferProjectForm" role="form" action="{{url('project/transfer','','','json')}}" method="post">
-            <input type="hidden" class="form-control" name="id" value="{{$project.id}}">
+        <form id="js_transferProjectForm" role="form" action="{{url('')}}" method="post">
 
             <div class="alert alert-dismissable alert-warning">
                 <i class="fa fa-fw fa-info-circle"></i>
@@ -22,26 +21,25 @@
 
             <div class="form-group">
                 <label class="control-label">转让项目:</label>
-                <input type="text" class="form-control" value="{{$project.title}}" placeholder="必填" readonly>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label">登录密码:</label>
-                <input type="text" class="form-control" name="password" value="" placeholder="重要操作，请输入登录密码" datatype="*" nullmsg="请输入登录密码!">
+                <input type="text" class="form-control" value="{{$model->title}}" readonly>
             </div>
 
             <div class="form-group">
                 <label class="control-label">转让给:</label>
 
                 <select class="form-control" name="user_id" data-live-search="true">
-                    {{foreach $members as $member}}
-                    {{$user_id = $member.user_id}}
-                    <option value="{{$user_id}}">8888</option>
+                    {{foreach $model->members as $member}}
+                    <option value="{{$user_id}}">{{$member->user->name}}({{$member->user->email}})</option>
                     {{foreachelse}}
                     <option value="0">暂无成员</option>
                     {{/foreach}}
                 </select>
 
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">登录密码:</label>
+                <input type="text" class="form-control js_password" name="password" value="" placeholder="重要操作，请输入登录密码" datatype="*" nullmsg="请输入登录密码!">
             </div>
 
             <input type="hidden" id="js_submit" value="提交">
@@ -55,9 +53,44 @@
 
 <script>
 
+    $(function () {
+        // 转让项目表单验证
+        $("#js_transferProjectForm").Validform({
 
+            tiptype:function(msg,o){
 
+                if(!o.obj.is("form")){
+
+                    if(3 == o.type){
+                        alert(msg, 'error');
+                    }
+
+                }
+            },
+
+            label:"label",
+
+            btnSubmit: '#js_submit',
+
+            tipSweep:true,
+
+            ajaxPost:true,
+
+            callback:function(json){
+
+                if(200 == json.code){
+                    alert(json.msg, 'success', function () {
+                        parent.location.reload();
+                    });
+                }else{
+                    $(".js_password").focus();
+                    alert(json.msg, 'error');
+                }
+
+            }
+        });
+    });
 
 </script>
 
-{{include_file name='public/footer'}}
+{{include_file name='home/public/footer'}}

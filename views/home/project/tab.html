@@ -2,7 +2,7 @@
 <ul class="nav nav-tabs">
     <li class="{{if $tab == 'home'}}active{{/if}}"><a href="{{url('show', ['token' => $project->currentVersion->token, 'tab' => 'home'])}}">项目主页</a></li>
     <li class="{{if $tab == 'version'}}active{{/if}}"><a href="{{url('show', ['token' => $project->currentVersion->token, 'tab' => 'version'])}}">项目版本</a></li>
-    <li class="{{if $tab == 'template'}}active{{/if}}"><a href="{{url('show', ['token' => $project->currentVersion->token, 'tab' => 'template'])}}">字段模板</a></li>
+    <li class="hidden-xs {{if $tab == 'template'}}active{{/if}}"><a href="{{url('show', ['token' => $project->currentVersion->token, 'tab' => 'template'])}}">字段模板</a></li>
     <li class="{{if $tab == 'env'}}active{{/if}}"><a href="{{url('show', ['token' => $project->currentVersion->token, 'tab' => 'env'])}}">项目环境</a></li>
     <li class="hidden-xs {{if $tab == 'member'}}active{{/if}}"><a href="{{url('show', ['token' => $project->currentVersion->token, 'tab' => 'member'])}}">项目成员</a></li>
     <li class="hidden-xs {{if $tab == 'history'}}active{{/if}}"><a href="{{url('show', ['token' => $project->currentVersion->token, 'tab' => 'history'])}}">项目动态</a></li>

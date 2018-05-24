@@ -1,6 +1,6 @@
 
 <ul class="nav nav-tabs">
     <li class="{{if $tab == 'home'}}active{{/if}}"><a href="{{url('home/api/show', ['id' => $api->id, 'tab' => 'home'])}}">接口主页</a></li>
-    <li class="{{if $tab == 'debug'}}active{{/if}}"><a href="{{url('home/api/show', ['id' => $api->id, 'tab' => 'debug'])}}">接口调试</a></li>
+    <li class="hidden-xs {{if $tab == 'debug'}}active{{/if}}"><a href="{{url('home/api/show', ['id' => $api->id, 'tab' => 'debug'])}}">接口调试</a></li>
     <li class="hidden-xs {{if $tab == 'history'}}active{{/if}}"><a href="{{url('home/api/show', ['id' => $api->id, 'tab' => 'history'])}}">接口动态</a></li>
 </ul>

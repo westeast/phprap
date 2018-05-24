@@ -19,14 +19,15 @@
                         <form class="form-inline" action="{{url()}}" method="get">
                             <div class="form-group">
                                 <label>项目名</label>
-                                <input name="search[project]" type="text" class="form-control" placeholder="支持模糊查询" value="{{$search.project}}">
+                                <input name="title" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.title}}">
                             </div>
 
                             <div class="form-group">
                                 <label>创建人</label>
-                                <input name="search[user]" type="text" class="form-control" placeholder="支持模糊查询" value="{{$search.user}}">
+                                <input name="name" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.name}}">
                             </div>
 
+                            <button type="reset" class="btn btn-warning">重置</button>
                             <button type="submit" class="btn btn-primary">搜索</button>
                         </form>
 
@@ -47,31 +48,25 @@
                                 <thead>
                                 <tr>
                                     <th>项目名称</th>
-                                    <th>项目简介</th>
                                     <th>创建人/账号</th>
                                     <th>成员数</th>
                                     <th>创建时间</th>
 
-                                    <th>操作面板</th>
+                                    <th width="100px;">操作面板</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {{foreach $model->models as $model}}
                                 <tr>
-                                    <td >99</td>
-                                    <td >5555</td>
-                                    <td >5555<br>666</td>
-                                    <td >4444</td>
-                                    <td >2222</td>
+                                    <td >{{$model->title}}</td>
+                                    <td >{{$model->creater->name}}({{$model->creater->email}})</td>
+                                    <td >{{$model->getMembers()->count()}}</td>
+                                    <td >{{$model->created_at}}</td>
                                     <td >
-
-
-                                        <a class="btn btn-success btn-xs js_addProjectBtn" data-project_id="{{$project.id}}">加入项目</a>
-
-
+                                        <a class="btn btn-success btn-xs js_addProjectBtn">加入项目</a>
                                     </td>
                                 </tr>
-
+                                {{/foreach}}
 
                                 </tbody>
                             </table>
@@ -83,7 +78,7 @@
                 <!-- /.panel -->
             </div>
             <div class="col-sm-12">
-                {{include_file name='home/public/page'}}
+                {{$model->pages}}
             </div>
 
             <!-- /.col-lg-6 -->

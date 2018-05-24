@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * 删除版本模型
+ */
 namespace app\models\version;
 
 use app\models\Version;
@@ -13,7 +15,7 @@ class DeleteVersion extends Version
     public function rules()
     {
         return [
-            ['password', 'required', 'message' => '密码不可以为空'],
+            ['password', 'required', 'message' => '登录密码不可以为空'],
             ['password', 'validatePassword'],
         ];
     }
@@ -36,6 +38,7 @@ class DeleteVersion extends Version
     public function delete()
     {
 
+        // todo 记录日志
         $this->status = self::DELETED_STATUS;
 
         if(!$this->validate()){
