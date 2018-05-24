@@ -201,9 +201,10 @@
     </div>
     <!-- /#wrapper -->
     <hr>
-    <p class="text-center">wwww</p>
+    <p class="text-center">{{config('copyright')}}</p>
 
-    <script type="text/javascript" src="{{STATIC_URL}}/plugins/echarts/echarts.min.js"></script>
+    <script src="http://capital.juzifenqi.com/static/js/echarts.min.js?v=1.0"></script>
+
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('user-chart'));

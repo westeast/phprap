@@ -20,9 +20,6 @@ textarea {resize: none;} /*禁止拖拽*/
 
 .ime-disabled{ime-mode:disabled;}/* 屏蔽输入法 */
 
-.fl{float: left}
-.fr{float: right}
-
 #wrapper {
     width: 100%;
 }
@@ -201,7 +198,7 @@ textarea {resize: none;} /*禁止拖拽*/
     }
 
 }
-
+.btn:first-child{margin-left: 0px}
 .btn{margin-left: 5px}
 
 .btn-outline {
@@ -527,3 +524,7 @@ a.btn-show-tips {
     margin-right: 10px;
 }
 
+/*/自定义样式*/
+.datetime {
+    width: 160px;
+}

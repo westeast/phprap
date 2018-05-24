@@ -1,113 +1,20 @@
 
-<!-- 修改个人资料模态框 -->
-<div class="modal fade" id="js_settingProfileModal" tabindex="-1" role="dialog" aria-labelledby="settingLabel" aria-hidden="true">
-
-        <div class="modal-dialog">
-            <form id="js_settingProfileForm" role="form" action="{{url('account/update', ['id' => Yii::$app->user->identity->id])}}" method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="settingLabel">个人设置</h4>
-                </div>
-                <div class="modal-body">
-
-                    <div class="row">
-                        <div class="col-lg-12">
-
-                            <input type="hidden" name="_csrf-backend" value="{{csrf_token()}}" />
-
-
-                            <div class="form-group">
-                                <label>登录账号</label>
-                                <input name="Account[email]" class="form-control" value="{{Yii::$app->user->identity->email}}" type="email" placeholder=""  datatype="e" nullmsg="请输入登录邮箱" errormsg="请输入合法的邮箱地址！">
-                            </div>
-
-                            <div class="form-group">
-                                <label>用户昵称</label>
-                                <input name="Account[name]" class="form-control" value="{{Yii::$app->user->identity->name}}" type="text" datatype="s2-10" nullmsg="请输入用户昵称！" errormsg="请输入2-10个由字母或汉字组成的字符">
-                            </div>
-
-                            <div class="form-group">
-                                <label>登录密码</label>
-                                <input name="Account[password]" class="form-control" placeholder="修改密码需要重新登录，密码不少于6位" type="text" ignore="ignore" datatype="*6-20" nullmsg="请输入登录密码！" errormsg="请填写6-20个字符">
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="submit" class="btn btn-primary">保存</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-            </form>
-        </div>
-
-    <!-- /.modal-dialog -->
-</div>
-
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 
 <!-- Bootstrap Core JavaScript -->
-<script src="{{STATIC_URL}}/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
-<!--<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
+<script src="https://cdn.bootcss.com/metisMenu/2.7.7/metisMenu.min.js"></script>
 
-<script src="{{STATIC_URL}}/plugins/artDialog/dist/dialog.js"></script>
+<script src="https://cdn.bootcss.com/artDialog/7.0.0/dialog.js"></script>
 
-<script src="{{STATIC_URL}}/plugins/validform/datatype.js"></script>
+<script src="{{STATIC_URL}}/plugins/validform/datatype.js?v={{Yii::$app->params['static_version']}}"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="{{STATIC_URL}}/js/app.js?v={{config('site_version')}}"></script>
-
-<script>
-
-
-    //重置表单
-    $(".js_resetForm").click(function () {
-        resetForm();
-    });
-
-    $("#js_settingProfileForm").Validform({
-
-        tiptype:function(msg,o, cssctl){
-
-            if(!o.obj.is("form")){
-
-                if(3 == o.type){
-                    alert(msg, 'error');
-                }
-
-            }
-
-        },
-
-        label:"label",
-
-        tipSweep:true,
-
-        ajaxPost:true,
-
-        callback:function(json){
-
-            if(200 == json.code || 201 == json.code){
-                alert(json.msg, 'success',function () {
-                    location.reload();
-                });
-            }else{
-
-                alert(json.msg);
-            }
-
-
-        }
-    });
-
-</script>
+<script src="{{STATIC_URL}}/js/app.js?v={{Yii::$app->params['static_version']}}"></script>
 
 </body>
 

@@ -83,7 +83,7 @@
                                                 <tbody>
                                                 {{foreach $api->module->project->envs as $env}}
                                                 <tr>
-                                                    <td style="width: 20%;">{{$env->title}}({{$env->name}})</td>
+                                                    <td style="width: 100px;">{{$env->title}}({{$env->name}})</td>
                                                     <td style="width: 50%;"><code>{{$env->domain}}{{$api->uri}}</code></td>
                                                     <td style="width: 15%;">
                                                         <button type="button" data-clipboard-text="{{$env->domain}}{{$api->uri}}" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>
@@ -92,7 +92,7 @@
                                                 {{/foreach}}
 
                                                 <tr>
-                                                    <td style="width: 20%;">模拟环境(mock)</td>
+                                                    <td style="width: 100px;">模拟环境(mock)</td>
                                                     <td style="width: 50%;"><code>http://demo.phprap.com/mock/FzxxmyQzxV.html</code></td>
                                                     <td style="width: 15%;">
                                                         <button type="button" data-clipboard-text="http://demo.phprap.com/mock/FzxxmyQzxV.html" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>

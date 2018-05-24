@@ -37,8 +37,8 @@
                                 <tr>
                                     <th>版本号</th>
                                     <th>复制于</th>
-                                    <th width="160px">创建时间</th>
-                                    <th width="160px">更新时间</th>
+                                    <th class="datetime">创建时间</th>
+                                    <th class="datetime">更新时间</th>
                                     <th>创建人</th>
                                     <th width="210px">操作面板</th>
                                 </tr>
@@ -46,7 +46,7 @@
                                 <tbody>
                                 {{foreach $model->models as $version}}
                                 {{if $project->CurrentVersion->id == $version->id}}
-                                <tr style="color: green">
+                                <tr class="success">
                                 {{else}}
                                 <tr>
                                 {{/if}}
@@ -54,7 +54,6 @@
                                     <td>
                                     <i class="fa fa-fw fa-random"></i>
                                     {{$version->name}}
-
                                     </td>
                                     {{else}}
                                     <td>
@@ -62,7 +61,6 @@
                                             <i class="fa fa-fw fa-random"></i>
                                             {{$version->name}}
                                         </a>
-
                                     </td>
                                     {{/if}}
                                     <td>{{$version->parent->name}}</td>
