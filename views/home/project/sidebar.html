@@ -8,7 +8,7 @@
             </li>
 
             {{foreach $project->currentVersion->modules as $module}}
-            <li class="module-item js_moduleItem">
+            <li class="module-item {{if $module->id == $api->module->id}}active{{/if}}">
                 <a href="javascript:void(0);" aria-expanded="false"><i class="fa fa-fw fa-folder-open"></i>
                     {{$module->title}}
 
@@ -21,11 +21,11 @@
                     <span class="fa hidden-xs fa-fw fa-pencil js_addModuleBtn" data-toggle="tooltip" data-placement="bottom" data-modal="#js_addModuleModal" data-title="编辑模块" data-height="230" data-src="{{url('home/module/update', ['id' => $module->id])}}"></span>
 
                 </a>
-                <ul class="nav nav-second-level collapse" aria-expanded="true">
-                    {{foreach $module->apis as $api}}
-                    <li class="api-item js_apiItem" data-id="1">
-                        <a href="{{url('home/api/show', ['id' => $api->id])}}" title="点击查看接口详情">
-                            <i class="fa fa-fw fa-files-o"></i>{{$api->title}}
+                <ul class="nav nav-second-level collapse {{if $module->id == $api->module->id}}in{{/if}}" aria-expanded="true">
+                    {{foreach $module->apis as $v}}
+                    <li class="api-item">
+                        <a class="{{if $api->id == $v->id}}active{{/if}}" href="{{url('home/api/show', ['id' => $v->id])}}" title="点击查看接口详情">
+                            <i class="fa fa-fw fa-files-o"></i>{{$v->title}}
                             <i class="fa fa-fw fa-eye pull-right"></i>
                         </a>
                     </li>

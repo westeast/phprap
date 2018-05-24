@@ -15,9 +15,9 @@
                     <h1>项目主页 </h1>
                     <div class="opt-btn">
 
-                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_addProjectBtn" data-toggle="tooltip" title="编辑项目" data-placement="bottom" data-modal="#js_addProjectModal" data-title="编辑项目" data-height="380" data-src="{{url('update', ['id' => $project->id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
+                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_addProjectBtn" data-toggle="tooltip" data-placement="bottom" data-modal="#js_addProjectModal" data-title="编辑项目" data-height="380" data-src="{{url('update', ['id' => $project->id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
 
-                        <a href="" class="btn hidden-xs btn-sm btn-warning" data-toggle="tooltip" title="导出当前版本" data-placement="bottom"><i class="fa fa-fw fa-download"></i>导出</a>
+                        <a href="" class="btn hidden-xs btn-sm btn-warning" data-toggle="tooltip" data-title="导出当前版本" data-placement="bottom"><i class="fa fa-fw fa-download"></i>导出</a>
 
                     </div>
                 </div>
@@ -31,7 +31,7 @@
 
                 <div class="panel panel-default">
 
-                    {{include_file name='home/project/tab'}}
+                    {{include_file name='home/project/tab' tab='home'}}
 
                     <div class="panel-body">
                         <div class="row">

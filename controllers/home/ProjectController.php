@@ -261,7 +261,7 @@ class ProjectController extends PublicController
                 break;
         }
 
-        return $this->display($view, ['project' => $project, 'model' => $model, 'tab' => $tab]);
+        return $this->display($view, ['project' => $project, 'model' => $model]);
 
     }
 

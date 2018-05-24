@@ -62,7 +62,7 @@ class ApiController extends PublicController
                 break;
         }
 
-        return $this->display($view, ['project' => $project, 'api' => $api, 'tab' => $tab]);
+        return $this->display($view, ['project' => $project, 'api' => $api]);
 
     }
 

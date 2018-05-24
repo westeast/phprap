@@ -15,31 +15,16 @@ p:last-child {
     margin: 0;
 }
 
-label {
-    margin-right: 5px;
-}
-textarea {
-    resize: none; /*禁止拖拽*/
-}
+label {margin-right: 5px;}
+textarea {resize: none;} /*禁止拖拽*/
 
 .ime-disabled{ime-mode:disabled;}/* 屏蔽输入法 */
 
-#wrapper {
-    width: 100%;
-}
-
-.btn+.btn {
-    margin-bottom: 0;
-    margin-left: 5px;
-}
 .fl{float: left}
 .fr{float: right}
 
-.btn-group-xs>.btn, .btn-xs {
-    padding: 1px 5px;
-    font-size: 12px;
-    line-height: 1.5;
-    border-radius: 3px;
+#wrapper {
+    width: 100%;
 }
 
 #page-wrapper {
@@ -158,6 +143,7 @@ textarea {
     background-color: #eee;
 }
 
+
 .sidebar .arrow {
     float: right;
 }
@@ -168,6 +154,10 @@ textarea {
 
 .sidebar .active>a>.fa.arrow:before {
     content: "\f107";
+}
+
+.nav>li>a:focus, .nav>li>a:hover{
+    text-decoration:none;background-color:#f8f8f8;
 }
 
 .sidebar .nav-second-level li,
@@ -211,6 +201,8 @@ textarea {
     }
 
 }
+
+.btn{margin-left: 5px}
 
 .btn-outline {
     color: inherit;
