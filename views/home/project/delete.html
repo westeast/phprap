@@ -14,6 +14,8 @@
     <div class="row">
         <form id="js_deleteProjectForm" role="form" action="{{url()}}" method="post">
 
+            <input type="hidden" name="csrf-phprap" value="{{csrf_token()}}" />
+
             <div class="alert alert-dismissable alert-warning">
                 <i class="fa fa-fw fa-info-circle"></i>&nbsp;
                 项目删除后，该项目下所有版本将被立刻删除，不可恢复，请谨慎操作！
@@ -25,8 +27,6 @@
             </div>
 
             <div class="form-group">
-                <input type="hidden" name="csrf-phprap" value="{{csrf_token()}}" />
-
                 <input name="DeleteProject[password]" type="text" class="form-control js_password" placeholder="重要操作，请输入登录密码" datatype="*" nullmsg="重要操作，请输入登录密码" errormsg="请输入正确的登录密码!">
             </div>
 

@@ -1,4 +1,7 @@
-
+/**
+ * 菜单折叠
+ */
+$('#side-menu').metisMenu();
 /**
  * 吐司提示
  */
@@ -150,3 +153,4 @@ function resetForm() {
     });
 
 })(jQuery);
+

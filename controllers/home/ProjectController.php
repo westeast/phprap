@@ -4,6 +4,7 @@ namespace app\controllers\home;
 
 use app\models\member\SearchMember;
 use app\models\project\SearchProject;
+use app\models\project\TransferProject;
 use Yii;
 use yii\web\Response;
 use yii\db\Exception;
@@ -74,9 +75,34 @@ class ProjectController extends PublicController
     public function actionTransfer($id)
     {
 
-        $model = SearchProject::findModel($id);
+        $request  = Yii::$app->request;
+        $response = Yii::$app->response;
 
-        return $this->display('transfer', ['model' => $model]);
+        $project  = TransferProject::findModel($id);
+
+        if($request->isPost){
+
+            $response->format = Response::FORMAT_JSON;
+
+            if(!$project->load($request->post())){
+
+                return ['code' => 302, 'msg' => '加载数据失败'];
+
+            }
+
+            if ($project->transfer()) {
+
+                return ['code' => 200, 'msg' => '转让成功'];
+
+            }else{
+
+                return ['code' => 300, 'msg' => $project->getError()];
+
+            }
+
+        }
+
+        return $this->display('transfer', ['model' => $project]);
 
     }
 

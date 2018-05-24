@@ -18,7 +18,7 @@ class TransferProject extends Project
     public function rules()
     {
         return [
-            ['user_id', 'required', 'message'  => '请选择要转让的成员'],
+            ['user_id', 'required', 'message'  => '请选择成员'],
             ['password', 'required', 'message' => '登录密码不可以为空'],
             ['password', 'validatePassword'],
             ['user_id', 'validateJoiner'],

@@ -49,10 +49,10 @@
 <script>
 
     $(function(){
-
+        var modalObj  = $(window.parent.document).find('#js_addModuleModal');
+        var submitObj = modalObj.find(":submit");
         // 添加表单验证
         $("#js_addModuleForm").Validform({
-
 
             tiptype:function(msg,o){
 
@@ -73,13 +73,22 @@
 
             ajaxPost:true,
 
+            beforeSubmit: function () {
+
+                submitObj.attr("disabled", "disabled");
+            },
+
             callback:function(json){
 
                 if(200 == json.code){
+
                     alert(json.msg, 'success', function () {
                         parent.location.reload();
                     });
+
                 }else{
+
+                    submitObj.removeAttr("disabled");
 
                     alert(json.msg, 'error');
                 }
