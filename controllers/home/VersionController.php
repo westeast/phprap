@@ -53,19 +53,17 @@ class VersionController extends PublicController
 
             if(!$version->load($request->post())){
 
-                return ['code' => 'error', 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
             if ($version->store()) {
 
-                return ['code' => 'success', 'msg' => '创建成功'];
-
-            }else{
-
-                return ['code' => 'error', 'msg' => $version->getError()];
+                return ['status' => 'success', 'message' => '创建成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $version];
 
         }
 
@@ -89,19 +87,17 @@ class VersionController extends PublicController
 
             if(!$version->load($request->post())){
 
-                return ['code' => 'error', 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
             if ($version->store()) {
 
-                return ['code' => 'success', 'msg' => '编辑成功'];
-
-            }else{
-
-                return ['code' => 'error', 'label' => $version->getLabel(),'msg' => $version->getError()];
+                return ['status' => 'success', 'message' => '编辑成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $version];
 
         }
 
@@ -148,19 +144,17 @@ class VersionController extends PublicController
 
             if(!$version->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
             if ($version->delete()) {
 
-                return ['code' => 200, 'msg' => '删除成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $version->getError()];
+                return ['status' => 'success', 'message' => '删除成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $version];
 
         }
 
