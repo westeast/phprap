@@ -2,21 +2,10 @@
 
 namespace app\models\project;
 
-use app\models\history\StoreHistory;
 use Yii;
-use yii\db\Exception;
 use app\models\Project;
+use app\models\history\StoreHistory;
 
-/**
- * This is the model class for table "doc_project".
- *
- * @property int $id
- * @property int $creater_id 创建者id
- * @property string $title 项目标题
- * @property string $remark 项目备注
- * @property int $allow_search 是否允许搜索
- * @property int $status 启用状态
- */
 class StoreProject extends Project
 {
 
@@ -26,11 +15,13 @@ class StoreProject extends Project
     public function rules()
     {
         return [
-            [['creater_id', 'allow_search', 'sort'], 'integer', 'on' => ['create', 'update']],
-            [['title', 'remark'], 'required', 'on' => ['create', 'update']],
-            ['title', 'validateTitle'],
-            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
-            [['creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['allow_search', 'sort'], 'filter', 'filter' => 'intval', 'on' => ['create', 'update']],
+            [['!creater_id', 'allow_search', 'sort', '!status'], 'integer', 'on' => ['create', 'update']],
+            [['title', 'remark'], 'string', 'max' => 250, 'on' => ['create', 'update']],
+            ['title', 'validateTitle', 'on' => ['create', 'update']],
+            [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
+            [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['!creater_id', 'title', 'allow_search', '!status'], 'required', 'on' => ['create', 'update']],
         ];
     }
 
@@ -58,56 +49,71 @@ class StoreProject extends Project
 
     }
 
+    /**
+     * 保存项目
+     * @return bool
+     */
     public function store()
     {
 
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        try {
+        $this->status = self::ACTIVE_STATUS;
 
-            if(!$this->save()){
-
-                throw new Exception($this->getError());
-            }
-
-            // 记录日志
-            $log = StoreHistory::findModel();
-
-            if($this->scenario == 'create'){
-                $log->method = 'create';
-                $log->content = '创建了项目<code>' . $this->title . '</code>';
-
-            }elseif($this->scenario == 'update'){
-                $log->method = 'update';
-                $log->content = '更新了项目<code>' . $this->title . '</code>';
-
-            }
-
-            $log->res_name = 'project';
-            $log->res_id   = $this->id;
-            $log->object = 'project';
-
-            if(!$log->store()){
-
-                throw new Exception($log->getError());
-            }
-
-            // 事务提交
-            $transaction->commit();
-
-            return true;
-
-        } catch (Exception $e) {
-
-            $this->addError('project', $e->getMessage());
-
-            // 事务回滚
-            $transaction->rollBack();
-
+        if(!$this->validate()){
             return false;
+        }
+
+        // 判断是否有更新
+        $oldAttributes   = $this->getOldAttributes();
+        $dirtyAttributes = $this->getDirtyAttributes();
+
+        if(!$dirtyAttributes){
+            return true;
+        }
+
+        if(!$this->save(false)){
+            $transaction->rollBack();
+            return false;
+        }
+
+        // 记录日志
+        $log = StoreHistory::findModel();
+
+        if($this->scenario == 'create'){
+            $log->method  = 'create';
+            $log->content = '创建了项目<code>' . $this->title . '</code>';
+
+        }elseif($this->scenario == 'update'){
+
+            $log->method  = 'update';
+
+            $find = [self::ALLOW_SEARCH, self::FORBID_SEARCH];
+
+            $replace = ['允许','禁止'];
+
+            $oldAttributes['allow_search'] = str_replace($find, $replace, $oldAttributes['allow_search']);
+            $dirtyAttributes['allow_search'] = str_replace($find, $replace, $dirtyAttributes['allow_search']);
+
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
 
         }
 
+        $log->res_name  = 'project';
+        $log->res_id    = $this->id;
+        $log->object    = 'project';
+        $log->object_id = $this->id;
+
+        if(!$log->store()){
+            $transaction->rollBack();
+            return false;
+        }
+
+        // 事务提交
+        $transaction->commit();
+
+        return true;
     }
+
 }

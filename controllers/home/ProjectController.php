@@ -107,58 +107,48 @@ class ProjectController extends PublicController
     public function actionCreate()
     {
 
-        $request  = Yii::$app->request;
+        $request = Yii::$app->request;
 
-        $project  = StoreProject::findModel();
+        $project = StoreProject::findModel();
 
         if($request->isPost){
 
             // 开启事务
             $transaction = Yii::$app->db->beginTransaction();
 
-            try {
+            $project->scenario = 'create';
 
-                $project->scenario = 'create';
+            if(!$project->load($request->post())){
+                return ['status' => 'error', 'message' => '加载数据失败'];
+            }
 
-                if(!$project->load($request->post())){
-                    throw new Exception('加载数据失败');
-                }
-
-                if(!$project->store()){
-                    throw new Exception($project->getError());
-                }
-
-                // 添加默认版本
-                $version = StoreVersion::findModel();
-
-                $version->scenario   = 'create';
-                $version->project_id = $project->id;
-                $version->parent_id  = 0;
-                $version->remark     = '初始版本';
-
-                if(!$version->load($request->post())){
-                    throw new Exception('加载数据失败');
-                }
-
-                if(!$version->store()){
-                    throw new Exception($version->getError());
-                }
-
-                // 事务提交
-                $transaction->commit();
-
-                return ['status' => 'success', 'message' => '添加成功'];
-
-            } catch (Exception $e) {
-
-                $project->addError('project', $e->getMessage());
-
-                // 事务回滚
+            if(!$project->store()){
                 $transaction->rollBack();
+                return ['status' => 'error', 'model' => $project];
+            }
 
-                return ['status' => 'error', 'message' => $e->getMessage()];
+            // 添加默认版本
+            $version = StoreVersion::findModel();
+
+            $version->scenario   = 'create';
+            $version->project_id = $project->id;
+            $version->parent_id  = 0;
+            $version->remark     = '初始版本';
+
+            if(!$version->load($request->post())){
+                return ['status' => 'error', 'message' => '加载数据失败'];
+            }
+
+            if(!$version->store()){
+                $transaction->rollBack();
+                return ['status' => 'error', 'model' => $version];
 
             }
+
+            // 事务提交
+            $transaction->commit();
+
+            return ['status' => 'success', 'message' => '添加成功'];
 
         }
 

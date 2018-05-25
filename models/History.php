@@ -15,6 +15,7 @@ use Yii;
  * @property string $user_email 操作人邮箱
  * @property string $method 操作方式
  * @property string $object 操作对象
+ * @property string $object_id 操作对象id
  * @property string $content 操作内容
  * @property string $created_at
  * @property string $updated_at

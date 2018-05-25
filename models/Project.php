@@ -10,18 +10,19 @@ use Yii;
  * @property int $id
  * @property int $creater_id 创建者id
  * @property string $title 项目标题
- * @property string $remark 项目备注
- * @property int $allow_search 是否允许搜索
+ * @property string $remark 项目描述
  * @property int $sort 排序数字
- * @property int $status 启用状态
- * @property string $created_at
- * @property string $updated_at
+ * @property int $allow_search 搜索状态 10:启用 20:禁止
+ * @property int $status 启用状态 10:启用 20:禁用 30:删除
+ * @property string $created_at 创建时间
+ * @property string $updated_at 更新时间
  */
 class Project extends Model
 {
 
     const ACTIVE_STATUS  = 10; //启用状态
-    const DELETED_STATUS = 20; //禁用状态
+    const DISABLE_STATUS = 20; //禁用状态
+    const DELETED_STATUS = 30; //删除状态
 
     const ALLOW_SEARCH  = 10; //允许搜索
     const FORBID_SEARCH = 20; //禁止搜索
@@ -38,6 +39,37 @@ class Project extends Model
     public static function tableName()
     {
         return '{{%project}}';
+    }
+
+    /**
+     * 验证规则
+     */
+    public function rules()
+    {
+        return [
+            [['creater_id', 'sort', 'allow_search', 'status'], 'integer'],
+            [['!creater_id', 'title', 'allow_search', '!status'], 'required'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['title', 'remark'], 'string', 'max' => 250],
+        ];
+    }
+
+    /**
+     * 字段字典
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'creater_id' => '项目创建者',
+            'title' => '项目名称',
+            'remark' => '项目描述',
+            'sort' => '排序数字',
+            'allow_search' => '搜索状态',
+            'status' => '启用状态',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
+        ];
     }
 
     /**

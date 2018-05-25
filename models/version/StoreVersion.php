@@ -72,49 +72,38 @@ class StoreVersion extends Version
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        try {
-
-            if(!$this->save()){
-                throw new Exception($this->getError());
-            }
-
-            // 记录日志
-            $log = StoreHistory::findModel();
-
-            if($this->scenario == 'create'){
-                $log->method = '创建';
-
-            }elseif($this->scenario == 'update'){
-                $log->method = '更新';
-
-            }
-
-            $log->res_name = 'project';
-            $log->res_id   = $this->project_id;
-            $log->object   = 'version';
-            $log->content  = $log->method . '了版本<code>' . $this->name . '</code>';
-
-            if(!$log->store()){
-
-                throw new Exception($log->getError());
-            }
-
-            // 事务提交
-            $transaction->commit();
-
-            return true;
-
-        } catch (Exception $e) {
-
-            $this->addError('version', $e->getMessage());
-
-            // 事务回滚
+        if(!$this->save()){
             $transaction->rollBack();
-
             return false;
+        }
+
+        // 记录日志
+        $log = StoreHistory::findModel();
+
+        if($this->scenario == 'create'){
+            $log->method  = 'create';
+            $log->content = '创建了版本<code>' . $this->name . '</code>';
+
+        }elseif($this->scenario == 'update'){
+            $log->method  = 'update';
+            $log->content = '更新了版本<code>' . $this->name . '</code>';
 
         }
 
+        $log->res_name  = 'project';
+        $log->res_id    = $this->project_id;
+        $log->object    = 'version';
+        $log->object_id = $this->id;
+
+        if(!$log->store()){
+            $transaction->rollBack();
+            return false;
+        }
+
+        // 事务提交
+        $transaction->commit();
+
+        return true;
     }
 
 }

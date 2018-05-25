@@ -48,4 +48,28 @@ class Model extends \yii\db\ActiveRecord
 
     }
 
+    /**
+     * 获取模型更新内容
+     * @param $oldAttributes
+     * @param $dirtyAttributes
+     * @return string
+     */
+    public function getUpdateContent($oldAttributes, $dirtyAttributes)
+    {
+
+        $content = '';
+
+        foreach ($dirtyAttributes as $name => $value) {
+
+            $label = '<strong>' . $this->getAttributeLabel($name) . '</strong>';
+
+            $oldValue = '<code>' . $oldAttributes[$name] . '</code>';
+            $newValue = '<code>' . $value . '</code>';
+
+            $oldAttributes[$name] && $content .= '将 ' . $label . ' 从' . $oldValue . '更新为' . $newValue . ',';
+        }
+
+        return trim($content, ',');
+    }
+
 }

@@ -35,17 +35,17 @@ class PublicController extends Controller
 
             $rs = parent::afterAction($action, $result);
 
-            if($rs['message']){
+            if(isset($rs['message'])){
 
                 $rs['message'] = $rs['message'] ? $rs['message'] : '操作成功';
 
             }else{
 
-                $rs['message'] = $rs['model']->error;
+                $rs['message'] = isset($rs['model']) ? $rs['model']->error : '操作成功';
 
             }
 
-            $rs['label'] = $rs['model']->label;
+            $rs['label'] = isset($rs['model']) ? $rs['model']->label : '';
 
             return array_filter($rs);
 

@@ -21,8 +21,9 @@ use Yii;
 class Version extends Model
 {
 
-    const ACTIVE_STATUS  = 10;
-    const DELETED_STATUS = 20;
+    const ACTIVE_STATUS  = 10; //启用状态
+    const DISABLE_STATUS = 20; //禁用状态
+    const DELETED_STATUS = 30; //删除状态
 
     /**
      * 绑定数据表

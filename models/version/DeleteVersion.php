@@ -4,6 +4,7 @@
  */
 namespace app\models\version;
 
+use app\models\history\StoreHistory;
 use app\models\Version;
 use Yii;
 
@@ -20,6 +21,10 @@ class DeleteVersion extends Version
         ];
     }
 
+    /**
+     * 验证密码是否正确
+     * @param $attribute
+     */
     public function validatePassword($attribute)
     {
 
@@ -35,21 +40,44 @@ class DeleteVersion extends Version
         }
     }
 
+    /**
+     * 删除版本
+     * @return bool
+     */
     public function delete()
     {
 
-        // todo 记录日志
-        $this->status = self::DELETED_STATUS;
+        // 开启事务
+        $transaction  = Yii::$app->db->beginTransaction();
+
+        $this->status = self::DISABLE_STATUS;
 
         if(!$this->validate()){
             return false;
         }
 
-        if($this->save(false)){
-            return true;
+        if(!$this->save(false)){
+            $transaction->rollBack();
+            return false;
         }
 
-        return false;
+        // 记录日志
+        $log = StoreHistory::findModel();
+
+        $log->method    = 'delete';
+        $log->res_name  = 'project';
+        $log->res_id    = $this->id;
+        $log->object    = 'version';
+        $log->object_id = $this->id;
+        $log->content   = '删除了版本<code>' . $this->name . '</code>';
+
+        if(!$log->store()){
+            $transaction->rollBack();
+            return false;
+        }
+
+        // 事务提交
+        $transaction->commit();
 
     }
 
