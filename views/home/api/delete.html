@@ -43,6 +43,8 @@
 
 $(function () {
     // 删除表单验证
+    var modalObj  = $(window.parent.document).find('#js_deleteApiModal');
+    var submitObj = modalObj.find(":submit");
     $("#js_deleteApiForm").Validform({
 
         tiptype:function(msg,o){
@@ -64,15 +66,25 @@ $(function () {
 
         ajaxPost:true,
 
+        beforeSubmit: function () {
+
+            submitObj.attr("disabled", "disabled");
+        },
+
         callback:function(json){
 
-            if(200 == json.code){
-                alert(json.msg, 'success', function () {
-                    parent.location.href = json.callback;
+            if(json.status == 'success'){
+
+                alert(json.message, 'success', function () {
+                    parent.location.reload();
                 });
+
             }else{
-                $(".js_password").focus();
-                alert(json.msg, 'error');
+
+                $(".js_" + json.label).focus().addClass('Validform_error');
+                submitObj.removeAttr("disabled");
+                alert(json.message, 'error');
+
             }
 
         }

@@ -103,7 +103,9 @@
             selectVersionBtn.removeAttr("readonly").val('').focus();
         });
 
-        // 添加项目表单验证
+        // 添加版本表单验证
+        var modalObj  = $(window.parent.document).find('#js_addVersionModal');
+        var submitObj = modalObj.find(":submit");
         $("#js_addVersionForm").Validform({
 
             tiptype:function(msg,o){
@@ -125,15 +127,25 @@
 
             ajaxPost:true,
 
+            beforeSubmit: function () {
+
+                submitObj.attr("disabled", "disabled");
+            },
+
             callback:function(json){
 
-                if(json.code == 'success'){
-                    alert(json.msg, 'success', function () {
+                if(json.status == 'success'){
+
+                    alert(json.message, 'success', function () {
                         parent.location.reload();
                     });
+
                 }else{
+
                     $(".js_" + json.label).focus().addClass('Validform_error');
-                    alert(json.msg, 'error');
+                    submitObj.removeAttr("disabled");
+                    alert(json.message, 'error');
+
                 }
 
             }

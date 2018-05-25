@@ -90,28 +90,4 @@
     <hr>
     <p class="text-center">{{config('copyright')}}</p>
 
-    <script>
-        $(function () {
-            $(".js_addProjectBtn").click(function () {
-                var thisObi = $(this);
-                var url = "{{url('apply')}}";
-                var projectId = thisObi.data('project_id');
-
-                $.post(url, { project_id:projectId }, function(json){
-                    if(json.code == 200 || json.code == 304){
-
-                        thisObi.removeClass('btn-success').addClass('btn-default').attr("disabled", "disabled").text('审核中');
-
-                    }else{
-
-                        thisObi.text('重新提交').removeAttr("disabled");
-                    }
-
-                    alert(json.msg, 2000);
-
-                }, 'json');
-            });
-        });
-    </script>
-
     {{include_file name='home/public/footer'}}
