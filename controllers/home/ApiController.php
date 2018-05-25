@@ -88,14 +88,11 @@ class ApiController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $api    = StoreApi::findModel();
         $module = Module::findModel($module_id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $api->scenario = 'create';
 
@@ -144,13 +141,10 @@ class ApiController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $api  = DeleteApi::findModel($id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             if(!$api->load($request->post())){
 

@@ -41,14 +41,11 @@ class MemberController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $project = Project::findModel($project_id);
         $member  = StoreMember::findModel();
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $member->scenario = 'create';
 
@@ -78,15 +75,10 @@ class MemberController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $member = StoreMember::findModel($id);
 
-        // 获取项目成员外的所有用户
-
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $member->scenario = 'update';
 
@@ -118,9 +110,6 @@ class MemberController extends PublicController
     {
 
         $request = Yii::$app->request;
-        $response = Yii::$app->response;
-
-        $response->format = Response::FORMAT_JSON;
 
         $project = Project::findModel($project_id);
 

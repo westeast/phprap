@@ -5,6 +5,7 @@ namespace app\controllers\home;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\Response;
 
 class PublicController extends Controller
 {
@@ -29,6 +30,8 @@ class PublicController extends Controller
     {
 
         if(Yii::$app->request->isAjax){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
             $rs = parent::afterAction($action, $result);
 

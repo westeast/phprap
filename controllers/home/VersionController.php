@@ -134,13 +134,10 @@ class VersionController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $version  = DeleteVersion::findModel($id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             if(!$version->load($request->post())){
 

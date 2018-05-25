@@ -42,7 +42,6 @@ class ModuleController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $version  = Version::findModel($version_id);
 
@@ -52,8 +51,6 @@ class ModuleController extends PublicController
         $module->project_id = $version->project_id;
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $module->scenario = 'create';
 
@@ -86,13 +83,10 @@ class ModuleController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $module = StoreModule::findModel($id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $module->scenario = 'update';
 
@@ -120,13 +114,10 @@ class ModuleController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $module   = DeleteModule::findModel($id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             if(!$module->load($request->post())){
 

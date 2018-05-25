@@ -43,15 +43,12 @@ class EnvController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $env  = StoreEnv::findModel();
 
         $env->project_id = $project_id;
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $env->scenario = 'create';
 
@@ -84,13 +81,10 @@ class EnvController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $env = StoreEnv::findModel($id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $env->scenario = 'update';
 
@@ -118,14 +112,11 @@ class EnvController extends PublicController
     public function actionDelete($id)
     {
 
-        $request  = Yii::$app->request;
-        $response = Yii::$app->response;
+        $request = Yii::$app->request;
 
         $model  = DeleteEnv::findModel($id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             if ($model->delete()) {
 

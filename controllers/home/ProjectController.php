@@ -75,13 +75,10 @@ class ProjectController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $project  = TransferProject::findModel($id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             if(!$project->load($request->post())){
 
@@ -111,13 +108,10 @@ class ProjectController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $project  = StoreProject::findModel();
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             // 开启事务
             $transaction = Yii::$app->db->beginTransaction();
@@ -181,13 +175,10 @@ class ProjectController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $project  = StoreProject::findModel($id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $project->scenario = 'update';
 
@@ -270,13 +261,10 @@ class ProjectController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $project  = DeleteProject::findModel($id);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             if(!$project->hasRule( 'delete')){
 

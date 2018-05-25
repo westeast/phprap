@@ -64,13 +64,10 @@ class AccountController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         if($request->isPost){
 
             $model = new RegisterForm();
-
-            $response->format = Response::FORMAT_JSON;
 
             if ($model->load($request->post()) && $model->register()) {
 
@@ -98,7 +95,6 @@ class AccountController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         // 已登录用户直接挑转到项目选择页
         if(!Yii::$app->user->isGuest){
@@ -109,8 +105,6 @@ class AccountController extends PublicController
         if($request->isPost){
 
             $model = new LoginForm();
-
-            $response->format = Response::FORMAT_JSON;
 
             if ($model->load($request->post()) && $model->login()) {
 
