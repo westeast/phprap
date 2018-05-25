@@ -3,7 +3,6 @@
 namespace app\models\member;
 
 use Yii;
-use yii\db\Exception;
 use app\models\Member;
 use app\models\history\StoreHistory;
 
@@ -32,48 +31,44 @@ class StoreMember extends Member
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        try {
-
-            if(!$this->save()){
-                throw new Exception($this->getError());
-            }
-
-            // 记录日志
-            $log = StoreHistory::findModel();
-
-            if($this->scenario == 'create'){
-                $log->method = '添加';
-
-            }elseif($this->scenario == 'update'){
-                $log->method = '更新';
-
-            }
-
-            $log->res_name = 'project';
-            $log->res_id   = $this->project->id;
-            $log->object   = 'member';
-            $log->content  = $log->method . '了成员<code>' . $this->user->name . '</code>';
-
-            if(!$log->store()){
-
-                throw new Exception($log->getError());
-            }
-
-            // 事务提交
-            $transaction->commit();
-
-            return true;
-
-        } catch (Exception $e) {
-
-            $this->addError('member', $e->getMessage());
-
-            // 事务回滚
-            $transaction->rollBack();
-
+        if(!$this->validate()){
             return false;
+        }
+
+        if(!$this->save(false)){
+            $transaction->rollBack();
+            return false;
+        }
+
+        // 记录日志
+        $log = StoreHistory::findModel();
+
+        if($this->scenario == 'create'){
+
+            $log->method   = 'create';
+            $log->content  = '添加了成员<code>' . $this->user->fullName . '</code>';
+
+        }elseif($this->scenario == 'update'){
+
+            $log->method  = 'update';
+            $log->content = '更新了成员<code>' . $this->user->fullName . '</code>';
 
         }
+
+        $log->res_name  = 'project';
+        $log->res_id    = $this->project->id;
+        $log->object    = 'member';
+        $log->object_id = $this->id;
+
+        if(!$log->store()){
+            $transaction->rollBack();
+            return false;
+        }
+
+        // 事务提交
+        $transaction->commit();
+
+        return true;
 
     }
 

@@ -10,9 +10,17 @@ use yii\web\Response;
 class PublicController extends Controller
 {
 
+    /**
+     * 是否启用布局
+     * @var bool
+     */
     public $layout = false;
 
-
+    /**
+     * 是否启用后置动作
+     * @var bool
+     */
+    public $afterAction = true;
 
     /**
      * @inheritdoc
@@ -34,6 +42,10 @@ class PublicController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
 
             $rs = parent::afterAction($action, $result);
+
+            if($this->afterAction === false){
+                return $rs;
+            }
 
             if(isset($rs['message'])){
 

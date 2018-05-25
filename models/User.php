@@ -214,7 +214,19 @@ class User extends Model implements IdentityInterface
         $this->password_reset_token = null;
     }
 
+    /**
+     * 获取用户全名(昵称+邮箱)
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->name . '(' . $this->email . ')';
+    }
 
+    /**
+     * 关联member表
+     * @return \yii\db\ActiveQuery
+     */
     public function getMember()
     {
 

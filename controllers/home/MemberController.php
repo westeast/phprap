@@ -108,18 +108,20 @@ class MemberController extends PublicController
      */
     public function actionSelect($project_id)
     {
+        // 禁用公共model里统一json格式输出
+        $this->afterAction = false;
 
         $request = Yii::$app->request;
 
         $project = Project::findModel($project_id);
 
-        $notMembers =  $project->getNotMembers($request->queryParams);
+        $notMembers = $project->getNotMembers($request->queryParams);
 
         $user = [];
 
         foreach ($notMembers as $k => $member){
             $user[$k]['id']   = $member->id;
-            $user[$k]['name'] = $member->name . '(' . $member->email . ')';
+            $user[$k]['name'] = $member->fullName;
         }
 
         return $user;
@@ -135,15 +137,12 @@ class MemberController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
         $member  = RemoveMember::findModel($id);
 
         if($request->isPost){
 
-            $response->format = Response::FORMAT_JSON;
-
-            if ($member->remover()) {
+            if ($member->remove()) {
 
                 return ['status' => 'success', 'message' => '移除成功'];
 

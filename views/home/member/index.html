@@ -46,9 +46,9 @@
                                 {{foreach $model->models as $member}}
 
                                 <tr>
-                                    <td>{{$member->user->name}}({{$member->user->email}})</td>
+                                    <td>{{$member->user->fullName}}</td>
 
-                                    <td>{{$member->creater->name}}({{$member->creater->email}})</td>
+                                    <td>{{$member->creater->fullName}}</td>
 
                                     <td>{{$member->created_at}}</td>
                                     <td>{{$member->updated_at}}</td>

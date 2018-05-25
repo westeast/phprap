@@ -2,7 +2,9 @@
 
 namespace app\models\project;
 
+use app\models\history\StoreHistory;
 use app\models\Project;
+use app\models\User;
 use Yii;
 
 class TransferProject extends Project
@@ -67,19 +69,41 @@ class TransferProject extends Project
     public function transfer()
     {
 
-        $this->creater_id = $this->user_id;
+        // 开启事务
+        $transaction  = Yii::$app->db->beginTransaction();
 
-        //todo 记录日志
+        $user = User::findModel($this->user_id);
+
+        $this->creater_id = $user->id;
 
         if(!$this->validate()){
             return false;
         }
 
-        if($this->save(false)){
-            return true;
+        if(!$this->save(false)){
+            $transaction->rollBack();
+            return false;
         }
 
-        return $this->getError();
+        // 记录日志
+        $log = StoreHistory::findModel();
+
+        $log->method    = 'transfer';
+        $log->res_name  = 'project';
+        $log->res_id    = $this->id;
+        $log->object    = 'project';
+        $log->object_id = $this->id;
+        $log->content   = '将项目 <code>' . $this->title . '</code>' . ' 转让给 ' . $user->fullName;
+
+        if(!$log->store()){
+            $transaction->rollBack();
+            return false;
+        }
+
+        // 事务提交
+        $transaction->commit();
+
+        return true;
 
     }
 
