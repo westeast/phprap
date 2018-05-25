@@ -77,6 +77,15 @@ class Member extends Model
     }
 
     /**
+     * 获取审核者
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreater()
+    {
+        return $this->hasOne(User::className(),['id'=>'creater_id']);
+    }
+
+    /**
      * 获取关联用户
      * @return \yii\db\ActiveQuery
      */
@@ -123,4 +132,5 @@ class Member extends Model
 
         return trim($title, '、');
     }
+
 }

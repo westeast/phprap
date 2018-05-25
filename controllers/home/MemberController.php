@@ -62,7 +62,7 @@ class MemberController extends PublicController
 
             if ($member->store()) {
 
-                return ['status' => 'success', 'msg' => '添加成功'];
+                return ['status' => 'success', 'message' => '添加成功'];
 
             }
 
@@ -98,7 +98,7 @@ class MemberController extends PublicController
 
             if ($member->store()) {
 
-                return ['status' => 'success', 'msg' => '编辑成功'];
+                return ['status' => 'success', 'message' => '编辑成功'];
 
             }
 

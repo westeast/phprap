@@ -32,16 +32,13 @@
 
                     <div class="panel-body">
                         <div class="table-responsive ">
-                            <table class="table table-striped table-bordered table-hover" style="min-width: 1250px;">
+                            <table class="table table-striped table-bordered table-hover" style="width: 100%;">
                                 <thead>
                                 <tr>
-                                    <th width="20%">昵称/邮箱</th>
-                                    <th>项目权限</th>
-                                    <th>版本权限</th>
-                                    <th>模板权限</th>
-                                    <th>接口权限</th>
-                                    <th>会员权限</th>
+                                    <th>成员昵称/邮箱</th>
+                                    <th>审核者</th>
                                     <th class="datetime">加入时间</th>
+                                    <th class="datetime">更新时间</th>
                                     <th width="150px">操作面板</th>
                                 </tr>
                                 </thead>
@@ -50,12 +47,11 @@
 
                                 <tr>
                                     <td>{{$member->user->name}}({{$member->user->email}})</td>
-                                    <td>{{$member->getRuleText('project')}}</td>
-                                    <td>{{$member->getRuleText('version')}}</td>
-                                    <td>{{$member->getRuleText('module')}}</td>
-                                    <td>{{$member->getRuleText('api')}}</td>
-                                    <td>{{$member->getRuleText('member')}}</td>
+
+                                    <td>{{$member->creater->name}}({{$member->creater->email}})</td>
+
                                     <td>{{$member->created_at}}</td>
+                                    <td>{{$member->updated_at}}</td>
                                     <td>
 
                                         <a type="button" class="btn btn-success btn-xs js_addMemberBtn" data-title="编辑权限" data-modal="#js_addMemberModal" data-height="300" data-src="{{url('home/member/update', ['id' => $member->id])}}"><i class="fa fa-fw fa-key"></i>权限</a>
@@ -101,7 +97,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="submit" class="btn btn-primary js_submit {{if !$project->notMembers}}disabled{{/if}}">确认</button>
+                <button type="submit" class="btn btn-primary js_submit">确认</button>
             </div>
 
         </div>
@@ -111,6 +107,9 @@
 
 <script>
     $(function(){
+
+
+        $('[data-toggle="popover"]').popover();
 
         // 移除成员
         $(".js_removerMemberBtn").click(function () {
@@ -123,17 +122,16 @@
 
                 $.post(url,{ 'csrf-phprap':csrf }, function (json) {
 
-                    if(json.code == 'success'){
+                    if(json.status == 'success'){
 
-                        alert(json.msg, 'success', function () {
+                        alert(json.message, 'success', function () {
                             window.location.reload();
-                            thisObj.closest('tr').remove();
                         });
 
                     }else{
 
                         thisObj.removeAttr("disabled");
-                        alert(json.msg, 'error');
+                        alert(json.message, 'error');
 
                     }
                 });

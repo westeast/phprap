@@ -51,9 +51,9 @@ class History extends Model
     public function getObjectText()
     {
 
-        $find = ['project','version','nev', 'module', 'api', 'field'];
+        $find = ['project','version','nev', 'module', 'api', 'field', 'member'];
 
-        $replace = ['项目','版本', '环境', '模块', '接口', '字段'];
+        $replace = ['项目','版本', '环境', '模块', '接口', '字段', '成员'];
 
         return str_replace($find, $replace, $this->object);
     }
