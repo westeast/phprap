@@ -101,7 +101,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="submit" class="btn btn-primary js_submit">提交</button>
+                <button type="submit" class="btn btn-primary js_submit {{if !$project->notMembers}}disabled{{/if}}">确认</button>
             </div>
 
         </div>
@@ -118,17 +118,23 @@
             confirm('您确定要移除该成员吗？',function () {
                 var url = thisObj.data('url');
                 var csrf = "{{csrf_token()}}";
+
+                thisObj.attr("disabled", "disabled");
+
                 $.post(url,{ 'csrf-phprap':csrf }, function (json) {
 
-                    if(200 == json.code){
+                    if(json.code == 'success'){
 
                         alert(json.msg, 'success', function () {
+                            window.location.reload();
                             thisObj.closest('tr').remove();
                         });
 
                     }else{
 
+                        thisObj.removeAttr("disabled");
                         alert(json.msg, 'error');
+
                     }
                 });
             });

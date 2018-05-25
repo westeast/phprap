@@ -101,7 +101,7 @@ class ApiController extends PublicController
 
             if(!$api->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
@@ -110,13 +110,11 @@ class ApiController extends PublicController
 
             if ($api->store()) {
 
-                return ['code' => 200, 'msg' => '创建成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $api->getError()];
+                return ['status' => 'success', 'message' => '创建成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $api];
 
         }
 
@@ -137,29 +135,6 @@ class ApiController extends PublicController
 
         $api = StoreApi::findModel($id);
 
-        if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
-
-            $api->scenario = 'update';
-
-            if(!$api->load($request->post())){
-
-                return ['code' => 302, 'msg' => '加载数据失败'];
-
-            }
-
-            if ($api->store()) {
-
-                return ['code' => 200, 'msg' => '编辑成功'];
-
-            }else{
-
-                return ['code' => 300, 'field' => $api->field,'msg' => $api->error];
-
-            }
-
-        }
 
         return $this->display('create', ['api' => $api]);
 
@@ -179,7 +154,7 @@ class ApiController extends PublicController
 
             if(!$api->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
@@ -189,11 +164,9 @@ class ApiController extends PublicController
 
                 return ['code' => 200, 'msg' => '删除成功', 'callback' => $callback];
 
-            }else{
-
-                return ['code' => 300, 'msg' => $api->getError()];
-
             }
+
+            return ['status' => 'error', 'model' => $api];
 
         }
 

@@ -59,19 +59,17 @@ class ModuleController extends PublicController
 
             if(!$module->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
             if ($module->store()) {
 
-                return ['code' => 200, 'msg' => '创建成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $module->getError()];
+                return ['status' => 'success', 'message' => '创建成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $module];
 
         }
 
@@ -100,19 +98,17 @@ class ModuleController extends PublicController
 
             if(!$module->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
             if ($module->store()) {
 
-                return ['code' => 200, 'msg' => '编辑成功'];
-
-            }else{
-
-                return ['code' => 300, 'field' => $module->field,'msg' => $module->error];
+                return ['status' => 'success', 'message' => '编辑成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $module];
 
         }
 
@@ -134,19 +130,17 @@ class ModuleController extends PublicController
 
             if(!$module->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
             if ($module->delete()) {
 
-                return ['code' => 200, 'msg' => '删除成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $module->getError()];
+                return ['status' => 'success', 'message' => '删除成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $module];
 
         }
 

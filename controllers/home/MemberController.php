@@ -54,7 +54,7 @@ class MemberController extends PublicController
 
             if(!$member->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
@@ -62,13 +62,11 @@ class MemberController extends PublicController
 
             if ($member->store()) {
 
-                return ['code' => 200, 'msg' => '成员添加成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $member->getError()];
+                return ['status' => 'success', 'msg' => '添加成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $member];
 
         }
 
@@ -94,19 +92,17 @@ class MemberController extends PublicController
 
             if(!$member->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
             if ($member->store()) {
 
-                return ['code' => 200, 'msg' => '编辑成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $member->getError()];
+                return ['status' => 'success', 'msg' => '编辑成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $member];
 
         }
 
@@ -160,13 +156,11 @@ class MemberController extends PublicController
 
             if ($member->remover()) {
 
-                return ['code' => 200, 'msg' => '移除成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $member->getError()];
+                return ['status' => 'success', 'message' => '移除成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $member];
 
         }
 

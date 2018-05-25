@@ -57,19 +57,17 @@ class EnvController extends PublicController
 
             if(!$env->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
             if ($env->store()) {
 
-                return ['code' => 200, 'msg' => '添加成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $env->getError()];
+                return ['status' => 'success', 'message' => '删除成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $env];
 
         }
 
@@ -88,7 +86,7 @@ class EnvController extends PublicController
         $request  = Yii::$app->request;
         $response = Yii::$app->response;
 
-        $env  = StoreEnv::findModel($id);
+        $env = StoreEnv::findModel($id);
 
         if($request->isPost){
 
@@ -98,19 +96,17 @@ class EnvController extends PublicController
 
             if(!$env->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
 
             }
 
             if ($env->store()) {
 
-                return ['code' => 200, 'msg' => '编辑成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $env->getError()];
+                return ['status' => 'success', 'message' => '编辑成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $env];
 
         }
 
@@ -133,13 +129,11 @@ class EnvController extends PublicController
 
             if ($model->delete()) {
 
-                return ['code' => 200, 'msg' => '删除成功'];
-
-            }else{
-
-                return ['code' => 300, 'msg' => $model->getError()];
+                return ['status' => 'success', 'message' => '删除成功'];
 
             }
+
+            return ['status' => 'error', 'model' => $model];
 
         }
 

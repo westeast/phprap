@@ -34,7 +34,11 @@
             </div>
             {{else}}
             <div class="form-group input-group">
+                {{if $project->notMembers}}
                 <input type="text" class="form-control js_selectMemberBtn" placeholder="输入昵称/邮箱，支持模糊查询" datatype="*1-250" nullmsg="请选择项目成员">
+                {{else}}
+                <input type="text" readonly class="form-control" placeholder="没有符合条件的会员" value="">
+                {{/if}}
                 <input class="js_userId" type="hidden" name='StoreMember[user_id]' datatype="n" nullmsg="请选择项目成员" value="">
 
                 <span class="input-group-btn">
@@ -153,13 +157,12 @@
 
                 var url = "{{url('member/select', ['project_id' => $project->id])}}";
 
-                $.get(url, {  "name": name }, function (data) {
+                $.get(url, { "name": name }, function (data) {
                     return process(data);
                 });
 
             },
             afterSelect: function (item) {
-                //选择项之后的时间，item是当前选中的项
                 userIdInput.val(item.id);
                 selectMemberBtn.attr("readonly","readonly");
             },
@@ -176,6 +179,8 @@
         });
 
         // 添加项目表单验证
+        var modalObj  = $(window.parent.document).find('#js_addMemberModal');
+        var submitObj = modalObj.find(":submit");
         $("#js_addMemberForm").Validform({
 
             tiptype:function(msg,o){
@@ -198,6 +203,7 @@
             ajaxPost:true,
 
             beforeSubmit:function(){
+                submitObj.attr("disabled", "disabled");
                 // 项目权限
                 var projectRule =[];
                 $(".js_projectRule:checkbox:checked").each(function(){
@@ -237,12 +243,12 @@
 
             callback:function(json){
 
-                if(200 == json.code){
+                if(json.code == 'success'){
                     alert(json.msg, 'success', function () {
                         parent.location.reload();
                     });
                 }else{
-
+                    $(".js_" + json.label).focus().addClass('Validform_error');
                     alert(json.msg, 'error');
                 }
 

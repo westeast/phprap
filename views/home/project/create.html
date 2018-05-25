@@ -87,6 +87,8 @@
     $(function(){
 
         // 添加表单验证
+        var modalObj  = $(window.parent.document).find('#js_addProjectModal');
+        var submitObj = modalObj.find(":submit");
         $("#js_addProjectForm").Validform({
 
             tiptype:function(msg,o){
@@ -115,13 +117,18 @@
 
             callback:function(json){
 
-                if(json.code == 'success'){
-                    alert(json.msg, 'success', function () {
+                if(json.status == 'success'){
+
+                    alert(json.message, 'success', function () {
                         parent.location.reload();
                     });
+
                 }else{
+
                     $(".js_" + json.label).focus().addClass('Validform_error');
-                    alert(json.msg, 'error');
+                    submitObj.removeAttr("disabled");
+                    alert(json.message, 'error');
+
                 }
 
             }

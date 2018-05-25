@@ -73,17 +73,18 @@ $(function () {
 
         callback:function(json){
 
-            if(200 == json.code){
+            if(json.status == 'success'){
 
-                alert(json.msg, 'success', function () {
+                alert(json.message, 'success', function () {
                     parent.location.reload();
                 });
 
             }else{
 
+                $(".js_" + json.label).focus().addClass('Validform_error');
                 submitObj.removeAttr("disabled");
-                $(".js_password").focus();
-                alert(json.msg, 'error');
+                alert(json.message, 'error');
+
             }
 
         }

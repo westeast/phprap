@@ -83,7 +83,7 @@ class Project extends Model
 
         $query->andFilterWhere(['status' => User::ACTIVE_STATUS]);
 
-        $query->andFilterWhere(['not in', 'id', $this->getMembers()->select('id')->column()])
+        $query->andFilterWhere(['not in', 'id', $this->getMembers()->select('user_id')->column()])
               ->andFilterWhere(['<>', 'id', $this->creater_id]);
 
         $query->andFilterWhere([

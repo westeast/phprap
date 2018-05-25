@@ -58,6 +58,8 @@
 
     $(function () {
         // 转让项目表单验证
+        var modalObj  = $(window.parent.document).find('#js_addProjectModal');
+        var submitObj = modalObj.find(":submit");
         $("#js_transferProjectForm").Validform({
 
             tiptype:function(msg,o){
@@ -79,17 +81,24 @@
 
             ajaxPost:true,
 
+            beforeSubmit: function () {
+
+                submitObj.attr("disabled", "disabled");
+            },
             callback:function(json){
 
-                if(200 == json.code){
-                    alert(json.msg, 'success', function () {
+                if(json.status == 'success'){
+                    alert(json.message, 'success', function () {
                         parent.location.reload();
                     });
                 }else{
-                    alert(json.msg, 'error');
+                    $(".js_" + json.label).focus().addClass('Validform_error');
+                    submitObj.removeAttr("disabled");
+                    alert(json.message, 'error');
                 }
 
             }
+
         });
     });
 

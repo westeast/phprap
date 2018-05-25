@@ -177,6 +177,7 @@ textarea {resize: none;} /*禁止拖拽*/
 
     .sidebar {
         z-index: 1;
+        display: block;
         position: absolute;
         width: 250px;
         margin-top: 51px;

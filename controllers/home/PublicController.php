@@ -2,6 +2,7 @@
 
 namespace app\controllers\home;
 
+use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
 
@@ -22,6 +23,34 @@ class PublicController extends Controller
                 'class' => 'yii\web\ErrorAction',
             ],
         ];
+    }
+
+    public function afterAction($action, $result)
+    {
+
+        if(Yii::$app->request->isAjax){
+
+            $rs = parent::afterAction($action, $result);
+
+            if($rs['message']){
+
+                $rs['message'] = $rs['message'] ? $rs['message'] : '操作成功';
+
+            }else{
+
+                $rs['message'] = $rs['model']->error;
+
+            }
+
+            $rs['label'] = $rs['model']->label;
+
+            return array_filter($rs);
+
+        }else{
+
+            return $result;
+        }
+
     }
 
     /** 展示模板
