@@ -43,6 +43,8 @@
 
 $(function () {
     // 删除项目表单验证
+    var modalObj  = $(window.parent.document).find('#js_deleteProjectModal');
+    var submitObj = modalObj.find(":submit");
     $("#js_deleteProjectForm").Validform({
 
         tiptype:function(msg,o){
@@ -64,14 +66,20 @@ $(function () {
 
         ajaxPost:true,
 
+        beforeSubmit: function () {
+
+            submitObj.attr("disabled", "disabled");
+        },
+
         callback:function(json){
 
-            if(200 == json.code){
+            if(json.code == 'success'){
                 alert(json.msg, 'success', function () {
                     parent.location.reload();
                 });
             }else{
-                $(".js_password").focus();
+                $(".js_" + json.label).focus().addClass('Validform_error');
+                submitObj.removeAttr("disabled");
                 alert(json.msg, 'error');
             }
 

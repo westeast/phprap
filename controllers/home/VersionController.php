@@ -53,17 +53,17 @@ class VersionController extends PublicController
 
             if(!$version->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['code' => 'error', 'msg' => '加载数据失败'];
 
             }
 
             if ($version->store()) {
 
-                return ['code' => 200, 'msg' => '创建成功'];
+                return ['code' => 'success', 'msg' => '创建成功'];
 
             }else{
 
-                return ['code' => 300, 'msg' => $version->getError()];
+                return ['code' => 'error', 'msg' => $version->getError()];
 
             }
 
@@ -89,17 +89,17 @@ class VersionController extends PublicController
 
             if(!$version->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['code' => 'error', 'msg' => '加载数据失败'];
 
             }
 
             if ($version->store()) {
 
-                return ['code' => 200, 'msg' => '编辑成功'];
+                return ['code' => 'success', 'msg' => '编辑成功'];
 
             }else{
 
-                return ['code' => 300, 'field' => $version->field,'msg' => $version->error];
+                return ['code' => 'error', 'label' => $version->getLabel(),'msg' => $version->getError()];
 
             }
 

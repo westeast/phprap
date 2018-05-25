@@ -32,7 +32,7 @@ class Model extends \yii\db\ActiveRecord
      * 获取错误字段
      * @return int|null|string
      */
-    public function getField()
+    public function getLabel()
     {
         return key($this->getFirstErrors());
     }

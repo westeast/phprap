@@ -54,7 +54,7 @@
 
             <div class="form-group">
                 <label class="control-label">版本描述</label>
-                <textarea class="form-control" rows="3" placeholder="版本更新摘要，必填" datatype="*1-250" nullmsg="请输入版本描述" name="StoreVersion[remark]">{{$version->remark}}</textarea>
+                <textarea class="form-control js_remark" rows="3" placeholder="版本更新摘要，必填" datatype="*1-250" nullmsg="请输入版本描述" name="StoreVersion[remark]">{{$version->remark}}</textarea>
             </div>
 
             <input type="hidden" id="js_submit" value="提交">
@@ -127,14 +127,12 @@
 
             callback:function(json){
 
-                if(200 == json.code){
+                if(json.code == 'success'){
                     alert(json.msg, 'success', function () {
                         parent.location.reload();
                     });
                 }else{
-                    if(json.field == 'name'){
-                        $(".js_name").focus();
-                    }
+                    $(".js_" + json.label).focus().addClass('Validform_error');
                     alert(json.msg, 'error');
                 }
 

@@ -108,16 +108,19 @@
 
             ajaxPost:true,
 
+            beforeSubmit: function () {
+
+                submitObj.attr("disabled", "disabled");
+            },
+
             callback:function(json){
 
-                if(200 == json.code){
+                if(json.code == 'success'){
                     alert(json.msg, 'success', function () {
                         parent.location.reload();
                     });
                 }else{
-                    if(json.field == 'title'){
-                        $(".js_title").focus();
-                    }
+                    $(".js_" + json.label).focus().addClass('Validform_error');
                     alert(json.msg, 'error');
                 }
 

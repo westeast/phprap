@@ -155,7 +155,7 @@ class ProjectController extends PublicController
                 // 事务提交
                 $transaction->commit();
 
-                return ['code' => 200, 'msg' => '项目添加成功'];
+                return ['code' => 'success', 'msg' => '项目添加成功'];
 
             } catch (Exception $e) {
 
@@ -164,7 +164,7 @@ class ProjectController extends PublicController
                 // 事务回滚
                 $transaction->rollBack();
 
-                return ['code' => 300, 'msg' => $e->getMessage()];
+                return ['code' => 'error', 'msg' => $e->getMessage()];
 
             }
 
@@ -194,16 +194,16 @@ class ProjectController extends PublicController
             $project->scenario = 'update';
 
             if(!$project->load($request->post())){
-                return ['code' => 301, 'msg' => '加载数据失败'];
+                return ['code' => 'error', 'msg' => '加载数据失败'];
             }
 
             if ($project->store()) {
 
-                return ['code' => 200, 'msg' => '编辑成功'];
+                return ['code' => 'success', 'msg' => '编辑成功'];
 
             }else{
 
-                return ['code' => 300, 'msg' => $project->getError()];
+                return ['code' => 'error', 'label' => $project->getLabel(),'msg' => $project->getError()];
 
             }
 
@@ -283,23 +283,23 @@ class ProjectController extends PublicController
 
             if(!$project->hasRule( 'delete')){
 
-                return ['code' => 301, 'msg' => '抱歉，您无权操作'];
+                return ['code' => 'error', 'msg' => '抱歉，您无权操作'];
 
             }
 
             if(!$project->load($request->post())){
 
-                return ['code' => 302, 'msg' => '加载数据失败'];
+                return ['code' => 'error', 'msg' => '加载数据失败'];
 
             }
 
             if ($project->delete()) {
 
-                return ['code' => 200, 'msg' => '删除成功'];
+                return ['code' => 'success', 'msg' => '删除成功'];
 
             }else{
 
-                return ['code' => 300, 'msg' => $project->getError()];
+                return ['code' => 'error', 'label' => $project->getLabel(),'msg' => $project->getError()];
 
             }
 
