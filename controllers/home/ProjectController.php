@@ -62,9 +62,13 @@ class ProjectController extends PublicController
     public function actionSearch()
     {
 
-        $model = SearchProject::findModel()->search(Yii::$app->request->queryParams);
+        $params = Yii::$app->request->queryParams;
 
-        return $this->display('search', ['model' => $model]);
+        $model = SearchProject::findModel();
+
+        $params['status'] = $model::ACTIVE_STATUS;
+
+        return $this->display('search', ['model' => $model->search($params)]);
 
     }
 

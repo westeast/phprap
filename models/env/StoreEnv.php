@@ -3,9 +3,7 @@ namespace app\models\env;
 
 use app\models\projectLog\StoreLog;
 use Yii;
-use yii\db\Exception;
 use app\models\Env;
-use app\models\history\StoreHistory;
 
 /**
  * This is the model class for table "doc_env".

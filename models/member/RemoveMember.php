@@ -2,7 +2,6 @@
 
 namespace app\models\member;
 
-use app\models\history\StoreHistory;
 use app\models\projectLog\StoreLog;
 use Yii;
 use app\models\Member;

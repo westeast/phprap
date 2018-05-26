@@ -50,7 +50,8 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <p class="text-muted"><label>接口名称：</label>{{$api->title}}</p>
-                                                <p class="text-muted"><label>接口创建人：</label>{{$api->creater->name}}({{$api->creater->email}})</p>
+                                                <p class="text-muted"><label>请求类型：</label>{{$api->method}}</p>
+                                                <p class="text-muted"><label>接口创建人：</label>{{$api->creater->fullName}}</p>
                                                 <p class="text-muted"><label>创建时间：</label>{{$api->created_at}}</p>
                                                 <p class="text-muted"><label>更新时间：</label>{{$api->updated_at}}</p>
 
@@ -83,18 +84,18 @@
                                                 <tbody>
                                                 {{foreach $api->module->project->envs as $env}}
                                                 <tr>
-                                                    <td style="width: 100px;">{{$env->title}}({{$env->name}})</td>
-                                                    <td style="width: 50%;"><code>{{$env->domain}}{{$api->uri}}</code></td>
-                                                    <td style="width: 15%;">
+                                                    <td style="width: 150px;">{{$env->title}}({{$env->name}})</td>
+                                                    <td><code>{{$env->domain}}{{$api->uri}}</code></td>
+                                                    <td style="width: 100px;">
                                                         <button type="button" data-clipboard-text="{{$env->domain}}{{$api->uri}}" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                                                     </td>
                                                 </tr>
                                                 {{/foreach}}
 
                                                 <tr>
-                                                    <td style="width: 100px;">模拟环境(mock)</td>
-                                                    <td style="width: 50%;"><code>http://demo.phprap.com/mock/FzxxmyQzxV.html</code></td>
-                                                    <td style="width: 15%;">
+                                                    <td>模拟环境(mock)</td>
+                                                    <td><code>http://demo.phprap.com/mock/FzxxmyQzxV.html</code></td>
+                                                    <td>
                                                         <button type="button" data-clipboard-text="http://demo.phprap.com/mock/FzxxmyQzxV.html" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                                                     </td>
 

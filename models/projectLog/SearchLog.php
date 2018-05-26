@@ -24,7 +24,9 @@ class SearchLog extends ProjectLog
         $query = static::find();
 
         $query->andFilterWhere([
-            'project_id'   => $this->params['project_id'],
+            'project_id'  => $this->params['project_id'],
+            'object_name' => $this->params['object_name'],
+            'object_id'   => $this->params['object_id'],
         ]);
 
         $pagination = new Pagination([

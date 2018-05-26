@@ -46,7 +46,7 @@
 
                                         <a class="input-group-btn verify-code">
 
-                                           <img alt="点击刷新" title="点击刷新" onclick="reloadCode()" src="{{url('account/captcha')}}">
+                                           <img alt="点击刷新" title="点击刷新" onclick="reloadCode()" src="{{url('home/captcha/register')}}">
 
                                         </a>
 
@@ -129,23 +129,22 @@
 
                 callback:function(json){
 
-                    if(200 == json.code){
+                    if(json.status == 'success'){
 
-                        alert(json.msg, 'success', function () {
+                        alert(json.message, 'success', function () {
                             if(json.callback){
                                 window.location.href = json.callback;
                             }else{
                                 window.location.reload();
                             }
-
                         });
 
                     }else{
 
                         reloadCode();
+                        $(".js_" + json.label).focus().addClass('Validform_error');
                         submitObj.removeAttr("disabled");
-                        alert(json.msg, 'error');
-
+                        alert(json.message, 'error');
                     }
 
                 }

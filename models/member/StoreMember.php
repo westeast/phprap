@@ -5,7 +5,6 @@ namespace app\models\member;
 use app\models\projectLog\StoreLog;
 use Yii;
 use app\models\Member;
-use app\models\history\StoreHistory;
 
 class StoreMember extends Member
 {

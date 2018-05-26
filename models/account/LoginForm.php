@@ -3,10 +3,9 @@
 namespace app\models\account;
 
 use Yii;
-use app\models\Model;
 use app\models\User;
 
-class LoginForm extends Model
+class LoginForm extends User
 {
 
     public $email;
@@ -24,7 +23,7 @@ class LoginForm extends Model
             ['password', 'required', 'message' => '密码不可以为空'],
             ['password', 'validatePassword'],
             ['verifyCode', 'required', 'message' => '验证码不能为空'],
-            ['verifyCode', 'captcha', 'captchaAction' => 'home/account/captcha'],
+            ['verifyCode', 'captcha', 'captchaAction' => 'home/captcha/login'],
         ];
     }
 
@@ -43,20 +42,14 @@ class LoginForm extends Model
     public function login()
     {
 
-        // 调用validate方法 进行rule的校验，其中包括用户是否存在和密码是否正确的校验
-        if ($this->validate()) {
-
-            $user = User::findByEmail($this->email);
-
-
-            // 校验成功后，session保存用户信息
-            return Yii::$app->user->login($user, $this->rememberMe ? 60*60*24 : 0);
-
-        } else {
-
-
+        if(!$this->validate()){
             return false;
         }
+
+        $user = User::findByEmail($this->email);
+
+        return Yii::$app->user->login($user, $this->rememberMe ? 60*60*24 : 0);
+
     }
 
 }

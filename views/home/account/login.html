@@ -18,20 +18,20 @@
 
                             <fieldset>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="登录邮箱" name="LoginForm[email]" type="email"  autocomplete="off" datatype="e" nullmsg="请输入登录邮箱" errormsg="请输入合法的邮箱地址！">
+                                    <input class="form-control js_email" placeholder="登录邮箱" name="LoginForm[email]" type="email"  autocomplete="off" datatype="e" nullmsg="请输入登录邮箱" errormsg="请输入合法的邮箱地址！">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="登录密码" name="LoginForm[password]" type="password" value="" autocomplete="off" datatype="*6-20" nullmsg="请输入登录密码" errormsg="请填写6-20个字符">
+                                    <input class="form-control js_password" placeholder="登录密码" name="LoginForm[password]" type="password" value="" autocomplete="off" datatype="*6-20" nullmsg="请输入登录密码" errormsg="请填写6-20个字符">
                                 </div>
 
                                 <div class="form-group">
                                     <div class="input-group">
 
-                                        <input type="text" name="LoginForm[verifyCode]" class="form-control" datatype="*" nullmsg="请输入验证码" placeholder="验证码，不区分大小写">
+                                        <input type="text" name="LoginForm[verifyCode]" class="form-control js_verifyCode" datatype="*" nullmsg="请输入验证码" placeholder="验证码，不区分大小写">
 
                                         <a class="input-group-btn verify-code">
 
-                                            <img alt="点击刷新" title="点击刷新" onclick="reloadCode()" src="{{url('account/captcha')}}" width="100px" height="35px">
+                                            <img alt="点击刷新" title="点击刷新" onclick="reloadCode()" src="{{url('home/captcha/login')}}" width="100px" height="35px">
 
                                         </a>
 
@@ -117,20 +117,20 @@
 
                     submitObj.attr("disabled", "disabled");
                 },
-
                 callback:function(json){
 
-                    if(200 == json.code){
+                    if(json.status == 'success'){
 
-                        alert(json.msg, 'success', function () {
+                        alert(json.message, 'success', function () {
                             window.location.reload();
                         });
 
                     }else{
 
                         reloadCode();
+                        $(".js_" + json.label).focus().addClass('Validform_error');
                         submitObj.removeAttr("disabled");
-                        alert(json.msg, 'error');
+                        alert(json.message, 'error');
                     }
 
                 }

@@ -43,6 +43,7 @@ class Version extends Model
             [['project_id', 'parent_id', 'creater_id', 'token', 'name'], 'required'],
             [['project_id', 'parent_id', 'creater_id', 'status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
+            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
             [['token'], 'string', 'max' => 20],
             [['name'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 250],

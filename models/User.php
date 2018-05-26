@@ -29,7 +29,8 @@ class User extends Model implements IdentityInterface
 {
 
     const ACTIVE_STATUS  = 10; //启用状态
-    const DELETED_STATUS = 20; //禁用状态
+    const DISABLE_STATUS = 20; //禁用状态
+    const DELETED_STATUS = 30; //删除状态
 
     /**
      * @inheritdoc
@@ -55,8 +56,8 @@ class User extends Model implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::ACTIVE_STATUS],
+            [['created_at', 'updated_at'], 'safe'],
             [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
         ];
     }
@@ -124,7 +125,7 @@ class User extends Model implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            'status' => self::ACTIVE_STATUS,
         ]);
     }
 

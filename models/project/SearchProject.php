@@ -23,6 +23,10 @@ class SearchProject extends Project
 
         $query = self::find()->joinWith('creater');
 
+        $query->andFilterWhere([
+            '{{%project}}.status' => self::ACTIVE_STATUS,
+        ]);
+
         $query->andFilterWhere(['like', '{{%project}}.title', $this->params['title']]);
 
         $query->andFilterWhere(['like', '{{%user}}.name', $this->params['name']]);

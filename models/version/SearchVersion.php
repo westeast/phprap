@@ -24,7 +24,7 @@ class SearchVersion extends Version
         $query = static::find();
 
         $query->andFilterWhere([
-            'status' => 10,
+            'status'     => self::ACTIVE_STATUS,
             'project_id' => $this->params['project_id'],
         ]);
 

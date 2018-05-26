@@ -15,20 +15,6 @@ use app\models\account\LoginForm;
 class AccountController extends PublicController
 {
 
-    public function actions(){
-        return [
-            'captcha' => [
-                'class' => 'app\actions\CaptchaAction',
-                'maxLength' => 5,
-                'minLength' => 5,
-                'padding' => 3,
-                'height' => 35,
-                'width'  => 100,
-                'offset' => 1
-            ]
-        ];
-    }
-
     public function behaviors()
     {
         return [
@@ -69,13 +55,19 @@ class AccountController extends PublicController
 
             $model = new RegisterForm();
 
-            if ($model->load($request->post()) && $model->register()) {
+            if(!$model->load($request->post())){
 
-                return ['code' => 200, 'msg' => '注册成功', 'callback' => Url::toRoute(['project/select'])];
+                return ['status' => 'error', 'message' => '加载数据失败'];
+
+            }
+
+            if ($model->register()) {
+
+                return ['status' => 'success', 'message' => '注册成功', 'callback' => Url::toRoute(['project/select'])];
 
             } else {
 
-                return ['code' => 300, 'msg' => $model->getError()];
+                return ['status' => 'error', 'message' => $model->getError(), 'label' => $model->getLabel()];
 
             }
 
@@ -106,13 +98,19 @@ class AccountController extends PublicController
 
             $model = new LoginForm();
 
-            if ($model->load($request->post()) && $model->login()) {
+            if(!$model->load($request->post())){
 
-                return ['code' => 200, 'msg' => '登录成功'];
+                return ['status' => 'error', 'message' => '加载数据失败'];
+
+            }
+
+            if ($model->login()) {
+
+                return ['status' => 'success', 'message' => '登录成功'];
 
             } else {
 
-                return ['code' => 300, 'msg' => $model->getError()];
+                return ['status' => 'error', 'message' => $model->getError(), 'label' => $model->getLabel()];
 
             }
 

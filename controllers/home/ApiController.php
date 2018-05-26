@@ -5,6 +5,7 @@ use app\models\Api;
 use app\models\api\DeleteApi;
 use app\models\api\StoreApi;
 use app\models\Module;
+use app\models\projectLog\SearchLog;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Response;
@@ -47,6 +48,11 @@ class ApiController extends PublicController
         // 获取当前版本
         $project->current_version = $api->module->version;
 
+        $params = [
+            'object_name' => 'api',
+            'object_id'  => $id
+        ];
+
         switch ($tab) {
             case 'home':
                 $view  = '/home/api/home';
@@ -54,15 +60,16 @@ class ApiController extends PublicController
             case 'debug':
                 $view  = '/home/api/debug';
                 break;
-            case 'history':
-                $view  = '/home/history/api';
+            case 'log':
+                $model = SearchLog::findModel()->search($params);
+                $view  = '/home/log/api';
                 break;
             default:
                 $view  = '/home/api/home';
                 break;
         }
 
-        return $this->display($view, ['project' => $project, 'api' => $api]);
+        return $this->display($view, ['project' => $project, 'api' => $api, 'model' => $model]);
 
     }
 

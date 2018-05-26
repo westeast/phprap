@@ -2,11 +2,9 @@
 
 namespace app\models\version;
 
-use app\models\history\StoreHistory;
 use app\models\projectLog\StoreLog;
 use app\models\Version;
 use Yii;
-use yii\db\Exception;
 
 /**
  * This is the model class for table "doc_version".

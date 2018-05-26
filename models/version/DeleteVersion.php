@@ -4,7 +4,6 @@
  */
 namespace app\models\version;
 
-use app\models\history\StoreHistory;
 use app\models\projectLog\StoreLog;
 use app\models\Version;
 use Yii;

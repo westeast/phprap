@@ -5,7 +5,6 @@ namespace app\models\project;
 use app\models\projectLog\StoreLog;
 use Yii;
 use app\models\Project;
-use app\models\history\StoreHistory;
 
 class StoreProject extends Project
 {
@@ -35,7 +34,7 @@ class StoreProject extends Project
         $query = self::find();
 
         $query->andFilterWhere([
-            'creater_id' => $this->creater_id,
+            'creater_id' => Yii::$app->user->identity->id,
             'status' => Project::ACTIVE_STATUS,
             'title'   => $this->title,
         ]);

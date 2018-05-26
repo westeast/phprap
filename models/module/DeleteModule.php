@@ -2,7 +2,6 @@
 
 namespace app\models\module;
 
-use app\models\history\StoreHistory;
 use app\models\Module;
 use app\models\projectLog\StoreLog;
 use Yii;

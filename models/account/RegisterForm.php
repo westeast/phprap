@@ -4,10 +4,9 @@ namespace app\models\account;
 
 use app\models\Config;
 use Yii;
-use app\models\Model;
 use app\models\User;
 
-class RegisterForm extends Model
+class RegisterForm extends User
 {
 
     public $name;
@@ -29,9 +28,11 @@ class RegisterForm extends Model
             ['password', 'required', 'message' => '密码不可以为空'],
             ['password', 'string', 'min' => 6, 'tooShort' => '密码至少填写6位'],
             ['verifyCode', 'required', 'message' => '验证码不能为空'],
-            ['verifyCode', 'captcha', 'captchaAction' => 'account/captcha'],
-            ['registerToken', 'required', 'message' => '注册口令不能为空'],
-            ['registerToken', 'validateToken'],
+            ['verifyCode', 'captcha', 'captchaAction' => 'home/captcha/register'],
+//            ['registerToken', 'required', 'message' => '注册口令不能为空'],
+//            ['registerToken', 'validateToken'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
         ];
     }
 
@@ -54,7 +55,7 @@ class RegisterForm extends Model
     {
 
         if (!$this->validate()) {
-            return null;
+            return false;
         }
 
         $user = new User();

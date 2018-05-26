@@ -50,6 +50,7 @@ class Project extends Model
             [['creater_id', 'sort', 'allow_search', 'status'], 'integer'],
             [['!creater_id', 'title', 'allow_search', '!status'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
+            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
             [['title', 'remark'], 'string', 'max' => 250],
         ];
     }
