@@ -30,7 +30,7 @@
             <div class="form-group">
                 <label>成员信息</label>
 
-                <input type="text" readonly class="form-control" datatype="*1-250" value="{{$member->user->name}}({{$member->user->email}})">
+                <input type="text" readonly class="form-control" datatype="*1-250" value="{{$member->user->fullName}}">
             </div>
             {{else}}
             <div class="form-group input-group">

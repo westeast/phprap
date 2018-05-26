@@ -13,16 +13,17 @@ use Yii;
  * @property int $creater_id 创建者id
  * @property string $title 模块名称
  * @property string $remark 项目描述
- * @property int $status 模块状态 10:正常 20:删除
- * @property int $sort 排序
- * @property string $created_at
- * @property string $updated_at
+ * @property int $status 模块状态
+ * @property int $sort 排序数字
+ * @property string $created_at 创建时间
+ * @property string $updated_at 更新时间
  */
 class Module extends Model
 {
 
-    const ACTIVE_STATUS  = 10;
-    const DELETED_STATUS = 20;
+    const ACTIVE_STATUS  = 10; //启用状态
+    const DISABLE_STATUS = 20; //禁用状态
+    const DELETED_STATUS = 30; //删除状态
 
     /**
      * 绑定数据表
@@ -30,6 +31,40 @@ class Module extends Model
     public static function tableName()
     {
         return '{{%module}}';
+    }
+
+    /**
+     * 验证规则
+     */
+    public function rules()
+    {
+        return [
+            [['project_id', 'version_id', 'title', 'status'], 'required'],
+            [['project_id', 'version_id', 'creater_id', 'status', 'sort'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['title'], 'string', 'max' => 50],
+            [['remark'], 'string', 'max' => 250],
+        ];
+    }
+
+    /**
+     * 字段字典
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'project_id' => '项目',
+            'version_id' => '版本',
+            'creater_id' => '创建者',
+            'title' => '模块名称',
+            'remark' => '项目描述',
+            'status' => '模块状态',
+            'sort' => '排序数字',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
+        ];
     }
 
     /**

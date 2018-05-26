@@ -4,6 +4,7 @@ namespace app\controllers\home;
 use app\models\member\SearchMember;
 use app\models\project\SearchProject;
 use app\models\project\TransferProject;
+use app\models\projectLog\SearchLog;
 use Yii;
 use yii\web\Response;
 use yii\db\Exception;
@@ -229,9 +230,9 @@ class ProjectController extends PublicController
                 $model = SearchMember::findModel()->search($params);
                 $view  = '/home/member/index';
                 break;
-            case 'history':
-                $model = SearchHistory::findModel()->search($params);
-                $view  = '/home/history/project';
+            case 'log':
+                $model = SearchLog::findModel()->search($params);
+                $view  = '/home/log/project';
                 break;
             default:
                 $view  = '/home/project/home';

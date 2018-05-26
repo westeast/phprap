@@ -24,7 +24,7 @@
 
                 <div class="panel panel-default">
 
-                    {{include_file name='home/project/tab' tab='history'}}
+                    {{include_file name='home/project/tab' tab='log'}}
 
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -33,6 +33,7 @@
                                 <thead>
                                 <tr>
                                     <th>操作人</th>
+                                    <th width="80px">操作版本</th>
                                     <th width="80px">操作类型</th>
                                     <th width="80px">操作对象</th>
                                     <th>操作内容</th>
@@ -43,6 +44,7 @@
                                 {{foreach $model->models as $history}}
                                 <tr>
                                     <td>{{$history->user_name}}({{$history->user_email}})</td>
+                                    <td>{{$history->version_name}}</td>
                                     <td>{{$history->methodText}}</td>
                                     <td>{{$history->objectText}}</td>
                                     <td>{{$history->content}}</td>

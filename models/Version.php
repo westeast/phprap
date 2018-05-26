@@ -14,7 +14,7 @@ use Yii;
  * @property string $token 版本token
  * @property string $name 版本号
  * @property string $remark 备注信息
- * @property int $status 版本状态，10:正常 20:禁用 30:删除
+ * @property int $status 版本状态
  * @property string $created_at 创建时间
  * @property string $updated_at 更新时间
  */
@@ -46,6 +46,26 @@ class Version extends Model
             [['token'], 'string', 'max' => 20],
             [['name'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 250],
+        ];
+    }
+
+    /**
+     * 字段字典
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'project_id' => '项目',
+            'parent_id' => '父级版本',
+            'creater_id' => '创建者',
+            'token' => 'Token',
+            'name'  => '版本号',
+            'remark' => '版本描述',
+            'status' => '版本状态',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

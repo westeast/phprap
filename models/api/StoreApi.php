@@ -2,6 +2,7 @@
 
 namespace app\models\api;
 
+use app\models\projectLog\StoreLog;
 use Yii;
 use yii\db\Exception;
 use app\models\Api;
@@ -58,50 +59,56 @@ class StoreApi extends Api
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        try {
+        $this->uri = '/' . trim($this->uri, '/');
 
-            $this->uri = '/' . trim($this->uri, '/');
-
-            if(!$this->save()){
-                throw new Exception($this->getError());
-            }
-
-            // 记录日志
-            $log = StoreHistory::findModel();
-
-            if($this->scenario == 'create'){
-                $log->method = '创建';
-
-            }elseif($this->scenario == 'update'){
-                $log->method = '更新';
-
-            }
-
-            $log->res_name = 'project';
-            $log->res_id   = $this->module->project->id;
-            $log->object   = 'api';
-            $log->content  = $log->method . '了接口<code>' . $this->title . '</code>';
-
-            if(!$log->store()){
-
-                throw new Exception($log->getError());
-            }
-
-            // 事务提交
-            $transaction->commit();
-
-            return true;
-
-        } catch (Exception $e) {
-
-            $this->addError('module', $e->getMessage());
-
-            // 事务回滚
-            $transaction->rollBack();
-
+        if(!$this->validate()){
             return false;
+        }
+
+        // 判断是否有更新
+        $oldAttributes   = $this->getOldAttributes();
+        $dirtyAttributes = $this->getDirtyAttributes();
+
+        if(!$dirtyAttributes){
+            return true;
+        }
+
+        if(!$this->save(false)){
+            $transaction->rollBack();
+            return false;
+        }
+
+        // 记录日志
+        $log = StoreLog::findModel();
+
+        if($this->scenario == 'create'){
+            $log->method  = 'create';
+            $log->content = '创建了 接口 <code>' . $this->title . '</code>';
+
+        }elseif($this->scenario == 'update'){
+
+            $log->method  = 'update';
+
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
 
         }
+
+        $log->project_id  = $this->module->project_id;
+        $log->version_id  = $this->module->version->id;
+        $log->version_name  = $this->module->version->name;
+        $log->object_name = 'api';
+        $log->object_id   = $this->id;
+
+        if(!$log->store()){
+
+            $transaction->rollBack();
+            return false;
+        }
+
+        // 事务提交
+        $transaction->commit();
+
+        return true;
 
     }
 

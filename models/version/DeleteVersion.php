@@ -5,6 +5,7 @@
 namespace app\models\version;
 
 use app\models\history\StoreHistory;
+use app\models\projectLog\StoreLog;
 use app\models\Version;
 use Yii;
 
@@ -62,14 +63,15 @@ class DeleteVersion extends Version
         }
 
         // 记录日志
-        $log = StoreHistory::findModel();
+        $log = StoreLog::findModel();
 
-        $log->method    = 'delete';
-        $log->res_name  = 'project';
-        $log->res_id    = $this->id;
-        $log->object    = 'version';
-        $log->object_id = $this->id;
-        $log->content   = '删除了版本<code>' . $this->name . '</code>';
+        $log->method     = 'delete';
+        $log->project_id = $this->project_id;
+        $log->version_id = $this->id;
+        $log->version_name = $this->name;
+        $log->object_name  = 'version';
+        $log->object_id    = $this->id;
+        $log->content      = '删除了 版本 <code>' . $this->name . '</code>';
 
         if(!$log->store()){
             $transaction->rollBack();
@@ -78,6 +80,8 @@ class DeleteVersion extends Version
 
         // 事务提交
         $transaction->commit();
+
+        return true;
 
     }
 

@@ -3,6 +3,7 @@
 namespace app\models\version;
 
 use app\models\history\StoreHistory;
+use app\models\projectLog\StoreLog;
 use app\models\Version;
 use Yii;
 use yii\db\Exception;
@@ -66,11 +67,27 @@ class StoreVersion extends Version
 
     }
 
+    /**
+     * 保存版本
+     * @return bool
+     */
     public function store()
     {
 
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
+
+        if(!$this->validate()){
+            return false;
+        }
+
+        // 判断是否有更新
+        $oldAttributes   = $this->getOldAttributes();
+        $dirtyAttributes = $this->getDirtyAttributes();
+
+        if(!$dirtyAttributes){
+            return true;
+        }
 
         if(!$this->save()){
             $transaction->rollBack();
@@ -78,22 +95,26 @@ class StoreVersion extends Version
         }
 
         // 记录日志
-        $log = StoreHistory::findModel();
+        $log = StoreLog::findModel();
 
         if($this->scenario == 'create'){
+
             $log->method  = 'create';
-            $log->content = '创建了版本<code>' . $this->name . '</code>';
+            $log->content = '创建了 版本 <code>' . $this->name . '</code>';
 
         }elseif($this->scenario == 'update'){
             $log->method  = 'update';
-            $log->content = '更新了版本<code>' . $this->name . '</code>';
+
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
 
         }
 
-        $log->res_name  = 'project';
-        $log->res_id    = $this->project_id;
-        $log->object    = 'version';
-        $log->object_id = $this->id;
+        $log->project_id    = $this->project_id;
+        $log->version_id    = $this->id;
+        $log->version_name  = $this->name;
+        $log->project_id    = $this->project_id;
+        $log->object_name   = 'version';
+        $log->object_id     = $this->id;
 
         if(!$log->store()){
             $transaction->rollBack();

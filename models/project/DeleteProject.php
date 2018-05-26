@@ -4,6 +4,7 @@ namespace app\models\project;
 
 use app\models\history\StoreHistory;
 use app\models\Project;
+use app\models\projectLog\StoreLog;
 use Yii;
 
 class DeleteProject extends Project
@@ -64,14 +65,13 @@ class DeleteProject extends Project
         }
 
         // 记录日志
-        $log = StoreHistory::findModel();
+        $log = StoreLog::findModel();
 
-        $log->method    = 'delete';
-        $log->res_name  = 'project';
-        $log->res_id    = $this->id;
-        $log->object    = 'project';
-        $log->object_id = $this->id;
-        $log->content   = '删除了项目<code>' . $this->title . '</code>';
+        $log->method      = 'delete';
+        $log->project_id  = $this->id;
+        $log->object_name = 'project';
+        $log->object_id   = $this->id;
+        $log->content     = '删除了 项目 <code>' . $this->title . '</code>';
 
         if(!$log->store()){
             $transaction->rollBack();

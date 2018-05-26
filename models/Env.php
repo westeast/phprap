@@ -9,9 +9,9 @@ use Yii;
  *
  * @property int $id
  * @property string $name 环境标识
- * @property string $title 环境名
+ * @property string $title 环境名称
  * @property string $domain 环境域名
- * @property int $status 启用状态 10:正常 20:删除
+ * @property int $status 启用状态
  * @property int $project_id 项目id
  * @property int $creater_id 创建者id
  * @property string $created_at
@@ -20,8 +20,9 @@ use Yii;
 class Env extends Model
 {
 
-    const ACTIVE_STATUS  = 10;
-    const DELETED_STATUS = 20;
+    const ACTIVE_STATUS  = 10; //启用状态
+    const DISABLE_STATUS = 20; //禁用状态
+    const DELETED_STATUS = 30; //删除状态
 
     /**
      * 默认环境
@@ -62,6 +63,25 @@ class Env extends Model
             [['name'], 'string', 'max' => 10],
             [['title'], 'string', 'max' => 50],
             [['domain'], 'string', 'max' => 250],
+        ];
+    }
+
+    /**
+     * 字段字典
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'name' => '环境标识',
+            'title' => '环境名称',
+            'domain' => '环境域名',
+            'status' => '启用状态',
+            'project_id' => '项目',
+            'creater_id' => '创建者',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

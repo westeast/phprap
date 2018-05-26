@@ -1,16 +1,17 @@
 <?php
 
-namespace app\models\history;
+namespace app\models\projectLog;
 
+use app\models\ProjectLog;
 use Yii;
-use app\models\History;
 use yii\data\Pagination;
 use app\widgets\LinkPager;
 
-class SearchHistory extends History
+class SearchLog extends ProjectLog
 {
 
     public $pageSize = 20;
+
     public function search($params = [])
     {
 
@@ -23,8 +24,7 @@ class SearchHistory extends History
         $query = static::find();
 
         $query->andFilterWhere([
-            'res_name' => 'project',
-            'res_id'   => $this->params['project_id'],
+            'project_id'   => $this->params['project_id'],
         ]);
 
         $pagination = new Pagination([

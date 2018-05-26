@@ -2,6 +2,7 @@
 
 namespace app\models\member;
 
+use app\models\projectLog\StoreLog;
 use Yii;
 use app\models\Member;
 use app\models\history\StoreHistory;
@@ -41,24 +42,23 @@ class StoreMember extends Member
         }
 
         // 记录日志
-        $log = StoreHistory::findModel();
+        $log = StoreLog::findModel();
 
         if($this->scenario == 'create'){
 
             $log->method   = 'create';
-            $log->content  = '添加了成员<code>' . $this->user->fullName . '</code>';
+            $log->content  = '添加了 成员 <code>' . $this->user->fullName . '</code>';
 
         }elseif($this->scenario == 'update'){
 
             $log->method  = 'update';
-            $log->content = '更新了成员<code>' . $this->user->fullName . '</code>';
+            $log->content = '更新了 成员 <code>' . $this->user->fullName . '</code>';
 
         }
 
-        $log->res_name  = 'project';
-        $log->res_id    = $this->project->id;
-        $log->object    = 'member';
-        $log->object_id = $this->id;
+        $log->project_id  = $this->project->id;
+        $log->object_name = 'member';
+        $log->object_id   = $this->id;
 
         if(!$log->store()){
             $transaction->rollBack();

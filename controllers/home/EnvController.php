@@ -60,7 +60,7 @@ class EnvController extends PublicController
 
             if ($env->store()) {
 
-                return ['status' => 'success', 'message' => '删除成功'];
+                return ['status' => 'success', 'message' => '创建成功'];
 
             }
 

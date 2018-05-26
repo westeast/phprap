@@ -47,17 +47,23 @@ class PublicController extends Controller
                 return $rs;
             }
 
+            if($rs['status'] == 'success'){
+                $defaultMessage= '操作成功';
+            }elseif ($rs['status'] == 'error') {
+                $defaultMessage= '操作失败';
+            }
+
             if(isset($rs['message'])){
 
-                $rs['message'] = $rs['message'] ? $rs['message'] : '操作成功';
+                $rs['message'] = $rs['message'] ? $rs['message'] : $defaultMessage;
 
             }else{
 
-                $rs['message'] = isset($rs['model']) ? $rs['model']->error : '操作成功';
+                $rs['message'] = $rs['model']->error ? $rs['model']->error : $defaultMessage;
 
             }
 
-            $rs['label'] = isset($rs['model']) ? $rs['model']->label : '';
+            $rs['label'] = $rs['model']->label ? $rs['model']->label : '';
 
             return array_filter($rs);
 

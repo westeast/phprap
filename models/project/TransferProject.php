@@ -4,6 +4,7 @@ namespace app\models\project;
 
 use app\models\history\StoreHistory;
 use app\models\Project;
+use app\models\projectLog\StoreLog;
 use app\models\User;
 use Yii;
 
@@ -86,14 +87,13 @@ class TransferProject extends Project
         }
 
         // 记录日志
-        $log = StoreHistory::findModel();
+        $log = StoreLog::findModel();
 
-        $log->method    = 'transfer';
-        $log->res_name  = 'project';
-        $log->res_id    = $this->id;
-        $log->object    = 'project';
-        $log->object_id = $this->id;
-        $log->content   = '将项目 <code>' . $this->title . '</code>' . ' 转让给 ' . $user->fullName;
+        $log->method      = 'transfer';
+        $log->project_id  = $this->id;
+        $log->object_name = 'project';
+        $log->object_id   = $this->id;
+        $log->content     = '将项目 <code>' . $this->title . '</code>' . ' 转让给 ' . $user->fullName;
 
         if(!$log->store()){
             $transaction->rollBack();

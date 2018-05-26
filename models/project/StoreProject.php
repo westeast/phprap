@@ -2,6 +2,7 @@
 
 namespace app\models\project;
 
+use app\models\projectLog\StoreLog;
 use Yii;
 use app\models\Project;
 use app\models\history\StoreHistory;
@@ -79,11 +80,11 @@ class StoreProject extends Project
         }
 
         // 记录日志
-        $log = StoreHistory::findModel();
+        $log = StoreLog::findModel();
 
         if($this->scenario == 'create'){
             $log->method  = 'create';
-            $log->content = '创建了项目<code>' . $this->title . '</code>';
+            $log->content = '创建了 项目 <code>' . $this->title . '</code>';
 
         }elseif($this->scenario == 'update'){
 
@@ -93,17 +94,16 @@ class StoreProject extends Project
 
             $replace = ['允许','禁止'];
 
-            $oldAttributes['allow_search'] = str_replace($find, $replace, $oldAttributes['allow_search']);
+            $oldAttributes['allow_search']   = str_replace($find, $replace, $oldAttributes['allow_search']);
             $dirtyAttributes['allow_search'] = str_replace($find, $replace, $dirtyAttributes['allow_search']);
 
             $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
 
         }
 
-        $log->res_name  = 'project';
-        $log->res_id    = $this->id;
-        $log->object    = 'project';
-        $log->object_id = $this->id;
+        $log->project_id  = $this->id;
+        $log->object_name = 'project';
+        $log->object_id   = $this->id;
 
         if(!$log->store()){
             $transaction->rollBack();

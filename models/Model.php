@@ -63,10 +63,13 @@ class Model extends \yii\db\ActiveRecord
 
             $label = '<strong>' . $this->getAttributeLabel($name) . '</strong>';
 
-            $oldValue = '<code>' . $oldAttributes[$name] . '</code>';
-            $newValue = '<code>' . $value . '</code>';
+            if($oldAttributes[$name] && $value){
+                $oldValue = '<code>' . $oldAttributes[$name] . '</code>';
+                $newValue = '<code>' . $value . '</code>';
 
-            $oldAttributes[$name] && $content .= '将 ' . $label . ' 从' . $oldValue . '更新为' . $newValue . ',';
+                $content .= '将 ' . $label . ' 从' . $oldValue . '更新为' . $newValue . ',';
+            }
+
         }
 
         return trim($content, ',');
