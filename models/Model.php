@@ -63,7 +63,7 @@ class Model extends \yii\db\ActiveRecord
 
             $label = '<strong>' . $this->getAttributeLabel($name) . '</strong>';
 
-            if($oldAttributes[$name] && $value){
+            if(isset($oldAttributes[$name])){
                 $oldValue = '<code>' . $oldAttributes[$name] . '</code>';
                 $newValue = '<code>' . $value . '</code>';
 

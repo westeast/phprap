@@ -2,6 +2,7 @@
 
 namespace app\models\account;
 
+use app\models\Config;
 use Yii;
 use app\models\User;
 
@@ -48,7 +49,9 @@ class LoginForm extends User
 
         $user = User::findByEmail($this->email);
 
-        return Yii::$app->user->login($user, $this->rememberMe ? 60*60*24 : 0);
+        $login_keep = config('login_keep', 'safe');
+
+        return Yii::$app->user->login($user, 60*60*$login_keep);
 
     }
 

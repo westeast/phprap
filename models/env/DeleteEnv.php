@@ -33,7 +33,7 @@ class DeleteEnv extends Env
         $log->project_id  = $this->project_id;
         $log->object_name = 'env';
         $log->object_id   = $this->id;
-        $log->content     = '删除了环境<code>' . $this->title . '</code>';
+        $log->content     = '删除了 环境<code>' . $this->title . '</code>';
 
         if(!$log->store()){
             $transaction->rollBack();

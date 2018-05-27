@@ -40,8 +40,8 @@
             {{/if}}
 
             <div class="form-group">
-                <label class="control-label">环境域名</label>
-                <input type="text" class="form-control" name="StoreEnv[domain]" placeholder="http://" datatype="/^(http|https)\:\/\//" nullmsg="请输入环境域名" errormsg="请输入包含协议的合法域名"value="{{$env->domain}}">
+                <label class="control-label">根路径</label>
+                <input type="text" class="form-control" name="StoreEnv[domain]" placeholder="http://" datatype="/^(http|https)\:\/\//" nullmsg="请输入根路径" errormsg="请输入包含协议的合法路径"value="{{$env->domain}}">
             </div>
 
             <input type="hidden" id="js_submit" value="提交">

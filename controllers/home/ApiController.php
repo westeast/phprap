@@ -109,6 +109,7 @@ class ApiController extends PublicController
 
             }
 
+            $api->project_id = $module->project_id;
             $api->version_id = $module->version_id;
             $api->module_id  = $module->id;
 

@@ -27,10 +27,10 @@ class RegisterForm extends User
             ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => '该登录邮箱已存在'],
             ['password', 'required', 'message' => '密码不可以为空'],
             ['password', 'string', 'min' => 6, 'tooShort' => '密码至少填写6位'],
-            ['verifyCode', 'required', 'message' => '验证码不能为空'],
-            ['verifyCode', 'captcha', 'captchaAction' => 'home/captcha/register'],
-//            ['registerToken', 'required', 'message' => '注册口令不能为空'],
-//            ['registerToken', 'validateToken'],
+            ['verifyCode', 'required', 'message' => '验证码不能为空', 'on' => 'verifyCode'],
+            ['verifyCode', 'captcha', 'captchaAction' => 'home/captcha/register', 'on' => 'verifyCode'],
+            ['registerToken', 'required', 'message' => '注册口令不能为空', 'on' => 'registerToken'],
+            ['registerToken', 'validateToken', 'on' => 'registerToken'],
             [['created_at', 'updated_at'], 'safe'],
             [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
         ];
@@ -54,6 +54,19 @@ class RegisterForm extends User
     public function register()
     {
 
+        $config = Config::findOne(['type' => 'app']);
+
+        $token   = $config->getField('register_token');
+        $captcha = $config->getField('register_captcha');
+
+        if($token){
+            $this->scenario = 'registerToken';
+        }
+
+        if($captcha){
+            $this->scenario = 'verifyCode';
+        }
+
         if (!$this->validate()) {
             return false;
         }
@@ -73,7 +86,9 @@ class RegisterForm extends User
 
         if($user->save()){
 
-            Yii::$app->user->login($user);
+            $login_keep = config('login_keep', 'safe');
+
+            Yii::$app->user->login($user, 60*60*$login_keep);
 
             return $user;
 

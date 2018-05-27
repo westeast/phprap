@@ -16,6 +16,7 @@ class StoreModule extends Module
     {
 
         return [
+            [['sort'], 'filter', 'filter' => 'intval', 'on' => ['create', 'update']],
             [['project_id', 'version_id', 'title'], 'required', 'on' => ['create', 'update']],
             [['project_id', 'version_id', 'creater_id', 'status', 'sort'], 'integer'],
             [['title', 'remark'], 'string', 'max' => 50, 'message' => '项目标题不能超过50个字符'],
@@ -73,6 +74,7 @@ class StoreModule extends Module
         }
 
         if(!$this->save(false)){
+
             $transaction->rollBack();
             return false;
         }

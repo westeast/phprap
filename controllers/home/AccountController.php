@@ -5,6 +5,9 @@ namespace app\controllers\home;
 use app\models\account\RegisterForm;
 use app\models\Config;
 use Yii;
+use yii\debug\models\search\Debug;
+use yii\debug\Module;
+use yii\debug\Panel;
 use yii\helpers\Url;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -73,7 +76,7 @@ class AccountController extends PublicController
 
         }
 
-        $config = Config::findOne(['type' => 'safe']);
+        $config = Config::findOne(['type' => 'safe'])->getField();
 
         return $this->display('register', ['config' => $config]);
 

@@ -3,6 +3,7 @@
 namespace app\controllers\home;
 
 use Yii;
+use yii\debug\Module;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
@@ -21,6 +22,8 @@ class PublicController extends Controller
      * @var bool
      */
     public $afterAction = true;
+
+    public $debugTags;
 
     /**
      * @inheritdoc
@@ -81,8 +84,15 @@ class PublicController extends Controller
      */
     public function display($view, $params = [])
     {
-        $view = $view . '.html';
-        return $this->render($view, $params);
+
+        if(YII_DEBUG === true){
+            $tags = array_keys($this->getDebugTags());
+            $tag  = reset($tags);
+
+            $params['toolbarTag'] = $tag;
+        }
+
+        return $this->render($view . '.html', $params);
     }
 
     /**
@@ -115,6 +125,35 @@ class PublicController extends Controller
         $jumpUrl = $jumpUrl ? Url::toRoute($jumpUrl) : \Yii::$app->request->referrer;
 
         return $this->display('/home/public/message', ['flag' => 'error', 'message' => $message, 'time' => $jumpSeconds, 'url' => $jumpUrl]);
+
+    }
+
+    public function getDebugTags($forceReload = false)
+    {
+        if ($this->debugTags === null || $forceReload) {
+            if ($forceReload) {
+                clearstatcache();
+            }
+
+            $indexFile = Module::getInstance()->dataPath . '/index.data';
+
+            $content = '';
+            $fp = @fopen($indexFile, 'r');
+            if ($fp !== false) {
+                @flock($fp, LOCK_SH);
+                $content = fread($fp, filesize($indexFile));
+                @flock($fp, LOCK_UN);
+                fclose($fp);
+            }
+
+            if ($content !== '') {
+                $this->debugTags = array_reverse(unserialize($content), true);
+            } else {
+                $this->debugTags = [];
+            }
+        }
+
+        return $this->debugTags;
 
     }
 

@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "doc_api".
  *
  * @property int $id
+ * @property int $project_id 项目id
  * @property int $version_id 版本id
  * @property int $module_id 模块id
  * @property string $title 接口名
@@ -35,12 +36,60 @@ class Api extends Model
     }
 
     /**
+     * 验证规则
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            [['project_id', 'version_id'], 'required'],
+            [['project_id', 'version_id', 'module_id', 'status', 'sort', 'creater_id'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
+            [['title', 'uri', 'remark'], 'string', 'max' => 250],
+            [['method'], 'string', 'max' => 10],
+        ];
+    }
+
+    /**
+     * 字段字典
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'project_id' => 'Project ID',
+            'version_id' => 'Version ID',
+            'module_id' => 'Module ID',
+            'title' => 'Title',
+            'method' => 'Method',
+            'uri' => 'Uri',
+            'remark' => 'Remark',
+            'status' => 'Status',
+            'sort' => 'Sort',
+            'creater_id' => 'Creater ID',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+
+    /**
      * 获取创建者
      * @return \yii\db\ActiveQuery
      */
     public function getCreater()
     {
         return $this->hasOne(User::className(),['id'=>'creater_id']);
+    }
+
+    /**
+     * 获取所属项目
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProject()
+    {
+        return $this->hasOne(Project::className(),['id'=>'project_id']);
     }
 
     /**

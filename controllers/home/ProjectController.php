@@ -227,6 +227,10 @@ class ProjectController extends PublicController
                 $model = SearchVersion::findModel()->search($params);
                 $view  = '/home/version/index';
                 break;
+            case 'template':
+                $model = SearchVersion::findModel()->search($params);
+                $view  = '/home/template/home';
+                break;
             case 'env':
                 $view = '/home/env/index';
                 break;

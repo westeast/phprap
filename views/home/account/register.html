@@ -34,11 +34,13 @@
                                     <input type="password" class="form-control" placeholder="确认密码" datatype="*" recheck="RegisterForm[password]" nullmsg="请输入重复密码" errormsg="重复密码与密码不一致">
                                 </div>
 
-
+                                {{if $config->register_token}}
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="注册口令，必填，区分大小写" name="RegisterForm[registerToken]"  datatype="*">
                                 </div>
+                                {{/if}}
 
+                                {{if $config->register_captcha}}
                                 <div class="form-group">
                                     <div class="input-group">
 
@@ -53,6 +55,7 @@
                                     </div>
 
                                 </div>
+                                {{/if}}
 
                                 <!-- Change this to a button or input when using this as a form -->
                                 <a href="javascript:void(0);" class="btn btn-lg btn-success btn-block js_submit">快速注册</a>
