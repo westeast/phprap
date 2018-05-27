@@ -100,18 +100,22 @@ class StoreVersion extends Version
         if($this->scenario == 'create'){
 
             $log->method  = 'create';
+
+            $log->version_name = $this->name;
+
             $log->content = '创建了 版本 <code>' . $this->name . '</code>';
 
         }elseif($this->scenario == 'update'){
             $log->method  = 'update';
 
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
+            $log->version_name = $oldAttributes['name'];
+
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, '版本V' . $oldAttributes['name']);
 
         }
 
         $log->project_id   = $this->project_id;
         $log->version_id   = $this->id;
-        $log->version_name = $oldAttributes['name'];
         $log->project_id   = $this->project_id;
         $log->object_name  = 'version';
         $log->object_id    = $this->id;

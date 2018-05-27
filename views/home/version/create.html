@@ -137,7 +137,11 @@
                 if(json.status == 'success'){
 
                     alert(json.message, 'success', function () {
-                        parent.location.reload();
+                        if(json.callback){
+                            parent.location.href = json.callback;
+                        }else{
+                            parent.location.reload();
+                        }
                     });
 
                 }else{

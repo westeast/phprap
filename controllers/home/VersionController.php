@@ -58,7 +58,9 @@ class VersionController extends PublicController
 
             if ($version->store()) {
 
-                return ['status' => 'success', 'message' => '创建成功'];
+                $callback = url('home/project/show', ['version_id' => $version->encode_id]);
+
+                return ['status' => 'success', 'message' => '创建成功', 'callback' => $callback];
 
             }
 

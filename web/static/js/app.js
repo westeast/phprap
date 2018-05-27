@@ -127,7 +127,7 @@ function resetForm() {
         }
 
         if(center){
-            $(modal).on('show.bs.modal', function (e) {
+            $(modal).on('show.bs.modal', function () {
                 $(this).css('display', 'block');
                 var modalHeight = $(window).height() / 2 - $(this).find('.modal-dialog').height() / 2;
                 $(this).find('.modal-dialog').css({'margin-top': modalHeight});
