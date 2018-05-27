@@ -53,10 +53,10 @@ class Model extends \yii\db\ActiveRecord
     }
 
     /**
-     * 获取加密id
+     * 创建加密id
      * @return string
      */
-    public function getEncodeId()
+    public function createEncodeId()
     {
         return mt_rand(1000, 9999) . date('His');
     }

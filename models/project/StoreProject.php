@@ -25,7 +25,7 @@ class StoreProject extends Project
 
             [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
             [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
-            [['!encode_id'], 'default', 'value'  => $this->getEncodeId(), 'on' => 'create'],
+            [['!encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
             [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
 
             [['!encode_id', 'title', 'allow_search', '!status', '!creater_id'], 'required', 'on' => ['create', 'update']],

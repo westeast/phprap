@@ -36,7 +36,7 @@ class StoreVersion extends Version
 
             [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
             [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
-            [['!encode_id'], 'default', 'value'  => $this->getEncodeId(), 'on' => 'create'],
+            [['!encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
             [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
 
             [['!encode_id', '!project_id', 'parent_id', '!creater_id', 'name', '!status'], 'required', 'on' => ['create', 'update']],
@@ -77,6 +77,8 @@ class StoreVersion extends Version
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
+        $this->parent_id = self::findModel(['encode_id' => $this->parent_id])->id;
+
         if(!$this->validate()){
             return false;
         }
@@ -100,7 +102,6 @@ class StoreVersion extends Version
         if($this->scenario == 'create'){
 
             $log->method  = 'create';
-
             $log->version_name = $this->name;
 
             $log->content = '创建了 版本 <code>' . $this->name . '</code>';

@@ -132,6 +132,8 @@ class Project extends Model
             ['like','email', $param['name']],
         ]);
 
+//        $sql = $query->createCommand()->getRawSql();
+
         return $query->limit(10)->all();
 
     }

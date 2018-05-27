@@ -106,16 +106,14 @@ class MemberController extends PublicController
      * 选择成员
      * @return string
      */
-    public function actionSelect($project_id)
+    public function actionSelect($project_id, $name)
     {
         // 禁用公共model里统一json格式输出
         $this->afterAction = false;
 
-        $request = Yii::$app->request;
-
         $project = Project::findModel(['encode_id' => $project_id]);
 
-        $notMembers = $project->getNotMembers($request->queryParams);
+        $notMembers = $project->getNotMembers(['name' => $name]);
 
         $user = [];
 

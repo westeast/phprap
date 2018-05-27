@@ -110,17 +110,18 @@ class VersionController extends PublicController
     public function actionSelect($project_id, $name)
     {
 
-        $request = Yii::$app->request;
+        // 禁用公共model里统一json格式输出
+        $this->afterAction = false;
 
-        if($request->isPost){
-            $version = SearchVersion::findModel();
+        $project = Project::findModel(['encode_id' => $project_id]);
 
-            $version->pageSize = 4;
+        $version = SearchVersion::findModel();
 
-            $versions = $version->search(['project_id' => $project_id, 'name' =>$name])->models;
+        $version->pageSize = 4;
 
-            return $versions;
-        }
+        $versions = $version->search(['project_id' => $project->id, 'name' => $name])->models;
+
+        return $versions;
 
     }
 

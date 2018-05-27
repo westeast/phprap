@@ -47,11 +47,7 @@
                                 </thead>
                                 <tbody>
                                 {{foreach $model->models as $version}}
-                                {{if $project->CurrentVersion->id == $version->id}}
-                                <tr class="success">
-                                {{else}}
                                 <tr>
-                                {{/if}}
                                     {{if $project->CurrentVersion->id == $version->id}}
                                     <td><i class="fa fa-check" aria-hidden="true"></i></td>
                                     <td>

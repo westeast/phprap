@@ -23,7 +23,7 @@ class StoreMember extends Member
 
             [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
             [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
-            [['!encode_id'], 'default', 'value'  => $this->getEncodeId(), 'on' => 'create'],
+            [['!encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
 
             [['encode_id', 'project_id', 'user_id', 'creater_id'], 'required', 'on' => ['create', 'update']],
 

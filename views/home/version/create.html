@@ -40,7 +40,7 @@
                 <div class="input-group">
 
                     <input type="text" class="form-control js_selectVersionBtn" placeholder="请输入要复制的版本号，支持模糊查询" datatype="*1-50" nullmsg="请输入要复制的版本号" value="{{$version->project->lastVersion->name}}">
-                    <input class="js_versionId" type="hidden" name='StoreVersion[parent_id]' datatype="n" nullmsg="请选择要复制的版本号" value="{{$version->project->lastVersion->id}}">
+                    <input class="js_versionId" type="hidden" name='StoreVersion[parent_id]' datatype="n" nullmsg="请选择要复制的版本号" value="{{$version->project->lastVersion->encode_id}}">
 
                     <span class="input-group-btn">
                         <button class="btn btn-default js_cleanVersionBtn" type="button" data-toggle="tooltip" data-placement="bottom" data-title="清空"><i class="fa fa-times"></i>
@@ -79,7 +79,7 @@
             autoSelect: true,
             source: function (name, process) {
 
-                var url = "{{url('home/version/select', ['project_id' => $version->project_id])}}";
+                var url = "{{url('home/version/select', ['project_id' => $version->project->encode_id])}}";
 
                 $.get(url, { "name": name }, function (data) {
 
