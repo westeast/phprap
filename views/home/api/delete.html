@@ -76,7 +76,7 @@ $(function () {
             if(json.status == 'success'){
 
                 alert(json.message, 'success', function () {
-                    parent.location.reload();
+                    parent.location.href = json.callback;
                 });
 
             }else{

@@ -8,21 +8,19 @@ use Yii;
  * This is the model class for table "doc_env".
  *
  * @property int $id
- * @property string $name 环境标识
+ * @property string $encode_id 加密id
  * @property string $title 环境名称
- * @property string $domain 环境域名
- * @property int $status 启用状态
+ * @property string $name 环境标识
+ * @property string $base_url 环境根路径
+ * @property int $sort 环境排序
+ * @property int $status 环境状态
  * @property int $project_id 项目id
  * @property int $creater_id 创建者id
- * @property string $created_at
- * @property string $updated_at
+ * @property string $created_at 创建时间
+ * @property string $updated_at 更新时间
  */
 class Env extends Model
 {
-
-    const ACTIVE_STATUS  = 10; //启用状态
-    const DISABLE_STATUS = 20; //禁用状态
-    const DELETED_STATUS = 30; //删除状态
 
     /**
      * 默认环境
@@ -57,13 +55,19 @@ class Env extends Model
     public function rules()
     {
         return [
-            [['name', 'title', 'domain', 'project_id', 'creater_id'], 'required'],
-            [['status', 'project_id', 'creater_id'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['name'], 'string', 'max' => 10],
+            [['sort', 'status', 'project_id', 'creater_id'], 'integer'],
+            [['encode_id', 'name'], 'string', 'max' => 10],
             [['title'], 'string', 'max' => 50],
-            [['domain'], 'string', 'max' => 250],
+            [['base_url'], 'string', 'max' => 250],
+            [['encode_id'], 'unique'],
+
+            [['created_at', 'updated_at'], 'safe'],
+            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
+            [['status'], 'default', 'value'  => self::ACTIVE_STATUS],
+
+            [['encode_id', 'title', 'name', 'base_url', 'project_id', 'creater_id'], 'required'],
         ];
+
     }
 
     /**
@@ -74,12 +78,14 @@ class Env extends Model
     {
         return [
             'id' => 'ID',
+            'encode_id' => '加密id',
             'name' => '环境标识',
             'title' => '环境名称',
-            'domain' => '环境域名',
-            'status' => '启用状态',
-            'project_id' => '项目',
-            'creater_id' => '创建者',
+            'base_url' => '环境根路径',
+            'status' => '环境状态',
+            'sort' => '环境排序',
+            'project_id' => '项目id',
+            'creater_id' => '创建者id',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];

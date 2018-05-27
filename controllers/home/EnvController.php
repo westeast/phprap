@@ -44,9 +44,10 @@ class EnvController extends PublicController
 
         $request  = Yii::$app->request;
 
-        $env  = StoreEnv::findModel();
+        $project  = Project::findModel(['encode_id' => $project_id]);
+        $env      = StoreEnv::findModel();
 
-        $env->project_id = $project_id;
+        $env->project_id = $project->id;
 
         if($request->isPost){
 
@@ -80,9 +81,9 @@ class EnvController extends PublicController
     public function actionUpdate($id)
     {
 
-        $request  = Yii::$app->request;
+        $request = Yii::$app->request;
 
-        $env = StoreEnv::findModel($id);
+        $env     = StoreEnv::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 
@@ -114,17 +115,17 @@ class EnvController extends PublicController
 
         $request = Yii::$app->request;
 
-        $model  = DeleteEnv::findModel($id);
+        $env     = DeleteEnv::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 
-            if ($model->delete()) {
+            if ($env->delete()) {
 
                 return ['status' => 'success', 'message' => '删除成功'];
 
             }
 
-            return ['status' => 'error', 'model' => $model];
+            return ['status' => 'error', 'model' => $env];
 
         }
 

@@ -4,7 +4,7 @@
         <ul class="nav" id="side-menu">
 
             <li>
-                <a href="{{url('home/project/show', ['token' => $project->currentVersion->token])}}"><i class="fa fa-home fa-fw"></i> 项目主页</a>
+                <a href="{{url('home/project/show', ['version_id' => $project->currentVersion->encode_id])}}"><i class="fa fa-home fa-fw"></i> 项目主页</a>
             </li>
 
             {{foreach $project->currentVersion->modules as $module}}
@@ -14,17 +14,17 @@
 
                     <span class="fa fa-fw arrow"></span>
 
-                    <span class="fa hidden-xs fa-fw fa-plus js_addApiBtn" data-toggle="tooltip" data-placement="bottom" data-modal="#js_addApiModal" data-title="添加接口" data-height="440" data-src="{{url('home/api/create', ['module_id' => $module->id])}}"></span>
+                    <span class="fa hidden-xs fa-fw fa-plus js_addApiBtn" data-toggle="tooltip" data-placement="bottom" data-modal="#js_addApiModal" data-title="添加接口" data-height="440" data-src="{{url('home/api/create', ['module_id' => $module->encode_id])}}"></span>
 
-                    <span class="fa hidden-xs fa-fw fa-trash-o js_deleteModuleBtn" data-toggle="tooltip" data-placement="bottom" data-modal="#js_deleteModuleModal" data-title="删除模块" data-height="250" data-src="{{url('home/module/delete', ['id' => $module->id])}}"></span>
+                    <span class="fa hidden-xs fa-fw fa-trash-o js_deleteModuleBtn" data-toggle="tooltip" data-placement="bottom" data-modal="#js_deleteModuleModal" data-title="删除模块" data-height="250" data-src="{{url('home/module/delete', ['id' => $module->encode_id])}}"></span>
 
-                    <span class="fa hidden-xs fa-fw fa-pencil js_addModuleBtn" data-toggle="tooltip" data-placement="bottom" data-modal="#js_addModuleModal" data-title="编辑模块" data-height="230" data-src="{{url('home/module/update', ['id' => $module->id])}}"></span>
+                    <span class="fa hidden-xs fa-fw fa-pencil js_addModuleBtn" data-toggle="tooltip" data-placement="bottom" data-modal="#js_addModuleModal" data-title="编辑模块" data-height="230" data-src="{{url('home/module/update', ['id' => $module->encode_id])}}"></span>
 
                 </a>
                 <ul class="nav nav-second-level collapse {{if $module->id == $api->module->id}}in{{/if}}" aria-expanded="true">
                     {{foreach $module->apis as $v}}
                     <li class="api-item">
-                        <a class="{{if $api->id == $v->id}}active{{/if}}" href="{{url('home/api/show', ['id' => $v->id])}}" title="点击查看接口详情">
+                        <a class="{{if $api->id == $v->id}}active{{/if}}" href="{{url('home/api/show', ['id' => $v->encode_id])}}" title="点击查看接口详情">
                             <i class="fa fa-fw fa-files-o"></i>{{$v->title}}
                             <i class="fa fa-fw fa-eye pull-right"></i>
                         </a>
@@ -36,7 +36,7 @@
             {{/foreach}}
 
             <li>
-                <a class="js_addModuleBtn hidden-xs" data-modal="#js_addModuleModal" data-height="230" data-title="添加模块" data-src="{{url('home/module/create', ['version_id' => $project->currentVersion->id])}}" href="javascript:void(0);"><i class="fa fa-fw fa-plus"></i> 添加模块</a>
+                <a class="js_addModuleBtn hidden-xs" data-modal="#js_addModuleModal" data-height="230" data-title="添加模块" data-src="{{url('home/module/create', ['version_id' => $project->currentVersion->encode_id])}}" href="javascript:void(0);"><i class="fa fa-fw fa-plus"></i> 添加模块</a>
             </li>
 
         </ul>

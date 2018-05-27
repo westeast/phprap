@@ -18,13 +18,20 @@ class StoreApi extends Api
     {
 
         return [
-            [['module_id', 'title', 'uri', 'method', 'sort'], 'required', 'on' => ['create', 'update']],
-            [['module_id', 'creater_id', 'status', 'sort'], 'integer'],
-            [['title', 'remark'], 'string', 'max' => 255],
-            ['title', 'validateTitle'],
+            [['sort'], 'filter', 'filter' => 'intval'], //此规则必须，否则就算模型里该字段没有修改，也会出现在脏属性里
+            [['project_id', 'version_id', 'module_id', 'status', 'sort', 'creater_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
-            [['creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['encode_id', 'method'], 'string', 'max' => 10],
+            [['title', 'uri', 'remark'], 'string', 'max' => 250],
+            [['encode_id'], 'unique'],
+            ['title', 'validateTitle'],
+
+            [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
+            [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['!encode_id'], 'default', 'value'  => $this->getEncodeId(), 'on' => 'create'],
+            [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
+
+            [['encode_id', 'project_id', 'version_id', 'module_id', 'title', 'method', 'uri', 'status', 'sort', 'creater_id'], 'required', 'on' => ['create', 'update']],
         ];
 
     }
@@ -38,6 +45,7 @@ class StoreApi extends Api
         $query = self::find();
 
         $query->andFilterWhere([
+            'creater_id' => Yii::$app->user->identity->id,
             'module_id' => $this->module_id,
             'status' => self::ACTIVE_STATUS,
             'title'  => $this->title,
@@ -89,7 +97,7 @@ class StoreApi extends Api
 
             $log->method  = 'update';
 
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, $oldAttributes['title']);
 
         }
 

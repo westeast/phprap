@@ -15,13 +15,21 @@ class StoreProject extends Project
     public function rules()
     {
         return [
-            [['allow_search', 'sort'], 'filter', 'filter' => 'intval', 'on' => ['create', 'update']],
-            [['!creater_id', 'allow_search', 'sort', '!status'], 'integer', 'on' => ['create', 'update']],
-            [['title', 'remark'], 'string', 'max' => 250, 'on' => ['create', 'update']],
-            ['title', 'validateTitle', 'on' => ['create', 'update']],
+            [['allow_search', 'sort'], 'filter', 'filter' => 'intval'], //此规则必须，否则就算模型里该字段没有修改，也会出现在脏属性里
+            [['sort', 'allow_search', 'status', 'creater_id'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['encode_id'], 'string', 'max' => 10],
+            [['title', 'remark'], 'string', 'max' => 250],
+            [['encode_id'], 'unique'],
+            ['title', 'validateTitle'],
+
             [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
             [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
-            [['!creater_id', 'title', 'allow_search', '!status'], 'required', 'on' => ['create', 'update']],
+            [['!encode_id'], 'default', 'value'  => $this->getEncodeId(), 'on' => 'create'],
+            [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
+
+            [['!encode_id', 'title', 'allow_search', '!status', '!creater_id'], 'required', 'on' => ['create', 'update']],
+
         ];
     }
 
@@ -59,8 +67,6 @@ class StoreProject extends Project
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        $this->status = self::ACTIVE_STATUS;
-
         if(!$this->validate()){
             return false;
         }
@@ -89,14 +95,17 @@ class StoreProject extends Project
 
             $log->method  = 'update';
 
-            $find = [self::ALLOW_SEARCH, self::FORBID_SEARCH];
+            if(isset($dirtyAttributes['allow_search'])){
 
-            $replace = ['允许','禁止'];
+                $find    = [self::ALLOW_SEARCH, self::FORBID_SEARCH];
 
-            $oldAttributes['allow_search']   = str_replace($find, $replace, $oldAttributes['allow_search']);
-            $dirtyAttributes['allow_search'] = str_replace($find, $replace, $dirtyAttributes['allow_search']);
+                $replace = ['允许','禁止'];
 
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
+                $oldAttributes['allow_search']   = str_replace($find, $replace, $oldAttributes['allow_search']);
+                $dirtyAttributes['allow_search'] = str_replace($find, $replace, $dirtyAttributes['allow_search']);
+            }
+
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, $oldAttributes['title']);
 
         }
 

@@ -40,9 +40,9 @@ class MemberController extends PublicController
     public function actionCreate($project_id)
     {
 
-        $request  = Yii::$app->request;
+        $request = Yii::$app->request;
 
-        $project = Project::findModel($project_id);
+        $project = Project::findModel(['encode_id' => $project_id]);
         $member  = StoreMember::findModel();
 
         if($request->isPost){
@@ -55,7 +55,7 @@ class MemberController extends PublicController
 
             }
 
-            $member->project_id = $project_id;
+            $member->project_id = $project->id;
 
             if ($member->store()) {
 
@@ -74,9 +74,9 @@ class MemberController extends PublicController
     public function actionUpdate($id)
     {
 
-        $request  = Yii::$app->request;
+        $request = Yii::$app->request;
 
-        $member = StoreMember::findModel($id);
+        $member  = StoreMember::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 
@@ -113,7 +113,7 @@ class MemberController extends PublicController
 
         $request = Yii::$app->request;
 
-        $project = Project::findModel($project_id);
+        $project = Project::findModel(['encode_id' => $project_id]);
 
         $notMembers = $project->getNotMembers($request->queryParams);
 
@@ -136,9 +136,9 @@ class MemberController extends PublicController
     public function actionRemove($id)
     {
 
-        $request  = Yii::$app->request;
+        $request = Yii::$app->request;
 
-        $member  = RemoveMember::findModel($id);
+        $member  = RemoveMember::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 

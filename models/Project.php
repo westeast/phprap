@@ -8,21 +8,18 @@ use Yii;
  * This is the model class for table "doc_project".
  *
  * @property int $id
- * @property int $creater_id 创建者id
- * @property string $title 项目标题
+ * @property string $encode_id 加密id
+ * @property string $title 项目名称
  * @property string $remark 项目描述
- * @property int $sort 排序数字
- * @property int $allow_search 搜索状态 10:启用 20:禁止
- * @property int $status 启用状态 10:启用 20:禁用 30:删除
+ * @property int $sort 项目排序
+ * @property int $allow_search 搜索状态
+ * @property int $status 项目状态
+ * @property int $creater_id 创建者id
  * @property string $created_at 创建时间
  * @property string $updated_at 更新时间
  */
 class Project extends Model
 {
-
-    const ACTIVE_STATUS  = 10; //启用状态
-    const DISABLE_STATUS = 20; //禁用状态
-    const DELETED_STATUS = 30; //删除状态
 
     const ALLOW_SEARCH  = 10; //允许搜索
     const FORBID_SEARCH = 20; //禁止搜索
@@ -46,13 +43,21 @@ class Project extends Model
      */
     public function rules()
     {
+
         return [
-            [['creater_id', 'sort', 'allow_search', 'status'], 'integer'],
-            [['!creater_id', 'title', 'allow_search', '!status'], 'required'],
+            [['sort', 'allow_search', 'status', 'creater_id'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['encode_id'], 'string', 'max' => 10],
+            [['title', 'remark'], 'string', 'max' => 250],
+            [['encode_id'], 'unique'],
+
             [['created_at', 'updated_at'], 'safe'],
             [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
-            [['title', 'remark'], 'string', 'max' => 250],
+            [['status'], 'default', 'value'  => self::ACTIVE_STATUS],
+
+            [['encode_id', 'title', 'allow_search', 'status', 'creater_id'], 'required'],
         ];
+
     }
 
     /**
@@ -60,14 +65,16 @@ class Project extends Model
      */
     public function attributeLabels()
     {
+
         return [
             'id' => 'ID',
-            'creater_id' => '项目创建者',
+            'encode_id' => '加密id',
             'title' => '项目名称',
             'remark' => '项目描述',
-            'sort' => '排序数字',
+            'sort' => '项目排序',
             'allow_search' => '搜索状态',
-            'status' => '启用状态',
+            'status' => '项目状态',
+            'creater_id' => '创建者id',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];

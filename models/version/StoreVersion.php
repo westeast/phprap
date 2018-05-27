@@ -30,14 +30,16 @@ class StoreVersion extends Version
     {
 
         return [
-            [['project_id', 'parent_id', 'name'], 'required', 'on' => ['create']],
-            [['project_id', 'name'], 'required', 'on' => ['update']],
             [['remark'], 'string', 'max' => 250],
             ['name', 'validateName'],
             [['project_id', 'creater_id', 'parent_id'], 'integer', 'on' => ['create', 'update']],
-            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
-            [['creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
-            [['token'], 'default', 'value' => mt_rand(1000, 9999) . date('His'), 'on' => 'create'],
+
+            [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
+            [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['!encode_id'], 'default', 'value'  => $this->getEncodeId(), 'on' => 'create'],
+            [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
+
+            [['!encode_id', '!project_id', 'parent_id', '!creater_id', 'name', '!status'], 'required', 'on' => ['create', 'update']],
         ];
     }
 
@@ -107,12 +109,12 @@ class StoreVersion extends Version
 
         }
 
-        $log->project_id    = $this->project_id;
-        $log->version_id    = $this->id;
-        $log->version_name  = $this->name;
-        $log->project_id    = $this->project_id;
-        $log->object_name   = 'version';
-        $log->object_id     = $this->id;
+        $log->project_id   = $this->project_id;
+        $log->version_id   = $this->id;
+        $log->version_name = $oldAttributes['name'];
+        $log->project_id   = $this->project_id;
+        $log->object_name  = 'version';
+        $log->object_id    = $this->id;
 
         if(!$log->store()){
             $transaction->rollBack();

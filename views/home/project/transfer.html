@@ -23,7 +23,7 @@
 
             <div class="form-group">
                 <label class="control-label">转让项目</label>
-                <input type="text" class="form-control" value="{{$model->title}}" readonly>
+                <input type="text" class="form-control" value="{{$project->title}}" readonly>
             </div>
 
             <div class="form-group">
@@ -31,7 +31,7 @@
 
                 <select class="form-control" name="TransferProject[user_id]" data-live-search="true" datatype="n" nullmsg="请选择成员">
                     <option value="">请选择成员</option>
-                    {{foreach $model->members as $member}}
+                    {{foreach $project->members as $member}}
                     <option value="{{$member->user_id}}">{{$member->user->name}}({{$member->user->email}})</option>
                     {{foreachelse}}
                     <option value="" disabled>暂无成员</option>

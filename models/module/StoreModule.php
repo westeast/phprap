@@ -16,14 +16,21 @@ class StoreModule extends Module
     {
 
         return [
-            [['sort'], 'filter', 'filter' => 'intval', 'on' => ['create', 'update']],
-            [['project_id', 'version_id', 'title'], 'required', 'on' => ['create', 'update']],
-            [['project_id', 'version_id', 'creater_id', 'status', 'sort'], 'integer'],
-            [['title', 'remark'], 'string', 'max' => 50, 'message' => '项目标题不能超过50个字符'],
+            [['sort'], 'filter', 'filter' => 'intval'], //此规则必须，否则就算模型里该字段没有修改，也会出现在脏属性里
+            [['project_id', 'version_id', 'status', 'sort', 'creater_id'], 'integer'],
+            [['encode_id'], 'string', 'max' => 10],
+            [['title'], 'string', 'max' => 50],
+            [['remark'], 'string', 'max' => 250],
+            [['encode_id'], 'unique'],
             ['title', 'validateTitle'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
-            [['creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+
+            [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
+            [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['!encode_id'], 'default', 'value'  => $this->getEncodeId(), 'on' => 'create'],
+            [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
+
+            [['!encode_id', '!project_id', '!version_id', 'title', '!status', '!creater_id'], 'required', 'on' => ['create', 'update']],
+
         ];
 
     }
@@ -59,8 +66,6 @@ class StoreModule extends Module
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        $this->status = self::ACTIVE_STATUS;
-
         if(!$this->validate()){
             return false;
         }
@@ -90,15 +95,15 @@ class StoreModule extends Module
 
             $log->method  = 'update';
 
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, $oldAttributes['title']);
 
         }
 
-        $log->project_id    = $this->project_id;
-        $log->version_id    = $this->version->id;
-        $log->version_name  = $this->version->name;
-        $log->object_name   = 'module';
-        $log->object_id     = $this->id;
+        $log->project_id   = $this->project_id;
+        $log->version_id   = $this->version->id;
+        $log->version_name = $this->version->name;
+        $log->object_name  = 'module';
+        $log->object_id    = $this->id;
 
         if(!$log->store()){
             $transaction->rollBack();

@@ -23,10 +23,10 @@
 
             <div class="form-group">
                 <label class="control-label">项目名称</label>
-                <input type="text" class="form-control js_title" name="StoreProject[title]" value="{{$model->title}}" placeholder="必填" datatype="*" nullmsg="请输入项目名称" errormsg="请输入项目名称">
+                <input type="text" class="form-control js_title" name="StoreProject[title]" value="{{$project->title}}" placeholder="必填" datatype="*" nullmsg="请输入项目名称" errormsg="请输入项目名称">
             </div>
 
-            {{if !$model->id}}
+            {{if !$project->id}}
             <div class="form-group">
                 <label class="control-label">初始版本</label>
                 <input type="text" class="form-control" name="StoreVersion[name]" value="1.0" placeholder="由数字和小数点组成，如1.0" datatype="version" nullmsg="请输入初始版本号" errormsg="版本号不合法">
@@ -34,13 +34,13 @@
             {{else}}
             <div class="form-group">
                 <label class="control-label">最新版本</label>
-                <input type="text" readonly class="form-control" value="{{$model->lastVersion->name}}">
+                <input type="text" readonly class="form-control" value="{{$project->lastVersion->name}}">
             </div>
             {{/if}}
 
             <div class="form-group">
                 <label class="control-label">项目描述</label>
-                <textarea class="form-control" name="StoreProject[remark]" rows="3" placeholder="必填" datatype="*1-250" nullmsg="请输入项目描述">{{$model->remark}}</textarea>
+                <textarea class="form-control" name="StoreProject[remark]" rows="3" placeholder="必填" datatype="*1-250" nullmsg="请输入项目描述">{{$project->remark}}</textarea>
             </div>
 
             <div class="form-group">
@@ -49,7 +49,7 @@
                         <i class="fa fa-info-circle"></i>
                     </a>
                 </label>
-                <input type="text" class="form-control js_sort" name="StoreProject[sort]" value="{{$model->sort|default:0}}" placeholder="排序数字越大越靠前" datatype="n" nullmsg="请输入排序数字" errormsg="必须是数字">
+                <input type="text" class="form-control js_sort" name="StoreProject[sort]" value="{{$project->sort|default:0}}" placeholder="排序数字越大越靠前" datatype="n" nullmsg="请输入排序数字" errormsg="必须是数字">
             </div>
 
             <div class="form-group">
@@ -62,11 +62,11 @@
                 <div class="form-group">
 
                     <label class="radio-inline">
-                        <input type="radio" name="StoreProject[allow_search]" {{if $model->allow_search == $model::ALLOW_SEARCH}}checked{{/if}} value="{{$model::ALLOW_SEARCH}}"> 允许
+                        <input type="radio" name="StoreProject[allow_search]" {{if $project->allow_search == $project::ALLOW_SEARCH}}checked{{/if}} value="{{$project::ALLOW_SEARCH}}"> 允许
                     </label>
 
                     <label class="radio-inline">
-                        <input type="radio" name="StoreProject[allow_search]" {{if !$model->id || $model->allow_search == $model::FORBID_SEARCH}}checked{{/if}} value="{{$model::FORBID_SEARCH}}"> 禁止
+                        <input type="radio" name="StoreProject[allow_search]" {{if !$project->id || $project->allow_search == $project::FORBID_SEARCH}}checked{{/if}} value="{{$project::FORBID_SEARCH}}"> 禁止
                     </label>
 
                 </div>

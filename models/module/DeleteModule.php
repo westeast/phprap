@@ -57,11 +57,11 @@ class DeleteModule extends Module
         // 记录日志
         $log = StoreLog::findModel();
 
-        $log->method    = 'delete';
-        $log->project_id    = $this->project_id;
-        $log->version_id    = $this->version->id;
-        $log->version_name  = $this->version->name;
-        $log->object_name   = 'module';
+        $log->method = 'delete';
+        $log->project_id   = $this->project_id;
+        $log->version_id   = $this->version->id;
+        $log->version_name = $this->version->name;
+        $log->object_name  = 'module';
         $log->object_id = $this->id;
         $log->content   = '删除了 模块 <code>' . $this->title . '</code>';
 

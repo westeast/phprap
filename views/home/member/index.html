@@ -14,7 +14,7 @@
                 <div class="page-header">
                     <h1>项目成员 </h1>
                     <div class="opt-btn">
-                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success" data-title='添加成员' data-modal="#js_addMemberModal" data-height="300" data-src="{{url('member/create', ['project_id' => $project->id])}}"><i class="fa fa-fw fa-plus"></i>添加</a>
+                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success" data-title='添加成员' data-modal="#js_addMemberModal" data-height="300" data-src="{{url('member/create', ['project_id' => $project->encode_id])}}"><i class="fa fa-fw fa-plus"></i>添加</a>
 
                     </div>
                 </div>
@@ -54,9 +54,9 @@
                                     <td>{{$member->updated_at}}</td>
                                     <td>
 
-                                        <a type="button" class="btn btn-success btn-xs js_addMemberBtn" data-title="编辑权限" data-modal="#js_addMemberModal" data-height="300" data-src="{{url('home/member/update', ['id' => $member->id])}}"><i class="fa fa-fw fa-key"></i>权限</a>
+                                        <a type="button" class="btn btn-success btn-xs js_addMemberBtn" data-title="编辑权限" data-modal="#js_addMemberModal" data-height="300" data-src="{{url('home/member/update', ['id' => $member->encode_id])}}"><i class="fa fa-fw fa-key"></i>权限</a>
 
-                                        <a type="button" class="btn btn-danger btn-xs js_removerMemberBtn" data-url="{{url('home/member/remove', ['id' => $member->id])}}"><i class="fa fa-fw fa-sign-out"></i>移除</a>
+                                        <a type="button" class="btn btn-danger btn-xs js_removerMemberBtn" data-url="{{url('home/member/remove', ['id' => $member->encode_id])}}"><i class="fa fa-fw fa-sign-out"></i>移除</a>
 
                                     </td>
                                 </tr>

@@ -4,6 +4,7 @@ namespace app\models\api;
 
 use app\models\Api;
 use app\models\projectLog\SearchLog;
+use app\models\projectLog\StoreLog;
 use Yii;
 
 class DeleteApi extends Api
@@ -58,7 +59,7 @@ class DeleteApi extends Api
         }
 
         // 记录日志
-        $log = SearchLog::findModel();
+        $log = StoreLog::findModel();
 
         $log->method      = 'delete';
         $log->project_id  = $this->project_id;

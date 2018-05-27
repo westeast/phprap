@@ -92,7 +92,7 @@ class TransferProject extends Project
         $log->project_id  = $this->id;
         $log->object_name = 'project';
         $log->object_id   = $this->id;
-        $log->content     = '将项目 <code>' . $this->title . '</code>' . ' 转让给 ' . $user->fullName;
+        $log->content     = '项目 <code>' . $this->title . '</code>' . ' 转让给 ' . $user->fullName;
 
         if(!$log->store()){
             $transaction->rollBack();

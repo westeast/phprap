@@ -14,7 +14,7 @@
                 <div class="page-header">
                     <h1>项目环境 </h1>
                     <div class="opt-btn">
-                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_addEnvBtn" data-modal="#js_addEnvModal" data-height="210" data-title='添加环境' data-src="{{url('home/env/create', ['project_id' => $project->id])}}"><i class="fa fa-fw fa-plus"></i>添加</a>
+                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_addEnvBtn" data-modal="#js_addEnvModal" data-height="210" data-title='添加环境' data-src="{{url('home/env/create', ['project_id' => $project->encode_id])}}"><i class="fa fa-fw fa-plus"></i>添加</a>
 
                     </div>
                 </div>
@@ -50,14 +50,14 @@
                                 <tr>
                                     <td>{{$env->name}}</td>
                                     <td>{{$env->title}}</td>
-                                    <td><code>{{$env->domain}}</code></td>
+                                    <td><code>{{$env->base_url}}</code></td>
                                     <td>{{$env->creater->name}}</td>
                                     <td>{{$env->created_at}}</td>
                                     <td>
 
-                                        <a class="btn btn-success btn-xs js_addEnvBtn" data-title="编辑环境" data-modal="#js_addEnvModal" data-height="210" data-src="{{url('home/env/update', ['id' => $env->id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
+                                        <a class="btn btn-success btn-xs js_addEnvBtn" data-title="编辑环境" data-modal="#js_addEnvModal" data-height="210" data-src="{{url('home/env/update', ['id' => $env->encode_id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
 
-                                        <a class="btn btn-danger btn-xs js_deleteEnvBtn" data-url="{{url('home/env/delete', ['id' => $env->id])}}"><i class="fa fa-fw fa-trash"></i>删除</a>
+                                        <a class="btn btn-danger btn-xs js_deleteEnvBtn" data-url="{{url('home/env/delete', ['id' => $env->encode_id])}}"><i class="fa fa-fw fa-trash"></i>删除</a>
 
                                     </td>
                                 </tr>

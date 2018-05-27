@@ -5,19 +5,7 @@ use app\models\projectLog\StoreLog;
 use Yii;
 use app\models\Env;
 
-/**
- * This is the model class for table "doc_env".
- *
- * @property int $id
- * @property string $name 环境标识
- * @property string $title 环境名
- * @property string $domain 环境域名
- * @property int $status 启用状态 10:正常 20:删除
- * @property int $project_id 项目id
- * @property int $creater_id 创建者id
- * @property string $created_at
- * @property string $updated_at
- */
+
 class StoreEnv extends Env
 {
 
@@ -28,15 +16,19 @@ class StoreEnv extends Env
     {
 
         return [
-            [['name', 'title', 'domain', '!project_id'], 'required', 'on' => ['create', 'update']],
+            [['sort'], 'filter', 'filter' => 'intval'], //此规则必须，否则就算模型里该字段没有修改，也会出现在脏属性里
             [['status', 'project_id', 'creater_id'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['name'], 'string', 'max' => 10],
+            [['encode_id', 'name'], 'string', 'max' => 10],
             [['title'], 'string', 'max' => 50],
-            [['domain'], 'string', 'max' => 250],
-            [['domain'], 'url'],
-            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
-            [['creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['base_url'], 'string', 'max' => 250],
+            [['encode_id'], 'unique'],
+
+            [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
+            [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['!encode_id'], 'default', 'value'  => $this->getEncodeId(), 'on' => 'create'],
+            [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
+
+            [['!encode_id', 'title', 'name', 'base_url', '!project_id', '!creater_id'], 'required', 'on' => ['create', 'update']],
 
         ];
     }
@@ -51,9 +43,7 @@ class StoreEnv extends Env
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        $this->domain = trim($this->domain, '/');
-
-        $this->status = self::ACTIVE_STATUS;
+        $this->base_url = trim($this->base_url, '/');
 
         if(!$this->validate()){
             return false;
@@ -83,7 +73,7 @@ class StoreEnv extends Env
 
             $log->method  = 'update';
 
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, $oldAttributes['title']);
 
         }
 

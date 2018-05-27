@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers\home;
 
+use app\models\Project;
 use app\models\version\DeleteVersion;
 use app\models\version\SearchVersion;
 use app\models\version\StoreVersion;
@@ -39,15 +40,13 @@ class VersionController extends PublicController
     {
 
         $request  = Yii::$app->request;
-        $response = Yii::$app->response;
 
+        $project  = Project::findModel(['encode_id' => $project_id]);
         $version  = StoreVersion::findModel();
 
-        $version->project_id = $project_id;
+        $version->project_id = $project->id;
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $version->scenario = 'create';
 
@@ -74,14 +73,11 @@ class VersionController extends PublicController
     public function actionUpdate($id)
     {
 
-        $request  = Yii::$app->request;
-        $response = Yii::$app->response;
+        $request = Yii::$app->request;
 
-        $version = StoreVersion::findModel($id);
+        $version = StoreVersion::findModel(['encode_id' => $id]);
 
         if($request->isPost){
-
-            $response->format = Response::FORMAT_JSON;
 
             $version->scenario = 'update';
 
@@ -112,16 +108,17 @@ class VersionController extends PublicController
     public function actionSelect($project_id, $name)
     {
 
-        $response = Yii::$app->response;
-        $response->format = Response::FORMAT_JSON;
+        $request = Yii::$app->request;
 
-        $version = SearchVersion::findModel();
+        if($request->isPost){
+            $version = SearchVersion::findModel();
 
-        $version->pageSize = 4;
+            $version->pageSize = 4;
 
-        $versions = $version->search(['project_id' => $project_id, 'name' =>$name])->models;
+            $versions = $version->search(['project_id' => $project_id, 'name' =>$name])->models;
 
-        return $versions;
+            return $versions;
+        }
 
     }
 
@@ -135,7 +132,7 @@ class VersionController extends PublicController
 
         $request  = Yii::$app->request;
 
-        $version  = DeleteVersion::findModel($id);
+        $version = DeleteVersion::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 

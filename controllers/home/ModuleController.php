@@ -43,7 +43,7 @@ class ModuleController extends PublicController
 
         $request  = Yii::$app->request;
 
-        $version  = Version::findModel($version_id);
+        $version  = Version::findModel(['encode_id' => $version_id]);
 
         $module   = StoreModule::findModel();
 
@@ -84,7 +84,7 @@ class ModuleController extends PublicController
 
         $request  = Yii::$app->request;
 
-        $module = StoreModule::findModel($id);
+        $module = StoreModule::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 
@@ -113,9 +113,9 @@ class ModuleController extends PublicController
     public function actionDelete($id)
     {
 
-        $request  = Yii::$app->request;
+        $request = Yii::$app->request;
 
-        $module   = DeleteModule::findModel($id);
+        $module  = DeleteModule::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 

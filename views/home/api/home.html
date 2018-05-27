@@ -19,7 +19,7 @@
 
                         <a href="javascript:void(0);" class="btn btn-sm btn-success js_editApiBtn" data-toggle="tooltip" data-placement="bottom" data-title="编辑接口"><i class="fa fa-fw fa-edit"></i>编辑</a>
 
-                        <a href="javascript:void(0);" class="btn btn-sm btn-danger js_deleteApiBtn" data-toggle="tooltip" data-placement="bottom" data-title="删除接口" data-modal="#js_deleteApiModal" data-height="250" data-src="{{url('home/api/delete', ['id' => $api->id])}}"><i class="fa fa-fw fa-trash"></i>删除</a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger js_deleteApiBtn" data-toggle="tooltip" data-placement="bottom" data-title="删除接口" data-modal="#js_deleteApiModal" data-height="250" data-src="{{url('home/api/delete', ['id' => $api->encode_id])}}"><i class="fa fa-fw fa-trash"></i>删除</a>
 
                     </div>
                 </div>
@@ -85,17 +85,17 @@
                                                 {{foreach $api->module->project->envs as $env}}
                                                 <tr>
                                                     <td style="width: 150px;">{{$env->title}}({{$env->name}})</td>
-                                                    <td><code>{{$env->domain}}{{$api->uri}}</code></td>
+                                                    <td><code>{{$env->base_url}}{{$api->uri}}</code></td>
                                                     <td style="width: 100px;">
-                                                        <button type="button" data-clipboard-text="{{$env->domain}}{{$api->uri}}" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>
+                                                        <button type="button" data-clipboard-text="{{$env->base_url}}{{$api->uri}}" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                                                     </td>
                                                 </tr>
                                                 {{/foreach}}
 
                                                 <tr>
-                                                    <td>模拟环境(mock)</td>
+                                                    <td style="width: 150px;">模拟环境(mock)</td>
                                                     <td><code>http://demo.phprap.com/mock/FzxxmyQzxV.html</code></td>
-                                                    <td>
+                                                    <td style="width: 100px;">
                                                         <button type="button" data-clipboard-text="http://demo.phprap.com/mock/FzxxmyQzxV.html" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                                                     </td>
 

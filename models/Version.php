@@ -8,10 +8,10 @@ use Yii;
  * This is the model class for table "doc_version".
  *
  * @property int $id
+ * @property string $encode_id 加密id
  * @property int $project_id 项目id
  * @property int $parent_id 父级版本id
  * @property int $creater_id 版本创建者id
- * @property string $token 版本token
  * @property string $name 版本号
  * @property string $remark 备注信息
  * @property int $status 版本状态
@@ -20,10 +20,6 @@ use Yii;
  */
 class Version extends Model
 {
-
-    const ACTIVE_STATUS  = 10; //启用状态
-    const DISABLE_STATUS = 20; //禁用状态
-    const DELETED_STATUS = 30; //删除状态
 
     /**
      * 绑定数据表
@@ -39,15 +35,21 @@ class Version extends Model
      */
     public function rules()
     {
+
         return [
-            [['project_id', 'parent_id', 'creater_id', 'token', 'name'], 'required'],
             [['project_id', 'parent_id', 'creater_id', 'status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
-            [['token'], 'string', 'max' => 20],
-            [['name'], 'string', 'max' => 10],
+            [['encode_id', 'name'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 250],
+            [['encode_id'], 'unique'],
+
+            [['created_at', 'updated_at'], 'safe'],
+            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
+            [['status'], 'default', 'value'  => self::ACTIVE_STATUS],
+
+            [['encode_id', 'project_id', 'parent_id', 'creater_id', 'name', 'status'], 'required'],
         ];
+
     }
 
     /**
@@ -58,10 +60,10 @@ class Version extends Model
     {
         return [
             'id' => 'ID',
-            'project_id' => '项目',
-            'parent_id' => '父级版本',
-            'creater_id' => '创建者',
-            'token' => 'Token',
+            'encode_id' => '加密id',
+            'project_id' => '项目id',
+            'parent_id' => '父级版本id',
+            'creater_id' => '创建者id',
             'name'  => '版本号',
             'remark' => '版本描述',
             'status' => '版本状态',

@@ -16,11 +16,17 @@ class StoreMember extends Member
     {
 
         return [
-            [['created_at', 'updated_at'], 'safe'],
-            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
-            [['creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
-            [['!project_id', '!creater_id', 'user_id','project_rule', 'version_rule', 'module_rule', 'api_rule', 'member_rule'], 'required', 'on' => ['create', 'update']],
             [['project_id', 'user_id', 'creater_id'], 'integer'],
+            [['encode_id'], 'string', 'max' => 10],
+            [['project_rule', 'version_rule', 'module_rule', 'api_rule', 'member_rule', 'map_rule'], 'string', 'max' => 100],
+            [['encode_id'], 'unique'],
+
+            [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
+            [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['!encode_id'], 'default', 'value'  => $this->getEncodeId(), 'on' => 'create'],
+
+            [['encode_id', 'project_id', 'user_id', 'creater_id'], 'required', 'on' => ['create', 'update']],
+
         ];
 
     }
@@ -33,6 +39,14 @@ class StoreMember extends Member
 
         if(!$this->validate()){
             return false;
+        }
+
+        // 判断是否有更新
+        $oldAttributes   = $this->getOldAttributes();
+        $dirtyAttributes = $this->getDirtyAttributes();
+
+        if(!$dirtyAttributes){
+            return true;
         }
 
         if(!$this->save(false)){
@@ -51,7 +65,8 @@ class StoreMember extends Member
         }elseif($this->scenario == 'update'){
 
             $log->method  = 'update';
-            $log->content = '更新了 成员 <code>' . $this->user->fullName . '</code>';
+
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
 
         }
 

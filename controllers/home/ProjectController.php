@@ -49,9 +49,9 @@ class ProjectController extends PublicController
     public function actionSelect()
     {
 
-        $model = Project::findModel();
+        $project = Project::findModel();
 
-        return $this->display('select', ['model' => $model]);
+        return $this->display('select', ['project' => $project]);
 
     }
 
@@ -64,7 +64,7 @@ class ProjectController extends PublicController
 
         $params = Yii::$app->request->queryParams;
 
-        $model = SearchProject::findModel();
+        $model  = SearchProject::findModel();
 
         $params['status'] = $model::ACTIVE_STATUS;
 
@@ -81,7 +81,7 @@ class ProjectController extends PublicController
 
         $request  = Yii::$app->request;
 
-        $project  = TransferProject::findModel($id);
+        $project  = TransferProject::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 
@@ -101,7 +101,7 @@ class ProjectController extends PublicController
 
         }
 
-        return $this->display('transfer', ['model' => $project]);
+        return $this->display('transfer', ['project' => $project]);
 
     }
 
@@ -157,7 +157,7 @@ class ProjectController extends PublicController
 
         }
 
-        return $this->display('create', ['model' => $project]);
+        return $this->display('create', ['project' => $project]);
 
     }
 
@@ -171,7 +171,7 @@ class ProjectController extends PublicController
 
         $request  = Yii::$app->request;
 
-        $project  = StoreProject::findModel($id);
+        $project  = StoreProject::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 
@@ -192,7 +192,7 @@ class ProjectController extends PublicController
 
         }
 
-        return $this->display('create', ['model' => $project]);
+        return $this->display('create', ['project' => $project]);
 
     }
 
@@ -202,10 +202,10 @@ class ProjectController extends PublicController
      * @param string $tab
      * @return string
      */
-    public function actionShow($token, $tab = 'home')
+    public function actionShow($version_id, $tab = 'home')
     {
 
-        $version = Version::findModel(['token' => $token, 'status' => Version::ACTIVE_STATUS]);
+        $version = Version::findModel(['encode_id' => $version_id, 'status' => Version::ACTIVE_STATUS]);
         $project = Project::findModel($version->project_id);
 
         // 获取当前版本
@@ -261,7 +261,7 @@ class ProjectController extends PublicController
 
         $request  = Yii::$app->request;
 
-        $project  = DeleteProject::findModel($id);
+        $project  = DeleteProject::findModel(['encode_id' => $id]);
 
         if($request->isPost){
 
