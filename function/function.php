@@ -69,6 +69,9 @@ if (!function_exists('dump'))
 
 }
 
+/**
+ * 获取系统配置信息
+ */
 if (!function_exists('config')){
     function config($name, $type='app')
     {
@@ -79,6 +82,9 @@ if (!function_exists('config')){
     }
 }
 
+/**
+ * 生成CSRF口令
+ */
 if (!function_exists('csrf_token')){
     function csrf_token()
     {
