@@ -51,6 +51,15 @@
                             </div>
 
                             <div class="form-group">
+                                <label>允许注册邮箱后缀
+                                    <a data-toggle="tooltip" data-placement="right" title="" class="btn-show-tips" data-original-title="填写后，填写的IP将被禁止访问">
+                                        <i class="fa fa-info-circle"></i>
+                                    </a>
+                                </label>
+                                <textarea class="form-control" name="Config[ip_black_list]" placeholder="IP黑名单，非必填，每行一个" rows="3" ignore="ignore" datatype="*" >{{$config->getField('ip_black_list')}}</textarea>
+                            </div>
+
+                            <div class="form-group">
                                 <label>注册口令
                                     <a data-toggle="tooltip" data-placement="right" title="" class="btn-show-tips" data-original-title="如果不填写注册口令，那么注册页面不会有输入注册口令项">
                                     <i class="fa fa-info-circle"></i>

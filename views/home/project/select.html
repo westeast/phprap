@@ -26,7 +26,6 @@
     }
 
     .panel:hover  {
-        background-color:#EFEFEF;
         cursor: pointer;
         background:#fff;
         color:#333;
@@ -48,9 +47,6 @@
         margin: 0;
         padding: 0 30px;
         border-left: 1px solid #e7e7e7;
-    }
-    .drag-sort{
-        cursor: move;
     }
 
 </style>
@@ -83,7 +79,7 @@
                     <div class="panel-heading">
                     <span class="head-title">{{$project->title}}</span>
                         <span class="head-btn">
-                            <a class="fa hidden-xs fa-pencil" data-toggle="tooltip" data-placement="top" data-modal="#js_addProjectModal"data-height="380" data-title="编辑项目" data-src="{{url('update', ['id' => $project->encode_id])}}"></a>
+                            <a class="fa hidden-xs fa-pencil" data-toggle="tooltip" data-placement="top" data-modal="#js_addProjectModal"data-height="310" data-title="编辑项目" data-src="{{url('update', ['id' => $project->encode_id])}}"></a>
 
                             <a class="fa hidden-xs fa-trash-o" data-toggle="tooltip" data-placement="top" data-modal="#js_deleteProjectModal" data-height="230" data-title="删除项目" data-src="{{url('delete', ['id' => $project->encode_id])}}"></a>
 

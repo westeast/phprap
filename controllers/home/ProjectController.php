@@ -5,6 +5,8 @@ use app\models\member\SearchMember;
 use app\models\project\SearchProject;
 use app\models\project\TransferProject;
 use app\models\projectLog\SearchLog;
+use app\models\Template;
+use app\models\template\StoreTemplate;
 use Yii;
 use yii\web\Response;
 use yii\db\Exception;
@@ -150,6 +152,21 @@ class ProjectController extends PublicController
 
             }
 
+            // 添加默认模板
+            $template = StoreTemplate::findModel();
+
+            $template->scenario     = 'create';
+
+            $template->project_id   = $project->id;
+            $template->header_json  = json_encode($template->defaultAttributes['header'], JSON_UNESCAPED_UNICODE);
+            $template->request_json = json_encode($template->defaultAttributes['request'], JSON_UNESCAPED_UNICODE);
+            $template->response_json  = json_encode($template->defaultAttributes['response'], JSON_UNESCAPED_UNICODE);
+
+            if(!$template->store()){
+                $transaction->rollBack();
+                return ['status' => 'error', 'model' => $template];
+            }
+
             // 事务提交
             $transaction->commit();
 
@@ -228,7 +245,7 @@ class ProjectController extends PublicController
                 $view  = '/home/version/index';
                 break;
             case 'template':
-                $model = SearchVersion::findModel()->search($params);
+                $model = Template::findModel(['project_id' => $project->id]);
                 $view  = '/home/template/home';
                 break;
             case 'env':

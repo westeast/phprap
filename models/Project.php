@@ -21,8 +21,14 @@ use Yii;
 class Project extends Model
 {
 
-    const ALLOW_SEARCH  = 10; //允许搜索
-    const FORBID_SEARCH = 20; //禁止搜索
+    /**
+     * 是否允许搜索标签
+     * @var array
+     */
+    public $allowSearchLabels = [
+        '10' => '允许',
+        '20' => '禁止',
+    ];
 
     /**
      * 当前版本号
@@ -236,14 +242,11 @@ class Project extends Model
      * 获取是否允许搜索文案
      * @return string
      */
-    public function getAllowSearchText()
+    public function getAllowSearchLabel()
     {
-        if($this->allow_search == self::ALLOW_SEARCH){
-            return '允许';
-        }
-        if($this->allow_search == self::FORBID_SEARCH){
-            return '禁止';
-        }
+
+        return $this->allowSearchLabels[$this->allow_search];
+
     }
 
     /**

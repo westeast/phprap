@@ -17,7 +17,6 @@ class RegisterForm extends User
 
     public function rules()
     {
-
         return [
             [['name', 'email', 'verifyCode', 'registerToken'], 'filter', 'filter' => 'trim'],
             ['name', 'required', 'message' => '用户昵称不可以为空'],
@@ -41,7 +40,7 @@ class RegisterForm extends User
 
         if (!$this->hasErrors()) {
 
-            $config = Config::findOne(['type' => 'app']);
+            $config = Config::findOne(['type' => 'safe']);
 
             $token  = $config->getField('register_token');
 
@@ -54,7 +53,7 @@ class RegisterForm extends User
     public function register()
     {
 
-        $config = Config::findOne(['type' => 'app']);
+        $config = Config::findOne(['type' => 'safe']);
 
         $token   = $config->getField('register_token');
         $captcha = $config->getField('register_captcha');

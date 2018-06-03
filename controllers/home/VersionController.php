@@ -2,6 +2,7 @@
 namespace app\controllers\home;
 
 use app\models\Project;
+use app\models\Version;
 use app\models\version\DeleteVersion;
 use app\models\version\SearchVersion;
 use app\models\version\StoreVersion;
@@ -33,7 +34,7 @@ class VersionController extends PublicController
     }
 
     /**
-     * 添加成员
+     * 添加版本
      * @return string
      */
     public function actionCreate($project_id)
@@ -72,6 +73,11 @@ class VersionController extends PublicController
 
     }
 
+    /**
+     * 更新版本
+     * @param $id
+     * @return array|string
+     */
     public function actionUpdate($id)
     {
 
@@ -112,6 +118,7 @@ class VersionController extends PublicController
 
         // 禁用公共model里统一json格式输出
         $this->afterAction = false;
+        Yii::$app->response->format = Response::FORMAT_JSON;
 
         $project = Project::findModel(['encode_id' => $project_id]);
 

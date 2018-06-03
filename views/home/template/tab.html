@@ -1,5 +1,0 @@
-
-<ul class="nav nav-tabs">
-    <li class="{{if $tab == 'home'}}active{{/if}}"><a href="{{url('/home/template/update', ['token' => $project->currentVersion->token, 'tab' => 'home'])}}">常规录入</a></li>
-    <li class="{{if $tab == 'version'}}active{{/if}}"><a href="{{url('show', ['token' => $project->currentVersion->token, 'tab' => 'version'])}}">JSON导入</a></li>
-</ul>

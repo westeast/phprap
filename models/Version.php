@@ -13,7 +13,7 @@ use Yii;
  * @property int $parent_id 父级版本id
  * @property int $creater_id 版本创建者id
  * @property string $name 版本号
- * @property string $remark 备注信息
+ * @property string $remark 更新摘要
  * @property int $status 版本状态
  * @property string $created_at 创建时间
  * @property string $updated_at 更新时间
@@ -65,7 +65,7 @@ class Version extends Model
             'parent_id' => '父级版本id',
             'creater_id' => '创建者id',
             'name'  => '版本号',
-            'remark' => '版本描述',
+            'remark' => '更新摘要',
             'status' => '版本状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

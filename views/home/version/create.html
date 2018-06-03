@@ -53,8 +53,8 @@
             {{/if}}
 
             <div class="form-group">
-                <label class="control-label">版本描述</label>
-                <textarea class="form-control js_remark" rows="3" placeholder="版本更新摘要，必填" datatype="*1-250" nullmsg="请输入版本描述" name="StoreVersion[remark]">{{$version->remark}}</textarea>
+                <label class="control-label">更新摘要</label>
+                <textarea class="form-control js_remark" rows="3" placeholder="版本更新摘要，必填" datatype="*1-250" nullmsg="请输入更新摘要" name="StoreVersion[remark]">{{$version->remark}}</textarea>
             </div>
 
             <input type="hidden" id="js_submit" value="提交">
@@ -88,7 +88,7 @@
 
             },
             afterSelect: function (item) {
-                versionIdInput.val(item.id);
+                versionIdInput.val(item.encode_id);
                 selectVersionBtn.attr("readonly","readonly");
             },
 

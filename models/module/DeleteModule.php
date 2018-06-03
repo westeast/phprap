@@ -59,6 +59,7 @@ class DeleteModule extends Module
 
         $log->method = 'delete';
         $log->project_id   = $this->project_id;
+        $log->module_id    = $this->id;
         $log->version_id   = $this->version->id;
         $log->version_name = $this->version->name;
         $log->object_name  = 'module';

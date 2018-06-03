@@ -24,7 +24,7 @@ class ModuleController extends PublicController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['create', 'update', 'select','delete', 'show'],
+                        'actions' => ['create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -75,7 +75,7 @@ class ModuleController extends PublicController
     }
 
     /**
-     * 更新模板
+     * 更新模块
      * @param $id
      * @return array|string
      */
@@ -110,6 +110,11 @@ class ModuleController extends PublicController
 
     }
 
+    /**
+     * 删除模块
+     * @param $id
+     * @return array|string
+     */
     public function actionDelete($id)
     {
 

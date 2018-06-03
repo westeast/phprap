@@ -62,7 +62,11 @@ class DeleteApi extends Api
         $log = StoreLog::findModel();
 
         $log->method      = 'delete';
-        $log->project_id  = $this->project_id;
+        $log->project_id  = $this->module->project_id;
+        $log->module_id   = $this->module->id;
+        $log->api_id      = $this->id;
+        $log->version_id  = $this->module->version->id;
+        $log->version_name  = $this->module->version->name;
         $log->object_name = 'api';
         $log->object_id   = $this->id;
         $log->content     = '删除了 接口 <code>' . $this->title . '</code>';

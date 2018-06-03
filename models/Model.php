@@ -22,6 +22,10 @@ class Model extends \yii\db\ActiveRecord
     public static function findModel($condition = null)
     {
 
+        if(!$condition){
+            return new static();
+        }
+
         if (($model = static::findOne($condition)) !== null) {
 
             return $model;

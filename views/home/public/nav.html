@@ -27,10 +27,10 @@
                 {{Yii::$app->user->identity->name}}  <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="{{url('project/search')}}"><i class="fa fa-search fa-fw"></i> 搜索项目</a>
+                <li><a href="{{url('home/project/search')}}"><i class="fa fa-search fa-fw"></i> 搜索项目</a>
                 </li>
 
-                <li><a href="{{url('account/setting')}}"><i class="fa fa-user fa-fw"></i> 个人中心</a>
+                <li><a href="{{url('home/profile/home')}}"><i class="fa fa-user fa-fw"></i> 个人中心</a>
                 </li>
 
                 <li><a href="{{url('admin/home/index')}}"><i class="fa fa-gear fa-fw"></i> 管理中心</a>
@@ -39,7 +39,7 @@
                 <li><a target="_blank" href="http://www.phprap.com/doc/index.html"><i class="fa fa-file-text fa-fw"></i> 帮助文档</a>
                 </li>
                 <li class="divider"></li>
-                <li><a class="js_logoutBtn" href="{{url('account/logout')}}"><i class="fa fa-sign-out fa-fw"></i> 退出登录</a>
+                <li><a class="js_logoutBtn" href="{{url('home/account/logout')}}"><i class="fa fa-sign-out fa-fw"></i> 退出登录</a>
                 </li>
             </ul>
 

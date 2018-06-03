@@ -6,20 +6,6 @@ use app\models\projectLog\StoreLog;
 use app\models\Version;
 use Yii;
 
-/**
- * This is the model class for table "doc_version".
- *
- * @property int $id
- * @property int $project_id 项目id
- * @property int $parent_id 父级项目id
- * @property string $name 版本号
- * @property string $token 版本token
- * @property string $remark 备注信息
- * @property int $status 版本状态
- * @property int $creater_id 版本创建者id
- * @property string $created_at 创建时间
- * @property string $updated_at 更新时间
- */
 class StoreVersion extends Version
 {
 
@@ -39,7 +25,7 @@ class StoreVersion extends Version
             [['!encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
             [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
 
-            [['!encode_id', '!project_id', 'parent_id', '!creater_id', 'name', '!status'], 'required', 'on' => ['create', 'update']],
+            [['!encode_id', '!project_id', '!creater_id', 'name', '!status'], 'required', 'on' => ['create', 'update']],
         ];
     }
 
@@ -53,7 +39,7 @@ class StoreVersion extends Version
 
         $query->andFilterWhere([
             'project_id' => $this->project_id,
-            'status' => Version::ACTIVE_STATUS,
+            'status' => self::ACTIVE_STATUS,
             'name'   => $this->name,
         ]);
 
@@ -77,7 +63,9 @@ class StoreVersion extends Version
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        $this->parent_id = self::findModel(['encode_id' => $this->parent_id])->id;
+        if($this->scenario == 'create'){
+            $this->parent_id = self::findModel(['encode_id' => $this->parent_id])->id;
+        }
 
         if(!$this->validate()){
             return false;
@@ -117,7 +105,6 @@ class StoreVersion extends Version
 
         $log->project_id   = $this->project_id;
         $log->version_id   = $this->id;
-        $log->project_id   = $this->project_id;
         $log->object_name  = 'version';
         $log->object_id    = $this->id;
 

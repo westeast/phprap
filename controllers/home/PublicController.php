@@ -40,15 +40,15 @@ class PublicController extends Controller
     public function afterAction($action, $result)
     {
 
+        if($this->afterAction === false){
+            return $result;
+        }
+
         if(Yii::$app->request->isAjax){
 
             Yii::$app->response->format = Response::FORMAT_JSON;
 
             $rs = parent::afterAction($action, $result);
-
-            if($this->afterAction === false){
-                return $rs;
-            }
 
             if($rs['status'] == 'success'){
                 $defaultMessage= '操作成功';

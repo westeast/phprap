@@ -1,7 +1,5 @@
 
 <ul class="nav nav-tabs">
-    <li class="active"><a href="{{url('show', ['id' => $model->id, 'tab' => 'home'])}}">账号设置</a></li>
-    <li class="{{if $tab == 'member'}}active{{/if}}"><a href="{{url('show', ['id' => $model->id, 'tab' => 'member'])}}">通知设置</a></li>
-    <!--<li class="{{if $tab == 'map'}}active{{/if}}"><a href="{{url('show', ['id' => $model->id, 'tab' => 'map'])}}">数据字典</a></li>-->
-    <li class="hidden-xs {{if $tab == 'history'}}active{{/if}}"><a href="{{url('show', ['id' => $model->id, 'tab' => 'history'])}}">11修改个人资料</a></li>
+    <li class="{{if $tab == 'home'}}active{{/if}}"><a href="{{url('home/profile/home')}}">个人资料</a></li>
+    <li class="{{if $tab == 'account'}}active{{/if}}"><a href="{{url('home/profile/account')}}">账户设置</a></li>
 </ul>

@@ -19,9 +19,9 @@ class StoreApi extends Api
 
         return [
             [['sort'], 'filter', 'filter' => 'intval'], //此规则必须，否则就算模型里该字段没有修改，也会出现在脏属性里
-            [['project_id', 'version_id', 'module_id', 'status', 'sort', 'creater_id'], 'integer'],
+            [['module_id', 'status', 'sort', 'creater_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['encode_id', 'method'], 'string', 'max' => 10],
+            [['encode_id', 'request_method', 'response_format'], 'string', 'max' => 20],
             [['title', 'uri', 'remark'], 'string', 'max' => 250],
             [['encode_id'], 'unique'],
             ['title', 'validateTitle'],
@@ -31,13 +31,13 @@ class StoreApi extends Api
             [['!encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
             [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
 
-            [['encode_id', 'project_id', 'version_id', 'module_id', 'title', 'method', 'uri', 'status', 'sort', 'creater_id'], 'required', 'on' => ['create', 'update']],
+            [['encode_id', 'module_id', 'title', 'request_method', 'response_format', 'uri', 'status', 'sort', 'creater_id'], 'required', 'on' => ['create', 'update']],
         ];
 
     }
 
     /**
-     * 验证模块名是否唯一
+     * 验证接口名是否唯一
      * @param $attribute
      */
     public function validateTitle($attribute)
@@ -45,7 +45,6 @@ class StoreApi extends Api
         $query = self::find();
 
         $query->andFilterWhere([
-            'creater_id' => Yii::$app->user->identity->id,
             'module_id' => $this->module_id,
             'status' => self::ACTIVE_STATUS,
             'title'  => $this->title,
@@ -61,6 +60,10 @@ class StoreApi extends Api
 
     }
 
+    /**
+     * 保存接口
+     * @return bool
+     */
     public function store()
     {
 
@@ -90,6 +93,7 @@ class StoreApi extends Api
         $log = StoreLog::findModel();
 
         if($this->scenario == 'create'){
+
             $log->method  = 'create';
             $log->content = '创建了 接口 <code>' . $this->title . '</code>';
 
@@ -97,13 +101,21 @@ class StoreApi extends Api
 
             $log->method  = 'update';
 
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, $oldAttributes['title']);
+            if(isset($dirtyAttributes['request_method'])){
+
+                $oldAttributes['request_method']   = $this->requestMethodLabels[$oldAttributes['request_method']];
+                $dirtyAttributes['request_method'] = $this->requestMethodLabels[$dirtyAttributes['request_method']];
+            }
+
+            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
 
         }
 
         $log->project_id  = $this->module->project_id;
+        $log->module_id   = $this->module->id;
+        $log->api_id       = $this->id;
         $log->version_id  = $this->module->version->id;
-        $log->version_name  = $this->module->version->name;
+        $log->version_name = $this->module->version->name;
         $log->object_name = 'api';
         $log->object_id   = $this->id;
 

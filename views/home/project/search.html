@@ -44,14 +44,14 @@
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover">
+                            <table class="table">
                                 <thead>
                                 <tr>
                                     <th>项目名称</th>
-                                    <th>创建人/账号</th>
-                                    <th>成员数</th>
-                                    <th>创建时间</th>
-
+                                    <th>创建人昵称/账号</th>
+                                    <th width="60px">成员数</th>
+                                    <th class="datetime">创建时间</th>
+                                    <th class="datetime">更新时间</th>
                                     <th width="100px;">操作面板</th>
                                 </tr>
                                 </thead>
@@ -59,9 +59,10 @@
                                 {{foreach $model->models as $model}}
                                 <tr>
                                     <td >{{$model->title}}</td>
-                                    <td >{{$model->creater->name}}({{$model->creater->email}})</td>
+                                    <td >{{$model->creater->fullName}}</td>
                                     <td >{{$model->getMembers()->count()}}</td>
                                     <td >{{$model->created_at}}</td>
+                                    <td >{{$model->updated_at}}</td>
                                     <td >
                                         <a class="btn btn-success btn-xs js_addProjectBtn">加入项目</a>
                                     </td>

@@ -97,12 +97,8 @@ class StoreProject extends Project
 
             if(isset($dirtyAttributes['allow_search'])){
 
-                $find    = [self::ALLOW_SEARCH, self::FORBID_SEARCH];
-
-                $replace = ['允许','禁止'];
-
-                $oldAttributes['allow_search']   = str_replace($find, $replace, $oldAttributes['allow_search']);
-                $dirtyAttributes['allow_search'] = str_replace($find, $replace, $dirtyAttributes['allow_search']);
+                $oldAttributes['allow_search']   = $this->allowSearchLabels[$oldAttributes['allow_search']];
+                $dirtyAttributes['allow_search'] = $this->allowSearchLabels[$dirtyAttributes['allow_search']];
             }
 
             $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, $oldAttributes['title']);

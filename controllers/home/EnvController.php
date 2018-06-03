@@ -74,7 +74,7 @@ class EnvController extends PublicController
     }
 
     /**
-     * 编辑环境
+     * 更新环境
      * @param $id
      * @return array|string
      */
@@ -109,7 +109,11 @@ class EnvController extends PublicController
 
     }
 
-
+    /**
+     * 删除环境
+     * @param $id
+     * @return array|string
+     */
     public function actionDelete($id)
     {
 
@@ -132,6 +136,5 @@ class EnvController extends PublicController
         return $this->display('delete');
 
     }
-
 
 }

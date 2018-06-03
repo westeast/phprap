@@ -110,6 +110,7 @@ class MemberController extends PublicController
     {
         // 禁用公共model里统一json格式输出
         $this->afterAction = false;
+        Yii::$app->response->format = Response::FORMAT_JSON;
 
         $project = Project::findModel(['encode_id' => $project_id]);
 

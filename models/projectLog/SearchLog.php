@@ -25,6 +25,9 @@ class SearchLog extends ProjectLog
 
         $query->andFilterWhere([
             'project_id'  => $this->params['project_id'],
+            'module_id'  => $this->params['module_id'],
+            'version_id'  => $this->params['version_id'],
+            'api_id'  => $this->params['api_id'],
             'object_name' => $this->params['object_name'],
             'object_id'   => $this->params['object_id'],
         ]);
@@ -46,7 +49,7 @@ class SearchLog extends ProjectLog
 
         $this->sql = $query->createCommand()->getRawSql();
 
-//        dump($this->sql);
+//        dump($this->params);
 
         $this->pages = LinkPager::widget([
             'pagination' => $pagination,

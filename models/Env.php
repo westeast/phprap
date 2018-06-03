@@ -26,7 +26,7 @@ class Env extends Model
      * 默认环境
      * @var array
      */
-    public $default_envs = [
+    public $defaultEnvs = [
         1 => [
             'name'  => 'product',
             'title' => '生产环境',
@@ -77,7 +77,7 @@ class Env extends Model
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => '环境id',
             'encode_id' => '加密id',
             'name' => '环境标识',
             'title' => '环境名称',
@@ -126,17 +126,17 @@ class Env extends Model
         $filter['name'] = 'product';
         if(!$query->where($filter)->exists()){
 
-            return $this->default_envs[1];
+            return $this->defaultEnvs[1];
         }
 
         $filter['name'] = 'develop';
         if(!$query->where($filter)->exists()){
-            return $this->default_envs[2];
+            return $this->defaultEnvs[2];
         }
 
         $filter['name'] = 'test';
         if(!$query->where($filter)->exists()){
-            return $this->default_envs[3];
+            return $this->defaultEnvs[3];
         }
 
     }

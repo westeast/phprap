@@ -1,7 +1,7 @@
 /**
  * 菜单折叠
  */
-$('#side-menu').metisMenu();
+$('#sidebar-menu').metisMenu();
 /**
  * 吐司提示
  */
@@ -11,9 +11,11 @@ function alert(msg, type, callbak) {
 
     var shift;
     var time;
-    if(!msg){
+    if(msg.length == 0){
+        alert('kkkk');
         return;
     }
+
     if(type == 'success'){
         shift = 5;
         time  = 1;
@@ -153,4 +155,3 @@ function resetForm() {
     });
 
 })(jQuery);
-

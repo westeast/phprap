@@ -29,7 +29,7 @@ class AccountController extends PublicController
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout','index','create','update','repassword','login_log','setting'],
+                        'actions' => ['logout','index','create','update','repassword','login_log','profile'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -70,7 +70,7 @@ class AccountController extends PublicController
 
             } else {
 
-                return ['status' => 'error', 'message' => $model->getError(), 'label' => $model->getLabel()];
+                return ['status' => 'error', 'model' => $model];
 
             }
 
@@ -137,29 +137,5 @@ class AccountController extends PublicController
         }
 
     }
-
-    public function actionSetting($tab= 'profile')
-    {
-
-        $user = Yii::$app->user->identity;
-
-        switch ($tab) {
-            case 'home':
-                $view = '/home/account/home';
-                break;
-            case 'profile':
-                $view = '/home/setting/profile';
-                break;
-            case 'notify':
-                $view = '/home/setting/notify';
-                break;
-            default:
-                $view = '/home/account/home';
-                break;
-        }
-
-        return $this->display($view, ['user' => $user]);
-    }
-
 
 }
