@@ -65,7 +65,7 @@
 
             </tr>
 
-            <tr class="js_responseClone">
+            <tr class="js_responseClone" data-level="0">
 
                 <td><input name="name" class="form-control js_name" placeholder="必填" datatype="*1-20" nullmsg="请填写参数名" value=""></td>
                 <td><input name="title" class="form-control js_title" placeholder="必填" datatype="*1-50" nullmsg="请填写参数标题" value=""></td>
@@ -265,7 +265,7 @@
                                                     <tbody>
 
                                                     {{foreach $model->responseAttributes as $response}}
-                                                    <tr>
+                                                    <tr data-level="{{$response.level}}">
 
                                                         <td>
                                                             {{if $response.level}}

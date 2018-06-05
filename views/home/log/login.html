@@ -111,29 +111,25 @@
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="table-responsive" style="overflow:scroll;">
-                            <table class="table table-striped table-bordered table-hover">
+                            <table class="table">
                                 <thead>
                                 <tr>
                                     <th>登录账号</th>
                                     <th>登录昵称</th>
-                                    <th>所属资方</th>
                                     <th>登录时间</th>
                                     <th>登录IP</th>
                                     <th>登录地点</th>
-                                    <th>操作系统</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {{foreach $models as $model}}
+                                {{foreach $model->models as $model}}
 
                                 <tr>
-                                    <td>{{$model->login_name}}{{if $capital_code = $model->capital_code}}@{{$capital_code}}{{/if}}</td>
-                                    <td>{{$model->nick_name}}</td>
-                                    <td>{{$model->capital_name}}</td>
+                                    <td>{{$model->user_email}}</td>
+                                    <td>{{$model->user_name}}</td>
                                     <td>{{$model->created_at}}</td>
                                     <td>{{$model->ip}}</td>
-                                    <td>{{$model->address}}</td>
-                                    <td>{{$model->os}} {{$model.browser}}</td>
+                                    <td>{{$model->location}}</td>
 
                                 </tr>
                                 {{/foreach}}
@@ -173,28 +169,6 @@
                 todayBtn: false, // 如果此值为true 或 "linked"，则在日期时间选择器组件的底部显示一个 "Today" 按钮用以选择当前日期。
                 // 窗口可选时间从今天开始
                 endDate: new Date()
-            });
-
-            $(".js_deleteBtn").click(function () {
-
-                var thisObj = $(this);
-                var csrf = "{{Yii::$app->request->csrfToken}}";
-                var id  = thisObj.data('id');
-                var url = "{{url('resource/delete')}}";
-
-                confirm('确认要删除该资源?', function(){
-                    $.post(url, {'id':id,'_csrf-backend':csrf}, function (json) {
-                        if(json.code == 200){
-                            alert(json.msg, 'success', function () {
-                                thisObj.closest('tr').remove();
-                            });
-                        }else{
-                            alert(json.msg, 'error');
-                        }
-                    }, 'json');
-
-                });
-
             });
 
         });

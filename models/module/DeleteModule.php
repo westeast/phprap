@@ -2,9 +2,8 @@
 
 namespace app\models\module;
 
-use app\models\Module;
-use app\models\projectLog\StoreLog;
 use Yii;
+use app\models\Module;
 
 class DeleteModule extends Module
 {
@@ -19,6 +18,10 @@ class DeleteModule extends Module
         ];
     }
 
+    /**
+     * 验证登录密码是否正确
+     * @param $attribute
+     */
     public function validatePassword($attribute)
     {
 
@@ -50,23 +53,6 @@ class DeleteModule extends Module
         }
 
         if(!$this->save(false)){
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        $log->method = 'delete';
-        $log->project_id   = $this->project_id;
-        $log->module_id    = $this->id;
-        $log->version_id   = $this->version->id;
-        $log->version_name = $this->version->name;
-        $log->object_name  = 'module';
-        $log->object_id = $this->id;
-        $log->content   = '删除了 模块 <code>' . $this->title . '</code>';
-
-        if(!$log->store()){
             $transaction->rollBack();
             return false;
         }

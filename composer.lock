@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e40a968c42d1361a1a4614955eb8fe7d",
+    "content-hash": "bacb44b4fbfebd82021e92d6c60d1704",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -250,6 +250,43 @@
                 "package"
             ],
             "time": "2018-05-22T14:43:18+00:00"
+        },
+        {
+            "name": "myweishanli/yii2-ip2location",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/myweishanli/yii2-ip2location.git",
+                "reference": "c5a5d58944d9672adfc3caab2a91b99b6e2ddbfc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/myweishanli/yii2-ip2location/c5a5d58944d9672adfc3caab2a91b99b6e2ddbfc.zip",
+                "reference": "c5a5d58944d9672adfc3caab2a91b99b6e2ddbfc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "yiisoft/yii2": ">=2.0.6"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "wsl\\ip2location\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shanli Wei",
+                    "email": "myweishanli@gmail.com"
+                }
+            ],
+            "description": "Yii2 Ip to Location",
+            "time": "2016-05-17T04:48:37+00:00"
         },
         {
             "name": "php-curl-class/php-curl-class",

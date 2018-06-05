@@ -3,6 +3,9 @@
 namespace app\models\account;
 
 use app\models\Config;
+use app\models\LoginLog;
+use app\models\loginLog\StoreLog;
+use wsl\ip2location\Ip2Location;
 use Yii;
 use app\models\User;
 
@@ -48,6 +51,17 @@ class LoginForm extends User
         }
 
         $user = User::findByEmail($this->email);
+
+        // 记录日志
+        $loginLog = new StoreLog();
+
+        $loginLog->user_id = $user->id;
+        $loginLog->user_name = $user->name;
+        $loginLog->user_email = $user->email;
+
+        if(!$loginLog->store()){
+            return false;
+        }
 
         $login_keep = config('login_keep', 'safe');
 

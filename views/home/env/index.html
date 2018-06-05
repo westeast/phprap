@@ -36,10 +36,9 @@
 
                                 <thead>
                                 <tr>
-                                    <th>环境标识符</th>
                                     <th>环境名称</th>
                                     <th>环境根路径</th>
-                                    <th>环境创建人</th>
+                                    <th>创建人昵称/账号</th>
                                     <th class="datetime">创建时间</th>
                                     <th class="hidden-xs" width="130px">操作面板</th>
 
@@ -48,10 +47,9 @@
                                 <tbody>
                                 {{foreach $project->envs as $env}}
                                 <tr>
-                                    <td>{{$env->name}}</td>
-                                    <td>{{$env->title}}</td>
+                                    <td>{{$env->title}}({{$env->name}})</td>
                                     <td><code>{{$env->base_url}}</code></td>
-                                    <td>{{$env->creater->name}}</td>
+                                    <td>{{$env->creater->fullName}}</td>
                                     <td>{{$env->created_at}}</td>
                                     <td class="hidden-xs">
 

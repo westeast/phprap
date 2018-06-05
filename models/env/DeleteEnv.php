@@ -1,10 +1,11 @@
 <?php
-
+/**
+ * 删除环境模型
+ */
 namespace app\models\env;
 
-use app\models\Env;
-use app\models\projectLog\StoreLog;
 use Yii;
+use app\models\Env;
 
 class DeleteEnv extends Env
 {
@@ -22,20 +23,6 @@ class DeleteEnv extends Env
         }
 
         if(!$this->save(false)){
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        $log->method      = 'delete';
-        $log->project_id  = $this->project_id;
-        $log->object_name = 'env';
-        $log->object_id   = $this->id;
-        $log->content     = '删除了 环境 <code>' . $this->title . '</code>';
-
-        if(!$log->store()){
             $transaction->rollBack();
             return false;
         }

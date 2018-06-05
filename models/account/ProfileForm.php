@@ -48,7 +48,7 @@ class ProfileForm extends User
 
     }
 
-    public function profile()
+    public function store()
     {
 
         if (!$this->validate()) {
@@ -60,10 +60,10 @@ class ProfileForm extends User
         $user->name   = $this->name;
         $user->email  = $this->email;
 
-        $user->setPassword($this->password);
+        $this->password && $user->setPassword($this->password);
         $user->generateAuthKey();
 
-        return true;
+//        return true;
 
         if($user->save()){
 

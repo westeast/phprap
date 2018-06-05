@@ -1,10 +1,11 @@
 <?php
-
+/**
+ * 保存字段模型
+ */
 namespace app\models\field;
 
-use app\models\Field;
-use app\models\projectLog\StoreLog;
 use Yii;
+use app\models\Field;
 
 class StoreField extends Field
 {
@@ -44,46 +45,7 @@ class StoreField extends Field
             return false;
         }
 
-        // 判断是否有更新
-        $oldAttributes   = $this->getOldAttributes();
-        $dirtyAttributes = $this->getDirtyAttributes();
-
-        if(!$dirtyAttributes){
-            return true;
-        }
-
         if(!$this->save(false)){
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        if($this->scenario == 'create'){
-
-            $log->method  = 'create';
-            $log->content = '创建了 字段';
-
-        }elseif($this->scenario == 'update'){
-
-            $log->method  = 'update';
-            $log->content = '更新了 字段';
-
-//            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
-
-        }
-
-        $log->project_id  = $this->api->module->project->id;
-        $log->module_id   = $this->api->module->id;
-        $log->api_id      = $this->api->id;
-        $log->version_id  = $this->api->module->version->id;
-        $log->version_name = $this->api->module->version->name;
-        $log->object_name = 'field';
-        $log->object_id   = $this->id;
-
-        if(!$log->store()){
-
             $transaction->rollBack();
             return false;
         }

@@ -1,13 +1,13 @@
 <?php
 
-namespace app\models\projectLog;
+namespace app\models\loginLog;
 
-use app\models\ProjectLog;
 use Yii;
+use app\models\LoginLog;
 use yii\data\Pagination;
 use app\widgets\LinkPager;
 
-class SearchLog extends ProjectLog
+class SearchLog extends LoginLog
 {
 
     public $pageSize = 20;
@@ -24,13 +24,11 @@ class SearchLog extends ProjectLog
         $query = static::find();
 
         $query->andFilterWhere([
-            'project_id'  => $this->params['project_id'],
-            'module_id'  => $this->params['module_id'],
-            'version_id'  => $this->params['version_id'],
-            'api_id'  => $this->params['api_id'],
-            'object_name' => $this->params['object_name'],
-            'object_id'   => $this->params['object_id'],
+            'user_id'  => $this->params['user_id'],
         ]);
+
+        $query->andFilterWhere(['like', 'user_name', $this->params['user_name']]);
+        $query->andFilterWhere(['like', 'user_email', $this->params['user_email']]);
 
         $pagination = new Pagination([
             'pageSizeParam' => false,
@@ -48,8 +46,6 @@ class SearchLog extends ProjectLog
         $this->count = $query->count();
 
         $this->sql = $query->createCommand()->getRawSql();
-
-//        dump($this->params);
 
         $this->pages = LinkPager::widget([
             'pagination' => $pagination,

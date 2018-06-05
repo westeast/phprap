@@ -11,8 +11,7 @@ function alert(msg, type, callbak) {
 
     var shift;
     var time;
-    if(msg.length == 0){
-        alert('kkkk');
+    if(!msg){
         return;
     }
 

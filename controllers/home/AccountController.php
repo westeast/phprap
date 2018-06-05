@@ -113,7 +113,7 @@ class AccountController extends PublicController
 
             } else {
 
-                return ['status' => 'error', 'message' => $model->getError(), 'label' => $model->getLabel()];
+                return ['status' => 'error', 'model' => $model];
 
             }
 

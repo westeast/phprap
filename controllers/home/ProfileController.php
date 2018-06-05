@@ -3,18 +3,11 @@
 namespace app\controllers\home;
 
 use app\models\account\ProfileForm;
-use app\models\account\RegisterForm;
-use app\models\Config;
+use app\models\loginLog\SearchLog;
 use Yii;
-use yii\debug\models\search\Debug;
-use yii\debug\Module;
-use yii\debug\Panel;
-use yii\helpers\Url;
-use yii\web\Response;
+
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
-use app\models\account\LoginForm;
 
 class ProfileController extends PublicController
 {
@@ -26,7 +19,7 @@ class ProfileController extends PublicController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['home','account','notify'],
+                        'actions' => ['home','account','log'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -66,7 +59,7 @@ class ProfileController extends PublicController
 
             }
 
-            if ($model->profile()) {
+            if ($model->store()) {
 
                 return ['status' => 'success', 'message' => '修改成功'];
 
@@ -79,6 +72,19 @@ class ProfileController extends PublicController
         }
 
         return $this->display('/home/account/profile', ['user' => $user]);
+
+    }
+
+    public function actionLog()
+    {
+
+        $params = Yii::$app->request->queryParams;
+
+        $params['user_id'] = Yii::$app->user->identity->id;
+
+        $model = SearchLog::findModel()->search($params);
+
+        return $this->display('/home/log/login', ['model' => $model]);
 
     }
 

@@ -4,9 +4,8 @@
  */
 namespace app\models\version;
 
-use app\models\projectLog\StoreLog;
-use app\models\Version;
 use Yii;
+use app\models\Version;
 
 class DeleteVersion extends Version
 {
@@ -57,22 +56,6 @@ class DeleteVersion extends Version
         }
 
         if(!$this->save(false)){
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        $log->method     = 'delete';
-        $log->project_id = $this->project_id;
-        $log->version_id = $this->id;
-        $log->version_name = $this->name;
-        $log->object_name  = 'version';
-        $log->object_id    = $this->id;
-        $log->content      = '删除了 版本 <code>' . $this->name . '</code>';
-
-        if(!$log->store()){
             $transaction->rollBack();
             return false;
         }

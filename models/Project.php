@@ -122,7 +122,7 @@ class Project extends Model
      * 获取非项目成员
      * @return \yii\db\ActiveQuery
      */
-    public function getNotMembers($param = [])
+    public function getNotMembers($param = [], $limit = 10)
     {
 
         $query = User::find();
@@ -138,9 +138,7 @@ class Project extends Model
             ['like','email', $param['name']],
         ]);
 
-//        $sql = $query->createCommand()->getRawSql();
-
-        return $query->limit(10)->all();
+        return $query->limit($limit)->all();
 
     }
 

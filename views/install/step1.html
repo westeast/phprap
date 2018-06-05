@@ -1,4 +1,4 @@
-{{include_file name='public/header' title='环境检测——安装步骤一'}}
+{{include_file name='install/public/header' title='环境检测——安装步骤一'}}
 <link href="{{STATIC_URL}}/css/install.css" rel="stylesheet">
 
 </head>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="panel-body">
 
-                    {{include_file name='public/nav' step=1}}
+                    {{include_file name='install/public/nav' step=1}}
                     <form id="js_step1Form" role="form" action="{{url('install/step1')}}" method="post">
                         <div class="row">
                             <div class="col-lg-12">
@@ -36,17 +36,17 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>操作系统</td>
-                                                    <td>{{$system.php_os}}</td>
+                                                    <td>{{$smarty.const.PHP_OS}}</td>
                                                     <td>Linux/Win</td>
                                                     <td><i class="fa fa-check"></i></td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>PHP版本</td>
-                                                    <td>{{$system.php_version}}</td>
+                                                    <td>{{$smarty.const.PHP_VERSION}}</td>
                                                     <td>>=5.4.0</td>
                                                     <td>
-                                                        {{if version_compare( $system.php_version, '5.4.0', '>=' )}}
+                                                        {{if version_compare($smarty.const.PHP_VERSION, '5.4.0', '>=' )}}
                                                         <i class="fa fa-check"></i>
                                                         {{else}}
                                                         <i class="fa fa-times"></i>
@@ -317,16 +317,7 @@
 
         });
 
-        //百度统计
-        var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?daf0d8924deff98ade7d56994ec572d8";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-
 })
 
 </script>
-{{include_file name='public/footer'}}
+{{include_file name='install/public/footer'}}

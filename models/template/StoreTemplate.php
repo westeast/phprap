@@ -46,38 +46,7 @@ class StoreTemplate extends Template
             return false;
         }
 
-        // 判断是否有更新
-        $dirtyAttributes = $this->getDirtyAttributes();
-
-        if(!$dirtyAttributes){
-            return true;
-        }
-
         if(!$this->save()){
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        if($this->scenario == 'create'){
-
-            $log->method  = 'create';
-            $log->content = '创建了 <code>默认模板</code>';
-
-        }elseif($this->scenario == 'update'){
-
-            $log->method  = 'update';
-            $log->content = '更新了 <code>默认模板</code>';
-
-        }
-
-        $log->project_id  = $this->project_id;
-        $log->object_name = 'template';
-        $log->object_id   = $this->id;
-
-        if(!$log->store()){
             $transaction->rollBack();
             return false;
         }
