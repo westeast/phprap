@@ -29,13 +29,14 @@ class step2 extends auth {
 
             $config_file    = RUNTIME_PATH . '/config/db.php';
 
-            $schema = schema::instance();
 
             if(file_put_contents($config_file, $config_content) === false){
 
                 response::ajax(['code' => 301, 'msg' => '数据库配置文件写入错误，请检查runtime/config/db.php是否有可写权限']);
 
             }
+            
+            $schema = schema::instance();
 
             if($schema->ping() === false){
 
