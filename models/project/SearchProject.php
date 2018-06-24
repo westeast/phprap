@@ -2,6 +2,8 @@
 
 namespace app\models\project;
 
+use app\models\Member;
+use app\models\member\SearchMember;
 use Yii;
 use app\models\Project;
 use yii\data\Pagination;
@@ -15,17 +17,29 @@ class SearchProject extends Project
     public function search($params = [])
     {
 
-        $this->params = array_map(function ($value) {
-
-            return trim($value);
-
-        }, $params);
+        $this->params = $params;
 
         $query = self::find()->joinWith('creater');
 
         $query->andFilterWhere([
             '{{%project}}.status' => self::ACTIVE_STATUS,
         ]);
+
+        $query->andFilterWhere([
+            '{{%project}}.creater_id' => $this->params['creater_id'],
+        ]);
+
+        if($this->params['joiner_id']){
+
+            $project_ids = Member::find()->where(['user_id' => $this->params['joiner_id']])->select('project_id')->column();
+
+            if(!$project_ids){
+                $project_ids = [0];
+            }
+            $query->andFilterWhere(['in', '{{%project}}.id', $project_ids]);
+        }
+
+        $this->params['type'] && $query->andFilterWhere(['in', '{{%project}}.type', $this->params['type']]);
 
         $query->andFilterWhere(['like', '{{%project}}.title', $this->params['title']]);
 

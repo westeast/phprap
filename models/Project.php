@@ -12,7 +12,7 @@ use Yii;
  * @property string $title 项目名称
  * @property string $remark 项目描述
  * @property int $sort 项目排序
- * @property int $allow_search 搜索状态
+ * @property int $type 项目类型
  * @property int $status 项目状态
  * @property int $creater_id 创建者id
  * @property string $created_at 创建时间
@@ -21,14 +21,9 @@ use Yii;
 class Project extends Model
 {
 
-    /**
-     * 是否允许搜索标签
-     * @var array
-     */
-    public $allowSearchLabels = [
-        '10' => '允许',
-        '20' => '禁止',
-    ];
+    const PUBLIC_TYPE  = 10;
+    const AUTH_TYPE    = 20;
+    const PRIVATE_TYPE = 30;
 
     /**
      * 当前版本号
@@ -84,6 +79,28 @@ class Project extends Model
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    /**
+     * 项目所有类型标签
+     * @return array
+     */
+    public function getTypeLabels()
+    {
+        return [
+            self::PUBLIC_TYPE  => '公开项目',
+            self::AUTH_TYPE    => '授权项目',
+            self::PRIVATE_TYPE => '私有项目',
+        ];
+    }
+
+    /**
+     * 获取当前项目类型标签
+     * @return mixed
+     */
+    public function getTypeLabel()
+    {
+        return $this->getTypeLabels()[$this->type];
     }
 
     /**
@@ -167,36 +184,29 @@ class Project extends Model
     public function getMyCreated()
     {
 
-        $filter = [
-            'status' => self::ACTIVE_STATUS,
-            'creater_id' => Yii::$app->user->identity->id,
-        ];
+        $user = Yii::$app->user->identity;
 
-        $sort = [
-            'sort' => SORT_DESC,
-            'id'   => SORT_DESC
-        ];
+        return $user->getMyCreatedProjects()
+            ->where(['=', 'status', Project::ACTIVE_STATUS])
+            ->orderBy('id')
+            ->all();
 
-        return self::find()->where($filter)->orderBy($sort)->all();
     }
 
     /**
      * 获取我参与的项目
+     * @return array|\yii\db\ActiveRecord[]
      */
     public function getMyJoined()
     {
 
-        $filter = [
-            'status' => self::ACTIVE_STATUS,
-            'creater_id' => Yii::$app->user->identity->id,
-        ];
+        $user = Yii::$app->user->identity;
 
-        $sort = [
-            'sort' => SORT_DESC,
-            'id'   => SORT_DESC
-        ];
+        return $user->getMyJoinedProjects()
+            ->where(['=', 'status', Project::ACTIVE_STATUS])
+            ->orderBy('id')
+            ->all();
 
-        return self::find()->where($filter)->orderBy($sort)->all();
     }
 
     /**
@@ -227,27 +237,6 @@ class Project extends Model
     }
 
     /**
-     * 获取友好的项目更新时间，如5分钟前
-     * @return string
-     */
-    public function getFriendUpdateAt()
-    {
-        $time = strtotime($this->updated_at);
-        return Yii::$app->formatter->asRelativeTime($time);
-    }
-
-    /**
-     * 获取是否允许搜索文案
-     * @return string
-     */
-    public function getAllowSearchLabel()
-    {
-
-        return $this->allowSearchLabels[$this->allow_search];
-
-    }
-
-    /**
      * 判断是否是项目创建者
      * @return bool
      */
@@ -274,23 +263,57 @@ class Project extends Model
     }
 
     /**
-     * 检测是否有项目某项权限，如编辑、删除
+     * 判断是否是公开项目
+     * @return bool
+     */
+    public function isPublic()
+    {
+
+        return $this->type == self::PUBLIC_TYPE ? true : false;
+    }
+
+    /**
+     * 获取项目地址
+     * @return string
+     */
+    public function getUrl($scheme = false)
+    {
+        return url('home/project/show', ['version_id' => $this->lastVersion->encode_id], $scheme);
+    }
+
+    /**
+     * 检测是否有操作权限
      * @param $rule
      * @return bool
      */
-    public function hasRule($rule, $user_id = 0)
+    public function hasRule($type, $rule, $user_id = 0)
     {
 
         $user_id = $user_id ? $user_id : Yii::$app->user->identity->id;
 
-        // 项目创建者拥有该项目所有权限
+        $user = User::findModel($user_id);
+
+        // 系统管理员拥有一切权限
+        if($user->isAdmin){
+            return true;
+        }
+
+        // 项目创建者拥有所有权限
         if($this->isCreater($user_id)){
             return true;
         }
 
+        if(!$this->isJoiner($user_id)){
+            return false;
+        }
+
         $member = Member::findOne(['project_id' => $this->id, 'user_id' => $user_id]);
 
-        if($this->isJoiner($user_id) && $member->hasRule('project', $rule)){
+        if(!$member->id){
+            return false;
+        }
+
+        if($member->hasRule($type, $rule)){
             return true;
         }
 

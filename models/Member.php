@@ -13,10 +13,10 @@ use Yii;
  * @property int $user_id 用户id
  * @property string $project_rule 项目权限
  * @property string $version_rule 版本权限
+ * @property string $env_rule 环境权限
  * @property string $module_rule 模块权限
  * @property string $api_rule 接口权限
  * @property string $member_rule 成员权限
- * @property string $map_rule 数据字典权限
  * @property int $creater_id 创建者id
  * @property string $created_at 创建时间
  * @property string $updated_at 更新时间
@@ -24,9 +24,9 @@ use Yii;
 class Member extends Model
 {
 
-    public $find    = ['look,','create,','update,', 'transfer,', 'export,', 'delete,', 'remove,'];
+    public $find    = ['look,','create,','update,', 'transfer,', 'export,', 'delete,', 'remove,', 'template,'];
 
-    public $replace = ['查看、','添加、', '编辑、', '转让、', '导出、', '删除、', '移除、'];
+    public $replace = ['查看、','添加、', '编辑、', '转让、', '导出、', '删除、', '移除、', '模板、'];
 
     /**
      * 绑定数据表
@@ -45,7 +45,7 @@ class Member extends Model
         return [
             [['project_id', 'user_id', 'creater_id'], 'integer'],
             [['encode_id'], 'string', 'max' => 10],
-            [['project_rule', 'version_rule', 'module_rule', 'api_rule', 'member_rule', 'map_rule'], 'string', 'max' => 100],
+            [['project_rule', 'version_rule', 'module_rule', 'api_rule', 'member_rule', 'env_rule'], 'string', 'max' => 100],
             [['encode_id'], 'unique'],
 
             [['created_at', 'updated_at'], 'safe'],
@@ -71,29 +71,11 @@ class Member extends Model
             'module_rule' => '模块权限',
             'api_rule' => '接口权限',
             'member_rule' => '成员权限',
-            'map_rule' => '数据字典权限',
+            'env_rule' => '环境权限',
             'creater_id' => '创建者id',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
-    }
-
-    /**
-     * 获取关联项目
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProject()
-    {
-        return $this->hasOne(Project::className(),['id'=>'project_id']);
-    }
-
-    /**
-     * 获取审核者
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCreater()
-    {
-        return $this->hasOne(User::className(),['id'=>'creater_id']);
     }
 
     /**
@@ -130,7 +112,7 @@ class Member extends Model
      * @param $type
      * @return string
      */
-    public function getRuleText($type)
+    public function getRuleLabel($type)
     {
 
         $type = $type . '_rule';

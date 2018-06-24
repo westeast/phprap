@@ -53,16 +53,20 @@
                 <label>项目权限</label>
                 <input type="hidden" class="js_projectRule" name="StoreMember[project_rule]">
                 <label class="checkbox-inline">
-                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" value="look">查看
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" value="look">查看项目
+                </label>
+
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" type="checkbox" value="update" {{if $member->hasRule('project', 'update')}}checked{{/if}} >编辑项目
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_projectRule" type="checkbox" {{if $member->hasRule('project', 'transfer')}}checked{{/if}} value="transfer">转让
+                    <input class="js_projectRule" type="checkbox" value="template" {{if $member->hasRule('project', 'template')}}checked{{/if}} >编辑模板
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_projectRule" type="checkbox" {{if $member->hasRule('project', 'update')}}checked{{/if}} value="update">编辑
+                    <input class="js_projectRule" type="checkbox" value="transfer" {{if $member->hasRule('project', 'transfer')}}checked{{/if}} >转让项目
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_projectRule" type="checkbox" {{if $member->hasRule('project', 'delete')}}checked{{/if}} value="delete">删除
+                    <input class="js_projectRule" type="checkbox" value="delete" {{if $member->hasRule('project', 'create')}}checked{{/if}} >删除项目
                 </label>
             </div>
 
@@ -70,19 +74,36 @@
                 <label>版本权限</label>
                 <input type="hidden" class="js_versionRule" name="StoreMember[version_rule]">
                 <label class="checkbox-inline">
-                    <input class="js_versionRule" onclick="return false;" checked type="checkbox" value="look">查看
+                    <input class="js_versionRule" onclick="return false;" checked type="checkbox" value="look">查看版本
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_versionRule" type="checkbox" {{if $member->hasRule('version', 'create')}}checked{{/if}} value="create">新增
+                    <input class="js_versionRule" type="checkbox" {{if $member->hasRule('version', 'create')}}checked{{/if}} value="create">新增版本
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_versionRule" type="checkbox" {{if $member->hasRule('version', 'update')}}checked{{/if}} value="update">编辑
+                    <input class="js_versionRule" type="checkbox" {{if $member->hasRule('version', 'update')}}checked{{/if}} value="update">编辑版本
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_versionRule" type="checkbox" {{if $member->hasRule('version', 'export')}}checked{{/if}} value="export">导出
+                    <input class="js_versionRule" type="checkbox" {{if $member->hasRule('version', 'export')}}checked{{/if}} value="export">导出版本
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_versionRule" type="checkbox" {{if $member->hasRule('version', 'delete')}}checked{{/if}} value="delete">删除
+                    <input class="js_versionRule" type="checkbox" {{if $member->hasRule('version', 'delete')}}checked{{/if}} value="delete">删除版本
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>环境权限</label>
+                <input type="hidden" class="js_envRule" name="StoreMember[env_rule]">
+                <label class="checkbox-inline">
+                    <input class="js_envRule" onclick="return false;" checked type="checkbox" value="look">查看环境
+                </label>
+                <label class="checkbox-inline">
+                    <input class="js_envRule" type="checkbox" {{if $member->hasRule('env', 'create')}}checked{{/if}} value="create">新增环境
+                </label>
+                <label class="checkbox-inline">
+                    <input class="js_envRule" type="checkbox" {{if $member->hasRule('env', 'update')}}checked{{/if}} value="update">编辑环境
+                </label>
+                <label class="checkbox-inline">
+                    <input class="js_envRule" type="checkbox" {{if $member->hasRule('env', 'delete')}}checked{{/if}} value="delete">删除环境
                 </label>
             </div>
 
@@ -90,16 +111,16 @@
                 <label>模块权限</label>
                 <input type="hidden" class="js_moduleRule" name="StoreMember[module_rule]">
                 <label class="checkbox-inline">
-                    <input class="js_moduleRule"  onclick="return false;" checked type="checkbox" value="look">查看
+                    <input class="js_moduleRule" onclick="return false;" checked type="checkbox" value="look">查看模块
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_moduleRule" type="checkbox" {{if $member->hasRule('module', 'create')}}checked{{/if}} value="create">新增
+                    <input class="js_moduleRule" type="checkbox" {{if $member->hasRule('module', 'create')}}checked{{/if}} value="create">新增模块
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_moduleRule" type="checkbox" {{if $member->hasRule('module', 'update')}}checked{{/if}} value="update">编辑
+                    <input class="js_moduleRule" type="checkbox" {{if $member->hasRule('module', 'update')}}checked{{/if}} value="update">编辑模块
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_moduleRule" type="checkbox" {{if $member->hasRule('module', 'delete')}}checked{{/if}} value="delete">删除
+                    <input class="js_moduleRule" type="checkbox" {{if $member->hasRule('module', 'delete')}}checked{{/if}} value="delete">删除模块
                 </label>
             </div>
 
@@ -108,16 +129,20 @@
                 <input type="hidden" class="js_apiRule" name="StoreMember[api_rule]">
 
                 <label class="checkbox-inline">
-                    <input class="js_apiRule" onclick="return false;" checked type="checkbox" value="look">查看
+                    <input class="js_apiRule" onclick="return false;" checked type="checkbox" value="look">查看接口
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_apiRule" type="checkbox" {{if $member->hasRule('api', 'create')}}checked{{/if}} value="create">新增
+                    <input class="js_apiRule" type="checkbox" {{if $member->hasRule('api', 'create')}}checked{{/if}} value="create">新增接口
+                </label>
+
+                <label class="checkbox-inline">
+                    <input class="js_apiRule" type="checkbox" {{if $member->hasRule('api', 'update')}}checked{{/if}} value="update">编辑接口
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_apiRule" type="checkbox" {{if $member->hasRule('api', 'update')}}checked{{/if}} value="update">编辑
+                    <input class="js_apiRule" type="checkbox" {{if $member->hasRule('api', 'export')}}checked{{/if}} value="field">导出接口
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_apiRule" type="checkbox" {{if $member->hasRule('api', 'delete')}}checked{{/if}} value="delete">删除
+                    <input class="js_apiRule" type="checkbox" {{if $member->hasRule('api', 'delete')}}checked{{/if}} value="delete">删除接口
                 </label>
             </div>
 
@@ -125,13 +150,17 @@
                 <label>成员权限</label>
                 <input type="hidden" class="js_memberRule" name="StoreMember[member_rule]">
                 <label class="checkbox-inline">
-                    <input class="js_memberRule" onclick="return false;" checked type="checkbox" value="look">查看
+                    <input class="js_memberRule" onclick="return false;" checked type="checkbox" value="look">查看成员
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_memberRule" type="checkbox" {{if $member->hasRule('member', 'create')}}checked{{/if}} value="create">新增
+                    <input class="js_memberRule" type="checkbox" {{if $member->hasRule('member', 'create')}}checked{{/if}} value="create">新增成员
+                </label>
+
+                <label class="checkbox-inline">
+                    <input class="js_memberRule" type="checkbox" {{if $member->hasRule('member', 'update')}}checked{{/if}} value="update">编辑成员
                 </label>
                 <label class="checkbox-inline">
-                    <input class="js_memberRule" type="checkbox" {{if $member->hasRule('member', 'remove')}}checked{{/if}} value="remove">移除
+                    <input class="js_memberRule" type="checkbox" {{if $member->hasRule('member', 'remove')}}checked{{/if}} value="remove">移除成员
                 </label>
             </div>
 
@@ -217,6 +246,13 @@
                     versionRule.push($(this).val());
                 });
                 $(".js_versionRule:hidden").val(versionRule.join(','));
+
+                // 环境权限
+                var envRule =[];
+                $(".js_envRule:checkbox:checked").each(function(){
+                    envRule.push($(this).val());
+                });
+                $(".js_envRule:hidden").val(envRule.join(','));
 
                 // 模块权限
                 var moduleRule =[];

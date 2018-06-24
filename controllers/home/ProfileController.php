@@ -6,37 +6,18 @@ use app\models\account\ProfileForm;
 use app\models\loginLog\SearchLog;
 use Yii;
 
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use yii\helpers\Url;
+use yii\web\Response;
 
 class ProfileController extends PublicController
 {
 
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['home','account','log'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-//                    'logout' => ['post'],
-                ],
-            ],
-
-        ];
-    }
-
     public function actionHome()
     {
+
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['home/account/login', 'callback' => Url::current()]);
+        }
 
         $user = Yii::$app->user->identity;
 
@@ -50,6 +31,8 @@ class ProfileController extends PublicController
         $user = Yii::$app->user->identity;
 
         if($request->isPost){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
             $model = new ProfileForm();
 
@@ -65,7 +48,7 @@ class ProfileController extends PublicController
 
             } else {
 
-                return ['status' => 'error', 'model' => $model];
+                return ['status' => 'error', 'message' => $model->getErrorMessage(), 'label' => $model->getErrorLabel()];
 
             }
 
@@ -77,6 +60,10 @@ class ProfileController extends PublicController
 
     public function actionLog()
     {
+
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['home/account/login', 'callback' => Url::current()]);
+        }
 
         $params = Yii::$app->request->queryParams;
 

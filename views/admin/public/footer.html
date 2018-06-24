@@ -11,11 +11,33 @@
 
 <script src="https://cdn.bootcss.com/artDialog/7.0.0/dialog.js"></script>
 
-<script src="{{STATIC_URL}}/plugins/validform/datatype.js?v={{Yii::$app->params['static_version']}}"></script>
+<script src="{{STATIC_URL}}/plugins/validform/datatype.js?v={{STATIC_VERSION}}"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="{{STATIC_URL}}/js/app.js?v={{Yii::$app->params['static_version']}}"></script>
+<script src="{{STATIC_URL}}/js/app.js?v={{STATIC_VERSION}}"></script>
+<script>
+    function get_pass_time(){
+        window.setTimeout("get_pass_time()", 1000);
+        BirthDay = new Date("{{getInstalledTime()}}");//这个日期是可以修改的
+        today = new Date();
+        timeold = (today.getTime() - BirthDay.getTime());
+        sectimeold = timeold/1000
+        secondsold = Math.floor(sectimeold);
+        msPerDay = 24*60*60*1000
+        e_daysold = timeold/msPerDay
+        daysold = Math.floor(e_daysold);
+        e_hrsold = (e_daysold - daysold)*24;
+        hrsold = Math.floor(e_hrsold);
+        e_minsold = (e_hrsold - hrsold)*60;
+        minsold = Math.floor((e_hrsold - hrsold)*60);
+        seconds = Math.floor((e_minsold - minsold)*60);
+        var siteDate = daysold + "天" + hrsold + "小时" + minsold + "分" + seconds + "秒";
+//          console.log(siteDate);
+        $(".pass-time").text(siteDate);
+    }
 
+    get_pass_time();
+</script>
 </body>
 
 </html>

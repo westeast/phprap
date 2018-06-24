@@ -30,9 +30,9 @@
                     <div class="opt-btn">
 
                         <!--<a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-warning" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="导出HTML"><i class="fa fa-fw fa-download"></i>导出</a>-->
-
+                        {{if $project->hasRule('project', 'template')}}
                         <a href="javascript:;" class="btn btn-sm btn-success js_editApiBtn" data-url="{{url('home/template/update', ['version_id' => $project->currentVersion->encode_id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
-
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -71,10 +71,10 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {{foreach $model->headerAttributes as $header}}
+                                                {{foreach $template->headerAttributes as $header}}
                                                 <tr>
                                                     <td>{{$header.name}}</td>
-                                                    <td>{{$model->field->typeLabels[$header.type]}}</td>
+                                                    <td>{{$template->field->typeLabels[$header.type]}}</td>
                                                     <td>{{$header.value}}</td>
                                                     <td>{{$header.remark}}</td>
                                                 </tr>
@@ -113,12 +113,12 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {{foreach $model->requestAttributes as $request}}
+                                                {{foreach $template->requestAttributes as $request}}
                                                 <tr class="">
                                                     <td>{{$request.name}}</td>
                                                     <td>{{$request.title}}</td>
-                                                    <td>{{$model->field->typeLabels[$request.type]}}</td>
-                                                    <td>{{$model->field->requiredLabels[$request.required]}}</td>
+                                                    <td>{{$template->field->typeLabels[$request.type]}}</td>
+                                                    <td>{{$template->field->requiredLabels[$request.required]}}</td>
                                                     <td>{{$request.default}}</td>
                                                     <td>{{$request.remark}}</td>
                                                 </tr>
@@ -155,7 +155,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {{foreach $model->responseAttributes as $response}}
+                                                {{foreach $template->responseAttributes as $response}}
                                                 <tr class="level{{$response.level}}">
                                                     <td>
                                                         {{if $response.level}}
@@ -166,7 +166,7 @@
 
                                                     </td>
                                                     <td>{{$response.title}}</td>
-                                                    <td>{{$model->field->typeLabels[$response.type]}}</td>
+                                                    <td>{{$template->field->typeLabels[$response.type]}}</td>
                                                     <td>{{$response.mock}}</td>
                                                     <td>{{$response.remark}}</td>
                                                 </tr>

@@ -74,12 +74,12 @@
 
             <!-- /.col-lg-4 -->
             {{foreach $project->MyCreated as $project}}
-            <div class="col-lg-3 view-project js_viewProject pannel-project" data-url="{{url('home/project/show', ['version_id' => $project->lastVersion->encode_id])}}">
+            <div class="col-lg-3 view-project js_viewProject pannel-project" data-url="{{$project->url}}">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                     <span class="head-title">{{$project->title}}</span>
                         <span class="head-btn">
-                            <a class="fa hidden-xs fa-pencil" data-toggle="tooltip" data-placement="top" data-modal="#js_addProjectModal"data-height="310" data-title="编辑项目" data-src="{{url('update', ['id' => $project->encode_id])}}"></a>
+                            <a class="fa hidden-xs fa-pencil" data-toggle="tooltip" data-placement="top" data-modal="#js_addProjectModal"data-height="250" data-title="编辑项目" data-src="{{url('update', ['id' => $project->encode_id])}}"></a>
 
                             <a class="fa hidden-xs fa-trash-o" data-toggle="tooltip" data-placement="top" data-modal="#js_deleteProjectModal" data-height="230" data-title="删除项目" data-src="{{url('delete', ['id' => $project->encode_id])}}"></a>
 
@@ -91,13 +91,13 @@
                     </div>
                     <div class="panel-footer">
                         <span class="pull-left"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{$project->creater->name}}</span>
-                        <span class="pull-right"><i class="fa fa-history fa-fw" aria-hidden="true"></i> {{$project->friendUpdateAt}}更新</span>
+                        <span class="pull-right"><i class="fa fa-history fa-fw" aria-hidden="true"></i> {{$project->getFriendTime($project->updated_at)}}更新</span>
                     </div>
                 </div>
             </div>
             {{/foreach}}
 
-            <div class="col-lg-3 hidden-xs" data-modal="#js_addProjectModal" data-height="380" data-title="添加项目" data-src="{{url('create')}}">
+            <div class="col-lg-3 hidden-xs" data-modal="#js_addProjectModal" data-height="330" data-title="添加项目" data-src="{{url('home/project/create')}}">
                 <div class="panel panel-default">
 
                     <div class="panel-body project-add">
@@ -117,13 +117,50 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-3">
+
+            <!-- /.col-lg-4 -->
+            {{foreach $project->myJoined as $project}}
+            <div class="col-lg-3 view-project js_viewProject pannel-project" data-url="{{$project->url}}">
                 <div class="panel panel-default">
-                    <div class="panel-body project-search js_searchProject">
-                        <p class="fa fa-search">搜索项目</p>
+                    <div class="panel-heading">
+                        <span class="head-title">{{$project->title}}</span>
+                        <span class="head-btn">
+                            {{if $project->hasRule('project', 'update')}}
+                            <a href="javascript:;" class="fa hidden-xs fa-pencil" data-toggle="tooltip" data-placement="top" data-modal="#js_addProjectModal" data-height="370" data-title="编辑项目" data-src="{{url('update', ['id' => $project->encode_id])}}"></a>
+                            {{/if}}
+
+                            {{if $project->hasRule('project', 'delete')}}
+                            <a href="javascript:;" class="fa hidden-xs fa-trash-o" data-toggle="tooltip" data-placement="top" data-modal="#js_deleteProjectModal" data-height="230" data-title="删除项目" data-src="{{url('delete', ['id' => $project->encode_id])}}"></a>
+                            {{/if}}
+
+                            {{if $project->hasRule('project', 'transfer')}}
+                            <a href="javascript:;" class="fa hidden-xs fa-exchange" data-toggle="tooltip" data-placement="top" data-modal="#js_transferProjectModal" data-height="300" data-title="转让项目" data-src="{{url('transfer', ['id' => $project->encode_id])}}"></a>
+                            {{/if}}
+
+                            <a href="javascript:;" class="fa hidden-xs fa-sign-out js_quitProject" data-url="{{url('home/member/remove', ['project_id' => $project->encode_id])}}"></a>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <p>{{$project->remark}}</p>
+                    </div>
+                    <div class="panel-footer">
+                        <span class="pull-left"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{$project->creater->name}}</span>
+                        <span class="pull-right"><i class="fa fa-history fa-fw" aria-hidden="true"></i> {{$project->getFriendTime($project->updated_at)}}更新</span>
                     </div>
                 </div>
             </div>
+            {{/foreach}}
+
+            <div class="col-lg-3 hidden-xs">
+                <div class="panel panel-default">
+
+                    <div class="panel-body project-search js_searchProject">
+                        <p class="fa fa-plus">搜索项目</p>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -206,6 +243,36 @@
 <script>
 
     $(function(){
+
+        // 退出项目
+        $(".js_quitProject").click(function (event) {
+            // 阻止事件冒泡
+            event.stopPropagation();
+
+            var thisObj = $(this);
+            confirm('您确定要退出该项目吗？',function () {
+                var url = thisObj.data('url');
+                var csrf = "{{csrf_token()}}";
+
+                thisObj.attr("disabled", "disabled");
+
+                $.post(url,{ 'csrf-phprap':csrf }, function (json) {
+
+                    if(json.status == 'success'){
+
+                        alert('退出成功', 'success', function () {
+                            window.location.reload();
+                        });
+
+                    }else{
+
+                        thisObj.removeAttr("disabled");
+                        alert(json.message, 'error');
+
+                    }
+                });
+            });
+        });
 
         //查看项目
         $(".js_viewProject").click(function (event) {

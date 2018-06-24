@@ -51,6 +51,8 @@ class EnvController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             $env->scenario = 'create';
 
             if(!$env->load($request->post())){
@@ -65,7 +67,7 @@ class EnvController extends PublicController
 
             }
 
-            return ['status' => 'error', 'model' => $env];
+            return ['status' => 'error', 'message' => $env->getErrorMessage(), 'label' => $env->getErrorLabel()];
 
         }
 
@@ -87,6 +89,8 @@ class EnvController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             $env->scenario = 'update';
 
             if(!$env->load($request->post())){
@@ -101,7 +105,7 @@ class EnvController extends PublicController
 
             }
 
-            return ['status' => 'error', 'model' => $env];
+            return ['status' => 'error', 'message' => $env->getErrorMessage(), 'label' => $env->getErrorLabel()];
 
         }
 
@@ -123,13 +127,15 @@ class EnvController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             if ($env->delete()) {
 
                 return ['status' => 'success', 'message' => '删除成功'];
 
             }
 
-            return ['status' => 'error', 'model' => $env];
+            return ['status' => 'error', 'message' => $env->getErrorMessage(), 'label' => $env->getErrorLabel()];
 
         }
 

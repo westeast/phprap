@@ -16,23 +16,6 @@ use app\models\member\StoreMember;
 class MemberController extends PublicController
 {
 
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['create', 'update', 'select','remove'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ],
-            ],
-
-        ];
-    }
-
     /**
      * 添加成员
      * @return string
@@ -46,6 +29,8 @@ class MemberController extends PublicController
         $member  = StoreMember::findModel();
 
         if($request->isPost){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
             $member->scenario = 'create';
 
@@ -71,6 +56,11 @@ class MemberController extends PublicController
 
     }
 
+    /**
+     * 编辑权限
+     * @param $id
+     * @return array|string
+     */
     public function actionUpdate($id)
     {
 
@@ -79,6 +69,8 @@ class MemberController extends PublicController
         $member  = StoreMember::findModel(['encode_id' => $id]);
 
         if($request->isPost){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
             $member->scenario = 'update';
 
@@ -103,13 +95,26 @@ class MemberController extends PublicController
     }
 
     /**
+     * 查看权限
+     * @param $id
+     * @return string
+     */
+    public function actionRule($id)
+    {
+
+        $member = StoreMember::findModel(['encode_id' => $id]);
+
+        return $this->display('rule', ['member' => $member]);
+
+    }
+
+    /**
      * 选择成员
      * @return string
      */
     public function actionSelect($project_id, $name)
     {
-        // 禁用公共model里统一json格式输出
-        $this->afterAction = false;
+
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $project = Project::findModel(['encode_id' => $project_id]);
@@ -132,14 +137,18 @@ class MemberController extends PublicController
      * @param $id
      * @return array
      */
-    public function actionRemove($id)
+    public function actionRemove($project_id)
     {
 
         $request = Yii::$app->request;
 
-        $member  = RemoveMember::findModel(['encode_id' => $id]);
+        $project = Project::findModel(['encode_id' => $project_id]);
+
+        $member  = RemoveMember::findModel(['project_id' => $project->id]);
 
         if($request->isPost){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
             if ($member->remove()) {
 
@@ -147,7 +156,7 @@ class MemberController extends PublicController
 
             }
 
-            return ['status' => 'error', 'model' => $member];
+            return ['status' => 'error', 'message' => $member->getErrorMessage(), 'label' => $member->getErrorLabel()];
 
         }
 

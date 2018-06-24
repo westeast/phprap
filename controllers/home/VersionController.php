@@ -49,6 +49,8 @@ class VersionController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             $version->scenario = 'create';
 
             if(!$version->load($request->post())){
@@ -87,6 +89,8 @@ class VersionController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             $version->scenario = 'update';
 
             if(!$version->load($request->post())){
@@ -116,8 +120,6 @@ class VersionController extends PublicController
     public function actionSelect($project_id, $name)
     {
 
-        // 禁用公共model里统一json格式输出
-        $this->afterAction = false;
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $project = Project::findModel(['encode_id' => $project_id]);
@@ -145,6 +147,8 @@ class VersionController extends PublicController
         $version = DeleteVersion::findModel(['encode_id' => $id]);
 
         if($request->isPost){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
             if(!$version->load($request->post())){
 

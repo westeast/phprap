@@ -27,7 +27,16 @@
                                 <input name="name" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.name}}">
                             </div>
 
-                            <button type="reset" class="btn btn-warning">重置</button>
+                            <div class="form-group">
+                                <label>项目类型</label>
+                                <select class="form-control" name="type">
+                                    <option value="0">不限</option>
+                                    <option value="{{$model::PUBLIC_TYPE}}" {{if $model.params.type == $model::PUBLIC_TYPE}}selected{{/if}}>公开项目</option>
+                                    <option value="{{$model::AUTH_TYPE}}" {{if $model.params.type == $model::AUTH_TYPE}}selected{{/if}}>授权项目</option>
+                                </select>
+                            </div>
+
+                            <button type="reset" class="btn btn-warning mr-2">重置</button>
                             <button type="submit" class="btn btn-primary">搜索</button>
                         </form>
 
@@ -48,6 +57,7 @@
                                 <thead>
                                 <tr>
                                     <th>项目名称</th>
+                                    <th>项目类型</th>
                                     <th>创建人昵称/账号</th>
                                     <th width="60px">成员数</th>
                                     <th class="datetime">创建时间</th>
@@ -58,13 +68,22 @@
                                 <tbody>
                                 {{foreach $model->models as $model}}
                                 <tr>
-                                    <td >{{$model->title}}</td>
+                                    <td >
+                                        {{$model->title}}
+                                    </td>
+                                    <td >
+                                        {{$model->typeLabel}}
+                                    </td>
                                     <td >{{$model->creater->fullName}}</td>
                                     <td >{{$model->getMembers()->count()}}</td>
                                     <td >{{$model->created_at}}</td>
                                     <td >{{$model->updated_at}}</td>
                                     <td >
-                                        <a class="btn btn-success btn-xs js_addProjectBtn">加入项目</a>
+                                        {{if $model->isCreater() || $model->isJoiner() || $model->isPublic()}}
+                                        <a target="_blank" href="{{$model->url}}" class="btn btn-warning btn-xs"><i class="fa fa-eye fa-fw" aria-hidden="true"></i> 查看项目</a>
+                                        {{else}}
+                                        <a class="btn btn-success btn-xs js_applyBtn" data-url="{{url('home/apply/create', ['project_id' => $model->encode_id])}}"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> 申请加入</a>
+                                        {{/if}}
                                     </td>
                                 </tr>
                                 {{/foreach}}
@@ -90,5 +109,37 @@
     <!-- /#wrapper -->
     <hr>
     <p class="text-center">{{config('copyright')}}</p>
+    <script>
+        $(function () {
+            $(".js_applyBtn").on('click', function(){
+                var thisObj = $(this);
+                confirm('您确定要申请加入该项目吗？',function () {
+                    var url = thisObj.data('url');
+                    var csrf = "{{csrf_token()}}";
 
+                    thisObj.attr("disabled", "disabled");
+
+                    $.post(url,{ 'csrf-phprap':csrf }, function (json) {
+
+                        if(json.status == 'nologin'){
+                            alert(json.message, 'success', function () {
+                                window.location.href = json.callback;
+                            });
+                        }else if(json.status == 'success'){
+
+                            alert(json.message, 'success', function () {
+                                window.location.reload();
+                            });
+
+                        }else{
+
+                            thisObj.removeAttr("disabled");
+                            alert(json.message, 'error');
+
+                        }
+                    });
+                });
+            });
+        });
+    </script>
     {{include_file name='home/public/footer'}}

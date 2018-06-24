@@ -7,29 +7,25 @@ use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * This is the model class for table "{{%user}}".
  *
- * @property integer $id
- * @property string $name
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property integer $integral
- * @property integer $level
- * @property string $ip
- * @property string $address
+ * @property int $id
+ * @property string $email 登录邮箱
+ * @property string $name 昵称
+ * @property string $password_hash 密码
  * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password
+ * @property int $type
+ * @property int $status 会员状态
+ * @property string $ip 注册ip
+ * @property string $location IP地址
+ * @property string $created_at
+ * @property string $updated_at
  */
 class User extends Model implements IdentityInterface
 {
 
-    const ACTIVE_STATUS  = 10; //启用状态
-    const DISABLE_STATUS = 20; //禁用状态
-    const DELETED_STATUS = 30; //删除状态
+    const USER_TYPE  = 10; // 普通用户类型
+    const ADMIN_TYPE = 20; // 管理员类型
 
     /**
      * @inheritdoc
@@ -42,33 +38,23 @@ class User extends Model implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::ACTIVE_STATUS],
+            [['name', 'email'], 'filter', 'filter' => 'trim'],
+            ['name', 'required', 'message' => '用户昵称不可以为空'],
+            ['name', 'string', 'min' => 2, 'max' => 50, 'message' => '用户昵称至少包含2个字符，最多50个字符'],
+            ['email', 'required', 'message' => '登录邮箱不能为空'],
+            ['email', 'email','message' => '邮箱格式不合法'],
+            ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => '该登录邮箱已存在'],
+            ['password_hash', 'required', 'message' => '密码不可以为空'],
+            ['password_hash', 'string', 'min' => 6, 'tooShort' => '密码至少填写6位'],
+
             [['created_at', 'updated_at'], 'safe'],
             [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
+            ['status', 'default', 'value' => self::ACTIVE_STATUS],
         ];
-    }
 
-    // 过滤敏感字段
-    public function fields()
-    {
-        $fields = parent::fields();
-
-        unset($fields['auth_key'], $fields['password_hash'], $fields['password_reset_token'], $fields['access_token']);
-
-        return $fields;
     }
 
     /**
@@ -76,7 +62,15 @@ class User extends Model implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::ACTIVE_STATUS]);
+
+        if(file_exists(Yii::getAlias("@runtime") . '/install/install.lock')){
+
+            return static::findOne(['id' => $id, 'status' => self::ACTIVE_STATUS]);
+
+        }
+
+        return null;
+
     }
 
     /**
@@ -85,6 +79,7 @@ class User extends Model implements IdentityInterface
      */
     public static function getIdentity()
     {
+
         return Yii::$app->user->identity;
 
     }
@@ -199,22 +194,6 @@ class User extends Model implements IdentityInterface
     }
 
     /**
-     * Generates new password reset token
-     */
-    public function generatePasswordResetToken()
-    {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
-    }
-
-    /**
-     * Removes password reset token
-     */
-    public function removePasswordResetToken()
-    {
-        $this->password_reset_token = null;
-    }
-
-    /**
      * 获取用户全名(昵称+邮箱)
      * @return string
      */
@@ -232,6 +211,53 @@ class User extends Model implements IdentityInterface
 
         return $this->hasOne(Member::className(),['user_id'=>'id']);
 
+    }
+
+    /**
+     * 获取最近登录
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function getLastLogin()
+    {
+        $filter = [
+            'user_id' => $this->id,
+        ];
+
+        $sort = [
+            'id' => SORT_DESC
+        ];
+
+        return LoginLog::find()->where($filter)->orderBy($sort)->one();
+    }
+
+    /**
+     * 获取创建的项目
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMyCreatedProjects()
+    {
+        return $this->hasMany(Project::className(),['creater_id'=>'id']);
+    }
+
+    /**
+     * 获取参与的项目
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMyJoinedProjects()
+    {
+
+        return $this->hasMany(Project::className(), ['id' => 'project_id'])
+            ->viaTable('{{%member}}', ['user_id' => 'id']);
+
+    }
+
+    /**
+     * 判断是否是系统管理员
+     * @return bool
+     */
+    public function getIsAdmin()
+    {
+        return $this->type == self::ADMIN_TYPE ? true : false;
     }
 
 }

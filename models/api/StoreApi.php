@@ -20,6 +20,7 @@ class StoreApi extends Api
             [['created_at', 'updated_at'], 'safe'],
             [['encode_id', 'request_method', 'response_format'], 'string', 'max' => 20],
             [['title', 'uri', 'remark'], 'string', 'max' => 250],
+            [['header_field', 'request_field', 'response_field'], 'string'],
             [['encode_id'], 'unique'],
             ['title', 'validateTitle'],
 

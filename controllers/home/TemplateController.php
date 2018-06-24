@@ -57,6 +57,8 @@ class TemplateController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             $template->scenario = 'update';
 
             if(!$template->load($request->post())){
@@ -79,32 +81,8 @@ class TemplateController extends PublicController
 
         }
 
-        $this->afterAction = false;
-
         return $this->display('create', ['project' => $project, 'model' => $template]);
 
-    }
-
-    /**
-     * 将表单传递过来的二维数组键值互换后转成json
-     * @param $array
-     * @return string
-     */
-    private function array2json($array)
-    {
-        if(!$array){
-            return '';
-        }
-        $data = [];
-
-        foreach ($array as $k => $v) {
-
-            foreach ($v as $k1 => $v1) {
-                $data[$k1][$k] = $v1;
-            }
-        }
-
-        return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
 }

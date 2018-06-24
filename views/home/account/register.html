@@ -19,7 +19,7 @@
                                 <input type="hidden" name="csrf-phprap" value="{{csrf_token()}}" />
 
                                 <div class="form-group">
-                                    <input autocomplete="off" type="text" class="form-control" placeholder="登录邮箱，必填" name="RegisterForm[email]" datatype="e" nullmsg="请输入登录邮箱" errormsg="请输入合法的邮箱地址" >
+                                    <input autocomplete="off" type="text" class="form-control js_email" placeholder="登录邮箱，必填" name="RegisterForm[email]" datatype="e" nullmsg="请输入登录邮箱" errormsg="请输入合法的邮箱地址" >
                                 </div>
 
                                 <div class="form-group">
@@ -31,7 +31,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <input autocomplete="off" type="password" class="form-control" placeholder="请再次输入确认密码" datatype="*" recheck="RegisterForm[password]" nullmsg="请输入重复密码" errormsg="重复密码与密码不一致">
+                                    <input autocomplete="off" type="password" class="form-control" placeholder="请再次输入确认密码" datatype="*" recheck="RegisterForm[password]" nullmsg="请输入重复密码" errormsg="两次密码输入不一致">
                                 </div>
 
                                 {{if $config->register_token}}

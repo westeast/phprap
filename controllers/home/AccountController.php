@@ -18,32 +18,7 @@ use app\models\account\LoginForm;
 class AccountController extends PublicController
 {
 
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['login', 'register','captcha'],
-                        'allow' => true,
-                    ],
-                    [
-                        'actions' => ['logout','index','create','update','repassword','login_log','profile'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-//                    'logout' => ['post'],
-                ],
-            ],
-
-        ];
-    }
+    public $checkLogin = false;
 
     /**
      * 会员注册
@@ -55,6 +30,8 @@ class AccountController extends PublicController
         $request  = Yii::$app->request;
 
         if($request->isPost){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
             $model = new RegisterForm();
 
@@ -70,7 +47,7 @@ class AccountController extends PublicController
 
             } else {
 
-                return ['status' => 'error', 'model' => $model];
+                return ['status' => 'error', 'message' => $model->getErrorMessage(), 'label' => $model->getErrorLabel()];
 
             }
 
@@ -99,6 +76,8 @@ class AccountController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             $model = new LoginForm();
 
             if(!$model->load($request->post())){
@@ -109,19 +88,21 @@ class AccountController extends PublicController
 
             if ($model->login()) {
 
-                return ['status' => 'success', 'message' => '登录成功'];
+                $callback = $model->callback ? $model->callback : Url::toRoute(['home/project/select']);
+
+                return ['status' => 'success', 'message' => '登录成功', 'callback' => $callback];
 
             } else {
 
-                return ['status' => 'error', 'model' => $model];
+                return ['status' => 'error', 'message' => $model->getErrorMessage(), 'label' => $model->getErrorLabel()];
 
             }
 
         }
 
-        $config = Config::findOne(['type' => 'safe']);
+        $config = Config::findOne(['type' => 'safe'])->getField();
 
-        return $this->display('login', ['config' => $config]);
+        return $this->render('login', ['callback' => $request->get('callback', ''), 'config' => $config]);
 
     }
 

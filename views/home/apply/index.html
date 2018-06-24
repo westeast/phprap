@@ -1,0 +1,96 @@
+{{include_file name='home/public/header' title='申请管理'}}
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    {{include_file name='home/public/nav' sidebar='home/account/sidebar' active='apply'}}
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">申请管理</h1>
+                <div class="search">
+                    <div class="well">
+
+                        <form class="form-inline" action="{{url()}}" method="get">
+                            <div class="form-group">
+                                <label>申请人</label>
+                                <input name="title" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.title}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>项目名</label>
+                                <input name="name" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.name}}">
+                            </div>
+
+                            <button type="reset" class="btn btn-warning mr-2">重置</button>
+                            <button type="submit" class="btn btn-primary">搜索</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>申请人昵称/邮箱</th>
+                                    <th>申请加入的项目</th>
+                                    <th class="datetime">申请时间</th>
+                                    <th class="datetime">处理时间</th>
+                                    <th width="100px;">操作面板</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{foreach $model->models as $model}}
+                                <tr>
+                                    <td >
+                                        {{$model->applier->fullName}}
+                                    </td>
+
+                                    <td >{{$model->project->title}}</td>
+                                    <td >{{$model->created_at}}</td>
+                                    <td >{{$model->updated_at}}</td>
+                                    <td >
+                                        <a class="btn btn-success btn-xs js_applyBtn" data-url="{{url('home/apply/create', ['project_id' => 1])}}"> 通过</a>
+                                        <a class="btn btn-danger btn-xs js_applyBtn" data-url="{{url('home/apply/create', ['project_id' => 1])}}"> 驳回</a>
+                                    </td>
+                                </tr>
+                                {{/foreach}}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <div class="col-sm-12">
+                {{$model->pages}}
+            </div>
+
+            <!-- /.col-lg-6 -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    <hr>
+    <p class="text-center">{{config('copyright')}}</p>
+
+    {{include_file name='home/public/footer'}}

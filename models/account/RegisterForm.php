@@ -3,6 +3,7 @@
 namespace app\models\account;
 
 use app\models\Config;
+use app\models\loginLog\StoreLog;
 use Yii;
 use app\models\User;
 
@@ -24,6 +25,7 @@ class RegisterForm extends User
             ['email', 'required', 'message' => '登录邮箱不能为空'],
             ['email', 'email','message' => '邮箱格式不合法'],
             ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => '该登录邮箱已存在'],
+            ['email', 'validateEmail'],
             ['password', 'required', 'message' => '密码不可以为空'],
             ['password', 'string', 'min' => 6, 'tooShort' => '密码至少填写6位'],
             ['verifyCode', 'required', 'message' => '验证码不能为空', 'on' => 'verifyCode'],
@@ -47,6 +49,31 @@ class RegisterForm extends User
             if (!$token || $token != $this->registerToken) {
                 $this->addError($attribute, '注册口令错误');
             }
+        }
+    }
+
+    public function validateEmail($attribute)
+    {
+
+        if (!$this->hasErrors()) {
+
+            $config = Config::findOne(['type' => 'safe'])->getField();
+
+            $email_white_list = array_filter(explode("\r\n", trim($config->email_white_list)));
+            $email_black_list = array_filter(explode("\r\n", trim($config->email_black_list)));
+
+            $register_email_suffix = '@' . explode('@', $this->email)[1];
+
+            if($email_white_list && !in_array($register_email_suffix, $email_white_list)){
+
+                $this->addError($attribute, '该邮箱后缀不在可注册名单中');
+            }
+
+            if($email_black_list && in_array($register_email_suffix, $email_black_list)){
+
+                $this->addError($attribute, '该邮箱后缀不允许注册');
+            }
+
         }
     }
 
@@ -75,21 +102,27 @@ class RegisterForm extends User
         $user->name   = $this->name;
         $user->email  = $this->email;
         $user->ip     = Yii::$app->request->userIP;
+        $user->location = $this->getLocation();
 
         $user->setPassword($this->password);
         $user->generateAuthKey();
 
-        // 获取IP物理地址
-//        $ip_address = get_ip_address();
-//        $user->address = $ip_address['country'] . ' ' . $ip_address['province'] .' ' . $ip_address['city'];
-
         if($user->save()){
 
-            $login_keep = config('login_keep', 'safe');
+            // 记录日志
+            $loginLog = new StoreLog();
 
-            Yii::$app->user->login($user, 60*60*$login_keep);
+            $loginLog->user_id = $user->id;
+            $loginLog->user_name = $user->name;
+            $loginLog->user_email = $user->email;
 
-            return $user;
+            if(!$loginLog->store()){
+                return false;
+            }
+
+            $login_keep_time = config('login_keep_time', 'safe');
+
+            return Yii::$app->user->login($user, 60*60*$login_keep_time);
 
         }
 

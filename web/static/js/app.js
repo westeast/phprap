@@ -80,6 +80,10 @@ function resetForm() {
         .removeAttr('selected');
 }
 
+$("[type='reset']").click(function () {
+    resetForm();
+});
+
 /**
  * iframe模态框
  */

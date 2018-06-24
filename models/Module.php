@@ -72,15 +72,6 @@ class Module extends Model
     }
 
     /**
-     * 获取创建者
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCreater()
-    {
-        return $this->hasOne(User::className(),['id'=>'creater_id']);
-    }
-
-    /**
      * 获取所属项目
      * @return \yii\db\ActiveQuery
      */

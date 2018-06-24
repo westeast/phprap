@@ -2,6 +2,9 @@
 
 namespace app\models\version;
 
+use app\models\api\StoreApi;
+use app\models\Module;
+use app\models\module\StoreModule;
 use Yii;
 use app\models\Version;
 
@@ -62,8 +65,11 @@ class StoreVersion extends Version
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        if($this->scenario == 'create'){
-            $this->parent_id = self::findModel(['encode_id' => $this->parent_id])->id;
+        if($this->scenario == 'create' && $this->parent_id){
+
+            $parent_version = self::findModel(['encode_id' => $this->parent_id]);
+
+            $this->parent_id = $parent_version->id;
         }
 
         if(!$this->validate()){
@@ -73,6 +79,43 @@ class StoreVersion extends Version
         if(!$this->save()){
             $transaction->rollBack();
             return false;
+        }
+
+        if($this->scenario == 'create' && $parent_version->id){
+            // 循环插入模块
+            foreach ($parent_version->modules as $module) {
+
+                $_module = StoreModule::findModel();
+
+                $_module->setAttributes($module->attributes);
+
+                $_module->encode_id  = $this->createEncodeId();
+                $_module->version_id = $this->id;
+
+                if(!$_module->store()){
+                    $transaction->rollBack();
+                    return false;
+                }
+
+                // 循环插入接口
+                foreach ($module->apis as $api) {
+                    $_api = StoreApi::findModel();
+
+                    $_api->setAttributes($api->attributes);
+
+                    $_api->encode_id = $this->createEncodeId();
+                    $_api->module_id = $_module->id;
+
+                    if(!$_api->store()){
+
+                        $transaction->rollBack();
+                        return false;
+                    }
+
+                }
+
+            }
+
         }
 
         // 事务提交

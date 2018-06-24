@@ -2,6 +2,7 @@
 
 namespace app\controllers\home;
 
+use app\models\Config;
 use Yii;
 use yii\debug\Module;
 use yii\helpers\Url;
@@ -18,62 +19,43 @@ class PublicController extends Controller
     public $layout = false;
 
     /**
-     * 是否启用后置动作
+     * 是否启用前置动作
      * @var bool
      */
-    public $afterAction = true;
+    public $beforeAction = true;
+
+    public $checkLogin = true;
 
     public $debugTags;
 
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
-
-    public function afterAction($action, $result)
+    public function beforeAction($action)
     {
 
-        if($this->afterAction === false){
-            return $result;
+        $config = Config::findOne(['type' => 'safe'])->getField();
+
+        $ip_white_list = array_filter(explode("\r\n", trim($config->ip_white_list)));
+        $ip_black_list = array_filter(explode("\r\n", trim($config->ip_black_list)));
+
+        $ip = Yii::$app->request->userIP;
+
+        if($ip_white_list && !in_array($ip, $ip_white_list)){
+
+            return $this->error('抱歉，该IP不在可访问IP段内');
         }
 
-        if(Yii::$app->request->isAjax){
-
-            Yii::$app->response->format = Response::FORMAT_JSON;
-
-            $rs = parent::afterAction($action, $result);
-
-            if($rs['status'] == 'success'){
-                $defaultMessage= '操作成功';
-            }elseif ($rs['status'] == 'error') {
-                $defaultMessage= '操作失败';
-            }
-
-            if(isset($rs['message'])){
-
-                $rs['message'] = $rs['message'] ? $rs['message'] : $defaultMessage;
-
-            }else{
-
-                $rs['message'] = $rs['model']->error ? $rs['model']->error : $defaultMessage;
-
-            }
-
-            $rs['label'] = $rs['model']->label ? $rs['model']->label : '';
-
-            return array_filter($rs);
-
-        }else{
-
-            return $result;
+        if($ip_black_list && in_array($ip, $ip_black_list)){
+            return $this->error('抱歉，该IP不允许访问');
         }
+
+        if($this->beforeAction && !$this->isInstalled()){
+            return $this->redirect(['home/install/step1'])->send();
+        }
+
+        if($this->checkLogin && Yii::$app->user->isGuest){
+            return $this->redirect(['home/account/login'])->send();
+        }
+
+        return true;
 
     }
 
@@ -92,7 +74,7 @@ class PublicController extends Controller
             $params['toolbarTag'] = $tag;
         }
 
-        return $this->render($view . '.html', $params);
+        exit($this->render($view . '.html', $params));
     }
 
     /**
@@ -103,13 +85,12 @@ class PublicController extends Controller
      * @param null $model
      * @return string
      */
-    public function success($message, $jumpSeconds = 1, $jumpUrl = '', $model = null)
+    public function success($message, $jumpSeconds = 1, $jumpUrl = '')
     {
 
         $jumpUrl = $jumpUrl ? Url::toRoute($jumpUrl) : \Yii::$app->request->referrer;
 
-        return $this->display('../public/message', ['flag' => 'success', 'message' => $message, 'time' => $jumpSeconds, 'url' => $jumpUrl, 'model' => $model]);
-
+        return $this->display('/home/public/message', ['flag' => 'success', 'message' => $message, 'time' => $jumpSeconds, 'url' => $jumpUrl]);
     }
 
     /**
@@ -125,10 +106,18 @@ class PublicController extends Controller
         $jumpUrl = $jumpUrl ? Url::toRoute($jumpUrl) : \Yii::$app->request->referrer;
 
         return $this->display('/home/public/message', ['flag' => 'error', 'message' => $message, 'time' => $jumpSeconds, 'url' => $jumpUrl]);
-
     }
 
-    public function getDebugTags($forceReload = false)
+    /**
+     * 判断是否已经安装过
+     * @return bool
+     */
+    public function isInstalled()
+    {
+        return file_exists(Yii::getAlias("@runtime") . '/install/install.lock');
+    }
+
+    private function getDebugTags($forceReload = false)
     {
         if ($this->debugTags === null || $forceReload) {
             if ($forceReload) {

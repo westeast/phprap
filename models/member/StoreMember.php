@@ -17,7 +17,7 @@ class StoreMember extends Member
         return [
             [['project_id', 'user_id', 'creater_id'], 'integer'],
             [['encode_id'], 'string', 'max' => 10],
-            [['project_rule', 'version_rule', 'module_rule', 'api_rule', 'member_rule', 'map_rule'], 'string', 'max' => 100],
+            [['project_rule', 'version_rule', 'module_rule', 'api_rule', 'member_rule', 'env_rule'], 'string', 'max' => 100],
             [['encode_id'], 'unique'],
 
             [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],

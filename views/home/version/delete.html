@@ -16,7 +16,7 @@
 
             <div class="alert alert-dismissable alert-warning">
                 <i class="fa fa-fw fa-info-circle"></i>&nbsp;
-                版本删除后，该版本下所有模块及接口将被立刻删除，不可恢复，请谨慎操作！
+                版本删除后，该版本下所有内容将被立刻删除，不可恢复，请谨慎操作！
             </div>
 
             <div class="well">
@@ -27,7 +27,7 @@
             <div class="form-group">
                 <input type="hidden" name="csrf-phprap" value="{{csrf_token()}}" />
 
-                <input name="DeleteVersion[password]" type="text" class="form-control js_password" placeholder="重要操作，请输入登录密码" datatype="*" nullmsg="重要操作，请输入登录密码" errormsg="请输入正确的登录密码!">
+                <input name="DeleteVersion[password]" type="password" class="form-control js_password" placeholder="重要操作，请输入登录密码" datatype="*" nullmsg="重要操作，请输入登录密码" errormsg="请输入正确的登录密码!">
             </div>
 
             <input type="hidden" id="js_submit" value="提交">

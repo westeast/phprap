@@ -14,8 +14,8 @@ class StoreProject extends Project
     public function rules()
     {
         return [
-            [['allow_search', 'sort'], 'filter', 'filter' => 'intval'], //此规则必须，否则就算模型里该字段没有修改，也会出现在脏属性里
-            [['sort', 'allow_search', 'status', 'creater_id'], 'integer'],
+            [['type', 'sort'], 'filter', 'filter' => 'intval'], //此规则必须，否则就算模型里该字段没有修改，也会出现在脏属性里
+            [['sort', 'type', 'status', 'creater_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['encode_id'], 'string', 'max' => 10],
             [['title', 'remark'], 'string', 'max' => 250],
@@ -27,7 +27,7 @@ class StoreProject extends Project
             [['!encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
             [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
 
-            [['!encode_id', 'title', 'allow_search', '!status', '!creater_id'], 'required', 'on' => ['create', 'update']],
+            [['!encode_id', 'title', 'type', '!status', '!creater_id'], 'required', 'on' => ['create', 'update']],
 
         ];
     }

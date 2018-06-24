@@ -16,6 +16,8 @@
 
                             <input type="hidden" name="csrf-phprap" value="{{csrf_token()}}" />
 
+                            <input type="hidden" name="LoginForm[callback]" value="{{$callback}}">
+
                             <fieldset>
                                 <div class="form-group">
                                     <input class="form-control js_email" placeholder="登录邮箱" name="LoginForm[email]" type="email"  autocomplete="off" datatype="e" nullmsg="请输入登录邮箱" errormsg="请输入合法的邮箱地址！">
@@ -24,6 +26,7 @@
                                     <input autocomplete="off" class="form-control js_password" placeholder="登录密码" name="LoginForm[password]" type="password" value="" autocomplete="off" datatype="*6-20" nullmsg="请输入登录密码" errormsg="请填写6-20个字符">
                                 </div>
 
+                                {{if $config->login_captcha}}
                                 <div class="form-group">
                                     <div class="input-group">
 
@@ -38,6 +41,7 @@
                                     </div>
 
                                 </div>
+                                {{/if}}
 
                                 <div class="checkbox">
                                     <label>
@@ -69,6 +73,16 @@
         function reloadCode() {
 
             var img = $(".verify-code").find('img');
+
+            if(!img){
+                return false;
+            }
+
+            var src = img.attr("src");
+
+            if(!src){
+                return false;
+            }
 
             var src = img.attr("src").split('?');
 
@@ -122,11 +136,15 @@
                     if(json.status == 'success'){
 
                         alert(json.message, 'success', function () {
-                            window.location.reload();
+                            if(json.callback){
+                                window.location.href = json.callback;
+                            }else{
+                                window.location.reload();
+                            }
+
                         });
 
                     }else{
-
                         reloadCode();
                         $(".js_" + json.label).focus().addClass('Validform_error');
                         submitObj.removeAttr("disabled");

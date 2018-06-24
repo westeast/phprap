@@ -44,27 +44,6 @@
                 <input type="text" class="form-control js_sort" name="StoreProject[sort]" value="{{$project->sort|default:0}}" placeholder="排序数字越大越靠前" datatype="n" nullmsg="请输入排序数字" errormsg="必须是数字">
             </div>
 
-            <div class="form-group">
-                <label class="control-label">搜索状态
-                    <a data-toggle="tooltip" data-placement="right" title="如果设为禁止搜索，那么其他人无法通过搜索项目搜索到该项目" class="btn-show-tips">
-                        <i class="fa fa-info-circle"></i>
-                    </a>
-                </label>
-
-                <div class="form-group">
-                    {{foreach $project->allowSearchLabels as $k => $v}}
-                    <label class="radio-inline">
-                        {{if !$project->id}}
-                        <input type="radio" name="StoreProject[allow_search]" {{if $k == 20}}checked{{/if}} value="{{$k}}"> {{$v}}
-                        {{else}}
-                        <input type="radio" name="StoreProject[allow_search]" {{if $k == $project->allow_search}}checked{{/if}} value="{{$k}}"> {{$v}}
-                        {{/if}}
-                    </label>
-                    {{/foreach}}
-                </div>
-
-            </div>
-
             <input type="hidden" id="js_submit" value="提交">
 
         </form>

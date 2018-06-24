@@ -31,7 +31,7 @@
                 <td><input name="remark" class="form-control js_remark" placeholder="非必填" value=""></td>
                 <td>
                     <a onclick="deleteField(this)" href="javascript:;" class="btn btn-xs fa hidden-xs fa hidden-xs fa-fw fa-trash-o option-btn" data-toggle="tooltip" data-placement="bottom" data-title="删除参数"></a>
-                    <a onclick="addField(this, 'header')" href="javascript:;" {{if !$model->field->isAllowDetele($request.type)}}disabled{{/if}} class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数"></a>
+                    <a onclick="addField(this, 'header')" href="javascript:;" class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数" disabled=""></a>
                 </td>
                 <td class="hidden"><input name="level" class="form-control js_level" value="0"></td>
 
@@ -58,7 +58,7 @@
                 <td><input name="remark" class="form-control js_remark" placeholder="非必填" value=""></td>
                 <td>
                     <a onclick="deleteField(this)" href="javascript:;" class="btn btn-xs fa hidden-xs fa hidden-xs fa-fw fa-trash-o option-btn" data-toggle="tooltip" data-placement="bottom" data-title="删除参数"></a>
-                    <a onclick="addField(this, 'request')" href="javascript:;" {{if !$model->field->isAllowDetele($request.type)}}disabled{{/if}} class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数"></a>
+                    <a onclick="addField(this, 'request')" href="javascript:;" class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数" disabled=""></a>
 
                 </td>
                 <td class="hidden"><input name="level" class="form-control js_level" value="0"></td>
@@ -84,7 +84,7 @@
                 <td>
                     <a onclick="deleteField(this)" href="javascript:;" class="btn btn-xs fa hidden-xs fa hidden-xs fa-fw fa-trash-o option-btn" data-toggle="tooltip" data-placement="bottom" data-title="删除参数"></a>
 
-                    <a onclick="addField(this, 'response')" href="javascript:;" disabled class="btn btn-xs fa hidden-xs fa-fw fa-plus option-btn addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数"></a>
+                    <a onclick="addField(this, 'response')" href="javascript:;" class="btn btn-xs fa hidden-xs fa-fw fa-plus option-btn addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数" disabled></a>
                 </td>
                 <td class="hidden"><input name="level" class="form-control js_level" value="0"></td>
 
@@ -156,7 +156,7 @@
                                                         <td><input name="remark" class="form-control js_remark" placeholder="非必填" value="{{$header.remark}}"></td>
                                                         <td>
                                                             <a onclick="deleteField(this)" href="javascript:;" class="btn btn-xs fa hidden-xs fa hidden-xs fa-fw fa-trash-o option-btn" data-toggle="tooltip" data-placement="bottom" data-title="删除参数"></a>
-                                                            <a onclick="addField(this, 'header')" href="javascript:;" {{if !$model->field->isAllowDetele($header.type)}}disabled{{/if}} class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数"></a>
+                                                            <a onclick="addField(this, 'header')" href="javascript:;" class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数" {{if !$model->field->isComplexType($header.type)}}disabled{{/if}}></a>
                                                         </td>
 
                                                         <td class="hidden"><input name="level" class="form-control js_level" value="{{$header.level|default:0}}"></td>
@@ -223,7 +223,7 @@
                                                         <td><input name="remark" class="form-control js_remark" placeholder="非必填" value="{{$request.remark}}"></td>
                                                         <td>
                                                             <a onclick="deleteField(this)" href="javascript:;" class="btn btn-xs fa hidden-xs fa hidden-xs fa-fw fa-trash-o option-btn js_deleteFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="删除参数"></a>
-                                                            <a onclick="addField(this, 'request')" href="javascript:;" {{if !$model->field->isAllowDetele($request.type)}}disabled{{/if}} class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数"></a>
+                                                            <a onclick="addField(this, 'request')" href="javascript:;" class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数" {{if !$model->field->isComplexType($request.type)}}disabled{{/if}}></a>
                                                         </td>
                                                         <td class="hidden"><input name="level" class="form-control js_level" value="{{$request.level|default:0}}"></td>
                                                     </tr>
@@ -289,7 +289,7 @@
 
                                                         <td>
                                                             <a onclick="deleteField(this)" href="javascript:;" class="btn btn-xs option-btn fa hidden-xs fa hidden-xs fa-fw fa-trash-o js_deleteFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="删除参数"></a>
-                                                            <a onclick="addField(this, 'response')" href="javascript:;" {{if !$model->field->isAllowDetele($response.type)}}disabled{{/if}} class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数"></a>
+                                                            <a onclick="addField(this, 'response')" href="javascript:;" class="btn btn-xs option-btn fa hidden-xs fa-fw fa-plus addFieldBtn" data-toggle="tooltip" data-placement="bottom" data-title="添加子参数" {{if !$model->field->isComplexType($response.type)}}disabled{{/if}}></a>
                                                         </td>
 
                                                         <td class="hidden"><input name="level" class="form-control js_level" value="{{$response.level|default:0}}"></td>

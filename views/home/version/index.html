@@ -14,8 +14,9 @@
                 <div class="page-header">
                     <h1>项目版本 </h1>
                     <div class="opt-btn">
+                        {{if $project->hasRule('version', 'create')}}
                         <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_addVersionBtn" data-modal="#js_addVersionModal" data-height="252" data-title='添加版本' data-src="{{url('home/version/create', ['project_id' => $project->encode_id])}}"><i class="fa fa-fw fa-plus"></i>添加</a>
-
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -46,7 +47,7 @@
 
                                 </thead>
                                 <tbody>
-                                {{foreach $model->models as $version}}
+                                {{foreach $version->models as $version}}
                                 <tr>
                                     {{if $project->CurrentVersion->id == $version->id}}
                                     <td><i class="fa fa-check" aria-hidden="true"></i></td>
@@ -70,16 +71,24 @@
                                     <td class="hidden-xs">
 
                                         <a role="button" class="btn btn-warning btn-xs disabled"><i class="fa fa-fw fa-random" aria-hidden="true"></i>切换</a>
+                                        {{if $project->hasRule('version', 'update')}}
                                         <a role="button" class="btn btn-success btn-xs js_addVersionBtn" data-modal="#js_addVersionModal" data-title="编辑版本" data-height="250" data-src="{{url('home/version/update', ['id' => $version->encode_id])}}"><i class="fa fa-fw fa-edit" aria-hidden="true"></i>编辑</a>
+                                        {{/if}}
+                                        {{if $project->hasRule('version', 'delete')}}
                                         <a role="button" class="btn btn-danger btn-xs disabled"><i class="fa fa-fw fa-trash" aria-hidden="true"></i>删除</a>
-
+                                        {{/if}}
                                     </td>
                                     {{else}}
                                     <td class="hidden-xs">
 
                                         <a role="button" class="btn btn-warning btn-xs" href="{{url('home/project/show', ['version_id' => $version->encode_id])}}"><i class="fa fa-fw fa-random"></i>切换</a>
+                                        {{if $project->hasRule('version', 'update')}}
                                         <a role="button" class="btn btn-success btn-xs js_addVersionBtn" data-modal="#js_addVersionModal" data-title="编辑版本" data-height="250" data-src="{{url('home/version/update', ['id' => $version->encode_id])}}"><i class="fa fa-fw fa-edit" aria-hidden="true"></i>编辑</a>
+                                        {{/if}}
+
+                                        {{if $project->hasRule('version', 'delete')}}
                                         <a role="button" class="btn btn-danger btn-xs js_deleteVersionBtn" data-modal="#js_deleteVersionModal" data-title="删除版本" data-height="250" data-src="{{url('home/version/delete', ['id' => $version->encode_id])}}"><i class="fa fa-fw fa-trash" aria-hidden="true"></i>删除</a>
+                                        {{/if}}
 
                                     </td>
                                     {{/if}}
@@ -89,7 +98,7 @@
 
                                 </tbody>
                             </table>
-                            {{$model->pages}}
+                            {{$version->pages}}
                         </div>
                     </div>
                     <!-- /.panel-body -->
