@@ -34,6 +34,8 @@
                         <p class="text-muted"><label>注册地点：</label>{{$user->location}}</p>
                         <p class="text-muted"><label>最近登录时间：</label>{{$user->lastLogin->created_at}}</p>
                         <p class="text-muted"><label>最近登录地点：</label>{{$user->lastLogin->location}}</p>
+                        <p class="text-muted"><label>创建项目数：</label>{{$user->getMyCreatedProjects()->count()}}</p>
+                        <p class="text-muted"><label>参数项目数：</label>{{$user->getMyJoinedProjects()->count()}}</p>
 
                     </div>
                     <!-- /.panel-body -->

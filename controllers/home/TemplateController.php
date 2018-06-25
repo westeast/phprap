@@ -15,23 +15,6 @@ use yii\web\Response;
 class TemplateController extends PublicController
 {
 
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['update'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ],
-            ],
-
-        ];
-    }
-
     /**
      * 更新模板
      * @param $id
@@ -51,10 +34,6 @@ class TemplateController extends PublicController
 
         $template = StoreTemplate::findModel(['project_id' => $project->id]);
 
-        if(!$request->isAjax){
-//            return $this->error('非法请求');
-        }
-
         if($request->isPost){
 
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -68,8 +47,6 @@ class TemplateController extends PublicController
             }
 
             $template->project_id = $project->id;
-
-//            dump($template->attributes);exit;
 
             if ($template->store()) {
 

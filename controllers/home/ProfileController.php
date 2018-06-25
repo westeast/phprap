@@ -43,6 +43,11 @@ class ProfileController extends PublicController
 
             if ($model->store()) {
 
+                // 修改密码退出登录
+                if($model->getOldAttribute('PASSWORD') != $model->password){
+                    Yii::$app->user->logout();
+                }
+
                 return ['status' => 'success', 'message' => '修改成功'];
 
             } else {

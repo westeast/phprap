@@ -18,6 +18,7 @@ class StoreTemplate extends Template
         return [
             [['project_id', 'status', 'creater_id'], 'integer'],
             [['header_field', 'request_field', 'response_field'], 'string'],
+
             [['created_at', 'updated_at'], 'safe'],
             [['encode_id'], 'string', 'max' => 10],
             [['project_id'], 'unique'],
