@@ -2,9 +2,8 @@
 
 namespace app\models\project;
 
-use app\models\Member;
-use app\models\member\SearchMember;
 use Yii;
+use app\models\Member;
 use app\models\Project;
 use yii\data\Pagination;
 use app\widgets\LinkPager;
@@ -36,6 +35,7 @@ class SearchProject extends Project
             if(!$project_ids){
                 $project_ids = [0];
             }
+
             $query->andFilterWhere(['in', '{{%project}}.id', $project_ids]);
         }
 
