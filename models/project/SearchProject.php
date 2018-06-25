@@ -22,11 +22,11 @@ class SearchProject extends Project
         $query = self::find()->joinWith('creater');
 
         $query->andFilterWhere([
-            '{{%project}}.status' => self::ACTIVE_STATUS,
+            '{{%project}}.creater_id' => $this->params['creater_id'],
         ]);
 
-        $query->andFilterWhere([
-            '{{%project}}.creater_id' => $this->params['creater_id'],
+        $this->params['status'] && $query->andFilterWhere([
+            '{{%project}}.status' => $this->params['status'],
         ]);
 
         if($this->params['joiner_id']){

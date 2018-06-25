@@ -17,23 +17,6 @@ use yii\web\Response;
 class EnvController extends PublicController
 {
 
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['create', 'update', 'delete'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ],
-            ],
-
-        ];
-    }
-
     /**
      * 创建环境
      * @param $project_id

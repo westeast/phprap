@@ -58,7 +58,7 @@
                                     <th>启用状态</th>
                                     <th class="datetime">注册时间</th>
 
-                                    <th width="150px">操作面板</th>
+                                    <th width="95px">操作面板</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -79,12 +79,12 @@
                                     <td>{{$model->created_at}}</td>
                                     <td>
                                         {{if $model->status == $model::ACTIVE_STATUS}}
-                                        <a type="button" class="btn btn-danger btn-xs js_statusBtn mr-1" data-url="{{url('admin/user/update', ['status' => $model::DISABLE_STATUS, 'id' => $model->id])}}" data-option="冻结">冻结用户</a>
+                                        <a type="button" class="btn btn-danger btn-xs js_statusBtn mr-1" data-url="{{url('admin/user/update', ['status' => $model::DISABLE_STATUS, 'id' => $model->id])}}" data-option="冻结">冻结</a>
                                         {{else}}
-                                        <a type="button" class="btn btn-success btn-xs js_statusBtn mr-1" data-url="{{url('admin/user/update', ['status' => $model::ACTIVE_STATUS, 'id' => $model->id])}}" data-option="恢复">恢复用户</a>
+                                        <a type="button" class="btn btn-success btn-xs js_statusBtn mr-1" data-url="{{url('admin/user/update', ['status' => $model::ACTIVE_STATUS, 'id' => $model->id])}}" data-option="恢复">恢复</a>
                                         {{/if}}
                                         <a type="button" class="btn btn-warning btn-xs" data-modal="#js_iframeModal" data-title="编辑用户" data-height="290" data-src="{{url('admin/user/update', [
-                                        'id' => $model->id])}}">编辑用户</a>
+                                        'id' => $model->id])}}">编辑</a>
                                     </td>
                                 </tr>
                                 {{/foreach}}

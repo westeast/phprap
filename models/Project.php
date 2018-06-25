@@ -55,7 +55,7 @@ class Project extends Model
             [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
             [['status'], 'default', 'value'  => self::ACTIVE_STATUS],
 
-            [['encode_id', 'title', 'allow_search', 'status', 'creater_id'], 'required'],
+            [['encode_id', 'title', 'status', 'creater_id'], 'required'],
         ];
 
     }
