@@ -13,12 +13,13 @@ class UpdateForm extends User
     public $name;
     public $email;
     public $password;
+    public $status;
 
     public function rules()
     {
         return [
-            [['user_id'], 'filter', 'filter' => 'intval'],
-            [['name', 'email'], 'filter', 'filter' => 'trim'],
+            [['user_id', 'status'], 'filter', 'filter' => 'intval'],
+            [['name', 'email', 'password'], 'filter', 'filter' => 'trim'],
             ['name', 'required', 'message' => '用户昵称不可以为空'],
             ['name', 'string', 'min' => 2, 'max' => 50, 'message' => '用户昵称至少包含2个字符，最多50个字符'],
             ['email', 'required', 'message' => '登录邮箱不能为空'],
@@ -62,6 +63,7 @@ class UpdateForm extends User
 
         $user->name = $this->name;
         $user->email = $this->email;
+        $user->status = $this->status;
 
         if($this->password){
             $this->scenario = 'password';
@@ -75,7 +77,6 @@ class UpdateForm extends User
         }
 
         if(!$user->save(false)){
-
             return false;
         }
 

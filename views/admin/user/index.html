@@ -147,7 +147,7 @@
 
                     thisObj.attr("disabled", "disabled");
 
-                    $.post(url,{ 'csrf-phprap':csrf }, function (json) {
+                    $.post(url,{ 'csrf-phprap':csrf,'UpdateForm[status]':20 }, function (json) {
 
                         if(json.status == 'success'){
 

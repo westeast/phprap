@@ -7,7 +7,6 @@ use Yii;
 class Model extends \yii\db\ActiveRecord
 {
 
-    public $model;
     public $models;
     public $pages;
     public $params;

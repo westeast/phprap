@@ -3,6 +3,7 @@
 namespace app\controllers\home;
 
 use app\models\account\ProfileForm;
+use app\models\account\UpdateForm;
 use app\models\loginLog\SearchLog;
 use Yii;
 
@@ -14,10 +15,6 @@ class ProfileController extends PublicController
 
     public function actionHome()
     {
-
-        if(Yii::$app->user->isGuest){
-            return $this->redirect(['home/account/login', 'callback' => Url::current()]);
-        }
 
         $user = Yii::$app->user->identity;
 
@@ -34,7 +31,9 @@ class ProfileController extends PublicController
 
             Yii::$app->response->format = Response::FORMAT_JSON;
 
-            $model = new ProfileForm();
+            $model = new UpdateForm();
+
+            $model->user_id = $user->id;
 
             if(!$model->load($request->post())){
 

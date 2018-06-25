@@ -44,9 +44,9 @@ class LoginForm extends User
                 $this->addError($attribute, '登录邮箱或密码错误');
             }
 
-            if ($user->status == $user::DISABLE_STATUS) {
-                $this->addError($attribute, '抱歉，该账号已被禁用，请联系管理员处理');
-            }
+//            if ($user->status == $user::DISABLE_STATUS) {
+//                $this->addError($attribute, '抱歉，该账号已被禁用，请联系管理员处理');
+//            }
         }
     }
 

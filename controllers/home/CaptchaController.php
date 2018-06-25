@@ -26,7 +26,7 @@ class CaptchaController extends Controller
                 'padding' => 3,
                 'height' => 35,
                 'width'  => 100,
-                'offset' => 1
+                'offset' => 2
             ]
         ];
     }
