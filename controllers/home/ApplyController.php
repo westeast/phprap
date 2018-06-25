@@ -45,6 +45,7 @@ class ApplyController extends PublicController
         $project = Project::findModel(['encode_id' => $project_id]);
 
         $apply->project_id = $project->id;
+        $apply->user_id = Yii::$app->user->identity->id;
 
         if ($apply->store()) {
 
@@ -75,6 +76,7 @@ class ApplyController extends PublicController
         }
 
         $apply->status = $status;
+        $apply->checked_at = date('Y-m-d H:i:s');
 
         if(!$apply->store()){
             $transaction->rollBack();

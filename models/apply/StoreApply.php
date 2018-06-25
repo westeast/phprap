@@ -25,6 +25,7 @@ class StoreApply extends Apply
             [['created_at', 'updated_at'], 'safe'],
             [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
             [['status'], 'default', 'value'  => self::CHECK_STATUS],
+            [['user_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
 
             [['project_id', 'user_id'], 'required', 'on' => ['create', 'update']],
 
@@ -65,8 +66,6 @@ class StoreApply extends Apply
 
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
-
-        $this->user_id = Yii::$app->user->identity->id;
 
         if(!$this->validate()){
             return false;

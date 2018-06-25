@@ -24,8 +24,8 @@ class Apply extends Model
 
     public $statusLabels = [
         self::CHECK_STATUS => '审核中',
-        self::PASS_STATUS => '申请通过',
-        self::REFUSE_STATUS => '申请拒绝',
+        self::PASS_STATUS => '审核通过',
+        self::REFUSE_STATUS => '审核拒绝',
     ];
 
     /**

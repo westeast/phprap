@@ -27,7 +27,7 @@
                                 <input name="name" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.name}}">
                             </div>
 
-                            <button type="reset" class="btn btn-warning mr-2">重置</button>
+                            <button type="reset" class="btn btn-warning mr-1">重置</button>
                             <button type="submit" class="btn btn-primary">搜索</button>
                         </form>
 
@@ -63,7 +63,7 @@
 
                                     <td >{{$model->project->title}}</td>
                                     <td >{{$model->created_at}}</td>
-                                    <td >{{$model->updated_at}}</td>
+                                    <td >{{$model->checked_at}}</td>
                                     <td >
                                         {{if $model->status == $model::CHECK_STATUS}}
                                         <a class="btn btn-success btn-xs js_applyBtn" data-url="{{url('home/apply/check', ['id' => $model->id, 'status' => $model::PASS_STATUS])}}"> 通过</a>
