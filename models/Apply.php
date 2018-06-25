@@ -22,6 +22,12 @@ class Apply extends Model
     const PASS_STATUS  = 20; //审核通过状态
     const REFUSE_STATUS = 30; //审核拒绝状态
 
+    public $statusLabels = [
+        self::CHECK_STATUS => '审核中',
+        self::PASS_STATUS => '申请通过',
+        self::REFUSE_STATUS => '申请拒绝',
+    ];
+
     /**
      * 绑定数据表
      */
@@ -63,6 +69,11 @@ class Apply extends Model
             'updated_at' => 'Updated At',
             'checked_at' => 'Checked At',
         ];
+    }
+
+    public function getStatusLabel()
+    {
+        return $this->statusLabels[$this->status];
     }
 
     /**

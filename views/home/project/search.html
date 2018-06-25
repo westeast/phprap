@@ -79,7 +79,7 @@
                                     <td >{{$model->created_at}}</td>
                                     <td >{{$model->updated_at}}</td>
                                     <td >
-                                        {{if $model->isCreater() || $model->isJoiner() || $model->isPublic()}}
+                                        {{if $model->isCreater() || $model->isJoiner()}}
                                         <a target="_blank" href="{{$model->url}}" class="btn btn-warning btn-xs"><i class="fa fa-eye fa-fw" aria-hidden="true"></i> 查看项目</a>
                                         {{else}}
                                         <a class="btn btn-success btn-xs js_applyBtn" data-url="{{url('home/apply/create', ['project_id' => $model->encode_id])}}"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> 申请加入</a>

@@ -2,6 +2,8 @@
 
 namespace app\controllers\home;
 
+use app\models\Project;
+use app\models\project\StoreProject;
 use Yii;
 use yii\db\Exception;
 use yii\web\Response;
@@ -175,6 +177,9 @@ class InstallController extends PublicController
 
         if($request->isPost){
 
+            // 开启事务
+            $transaction = Yii::$app->db->beginTransaction();
+
             Yii::$app->response->format = Response::FORMAT_JSON;
 
             $step3 = $request->post('Step3');
@@ -184,25 +189,35 @@ class InstallController extends PublicController
             $user->name = $step3['name'];
             $user->email = $step3['email'];
             $user->ip = Yii::$app->request->userIP;
+            $user->location = $user->getLocation();
 
             $user->setPassword($step3['password']);
             $user->generateAuthKey();
 
             $user->type = $user::ADMIN_TYPE;
 
-            if($user->save()){
-
-                Yii::$app->user->login($user);
-
-                Yii::$app->cache->set('step', 3);
-
-                return ['status' => 'success', 'callback' => url('home/install/step4')];
-
-            }else{
-
+            if(!$user->save()){
+                $transaction->rollBack();
                 return ['status' => 'error', 'message' => $user->getErrorMessage()];
-
             }
+
+            $project = StoreProject::find()->one();
+
+            $project->creater_id = $user->id;
+
+            if(!$project->store()){
+                $transaction->rollBack();
+                return ['status' => 'error', 'message' => $project->getErrorMessage()];
+            }
+
+            Yii::$app->user->login($user);
+
+            Yii::$app->cache->set('step', 3);
+
+            // 事务提交
+            $transaction->commit();
+
+            return ['status' => 'success', 'callback' => url('home/install/step4')];
 
         }
 

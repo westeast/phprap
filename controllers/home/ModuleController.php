@@ -128,6 +128,8 @@ class ModuleController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             if(!$module->load($request->post())){
 
                 return ['status' => 'error', 'message' => '加载数据失败'];

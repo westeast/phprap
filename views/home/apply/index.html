@@ -65,8 +65,12 @@
                                     <td >{{$model->created_at}}</td>
                                     <td >{{$model->updated_at}}</td>
                                     <td >
-                                        <a class="btn btn-success btn-xs js_applyBtn" data-url="{{url('home/apply/create', ['project_id' => 1])}}"> 通过</a>
-                                        <a class="btn btn-danger btn-xs js_applyBtn" data-url="{{url('home/apply/create', ['project_id' => 1])}}"> 驳回</a>
+                                        {{if $model->status == $model::CHECK_STATUS}}
+                                        <a class="btn btn-success btn-xs js_applyBtn" data-url="{{url('home/apply/check', ['id' => $model->id, 'status' => $model::PASS_STATUS])}}"> 通过</a>
+                                        <a class="btn btn-danger btn-xs js_applyBtn" data-url="{{url('home/apply/check', ['id' => $model->id, 'status' => $model::REFUSE_STATUS])}}"> 驳回</a>
+                                        {{else}}
+                                        <a class="btn btn-default btn-xs">{{$model->statusLabel}}</a>
+                                        {{/if}}
                                     </td>
                                 </tr>
                                 {{/foreach}}
@@ -93,4 +97,33 @@
     <hr>
     <p class="text-center">{{config('copyright')}}</p>
 
+    <script>
+        $(function () {
+            $(".js_applyBtn").click(function () {
+                var thisObj = $(this);
+                confirm('您确定要'+thisObj.text()+' 该申请吗？',function () {
+                    var url = thisObj.data('url');
+                    var csrf = "{{csrf_token()}}";
+
+                    thisObj.attr("disabled", "disabled");
+
+                    $.post(url,{ 'csrf-phprap':csrf }, function (json) {
+
+                        if(json.status == 'success'){
+
+                            alert(json.message, 'success', function () {
+                                window.location.reload();
+                            });
+
+                        }else{
+
+                            thisObj.removeAttr("disabled");
+                            alert(json.message, 'error');
+
+                        }
+                    });
+                });
+            });
+        });
+    </script>
     {{include_file name='home/public/footer'}}

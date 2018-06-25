@@ -26,6 +26,7 @@ class StoreProject extends Project
             [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
             [['!encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
             [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
+            [['!type'], 'default', 'value'  => self::AUTH_TYPE, 'on' => 'create'],
 
             [['!encode_id', 'title', 'type', '!status', '!creater_id'], 'required', 'on' => ['create', 'update']],
 

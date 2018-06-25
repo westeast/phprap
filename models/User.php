@@ -53,6 +53,9 @@ class User extends Model implements IdentityInterface
             [['created_at', 'updated_at'], 'safe'],
             [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
             ['status', 'default', 'value' => self::ACTIVE_STATUS],
+            ['type', 'default', 'value' => self::USER_TYPE],
+            ['ip', 'default', 'value' => Yii::$app->request->userIP],
+            ['location', 'default', 'value' => $this->getLocation()],
         ];
 
     }

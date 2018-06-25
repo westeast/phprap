@@ -123,11 +123,7 @@
 
                     $.post(url,{ 'csrf-phprap':csrf }, function (json) {
 
-                        if(json.status == 'nologin'){
-                            alert(json.message, 'success', function () {
-                                window.location.href = json.callback;
-                            });
-                        }else if(json.status == 'success'){
+                        if(json.status == 'success'){
 
                             alert(json.message, 'success', function () {
                                 window.location.reload();
