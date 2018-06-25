@@ -14,81 +14,23 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <div class="page-header">
-                    <h1>登录历史 </h1>
-                </div>
+                <h1 class="page-header">登录历史</h1>
 
-                <div class="row">
-                    <form action="{{url()}}" method="get">
-                        <div class="col-sm-6">
-
-                            <div class="form-group">
-                                <input name="keywords" type="text" class="form-control" placeholder="登录IP/登录地点,支持模糊查询" value="{{$searchs.keywords}}">
-                            </div>
-
-                        </div>
-
-                        <div class="col-sm-6">
-
-                            <div class="form-group">
-                                <input name="os" type="text" class="form-control" placeholder="操作系统,支持模糊查询" value="{{$searchs.os}}">
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6">
-
-                            <div class="form-inline">
-
-                                <div class="input-daterange input-group" id="datepicker">
-                                    <input type="text" name="start_date" placeholder="登录开始时间" value="{{$searchs.start_date}}" class="form-control date-picker" id="js_startData" />
-                                    <span class="input-group-addon">至</span>
-                                    <input type="text" name="end_date" placeholder="登录结束时间" value="{{$searchs.end_date}}" class="form-control date-picker" id="js_endData" />
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-
-                            <div class="form-group">
-                                <div class="search-btn">
-                                    <button type="button" class="btn btn-warning js_resetForm">重置</button>
-
-                                    <button type="submit" class="btn btn-primary">搜索</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-
-                </div>
-
-                <div class="search hidden">
+                <div class="search">
                     <div class="well">
                         <form class="form-inline" action="{{url()}}" method="get">
 
                             <div class="form-group">
                                 <label>登录IP</label>
-                                <input name="ip" type="text" class="form-control" placeholder="支持模糊查询" value="{{$searchs.ip}}">
+                                <input name="ip" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.ip}}">
                             </div>
 
                             <div class="form-group">
                                 <label>登录地点</label>
-                                <input name="address" type="text" class="form-control" placeholder="支持模糊查询" value="{{$searchs.address}}">
+                                <input name="location" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.location}}">
                             </div>
 
-                            <div class="form-group">
-                                <label>操作系统</label>
-                                <select class="form-control" name="os">
-                                    <option value="">不限</option>
-                                    <option value="电脑" {{if $searchs.os == '电脑'}}selected{{/if}}>电脑</option>
-                                    <option value="手机" {{if $searchs.os == '手机'}}selected{{/if}}>手机</option>
-                                    <option value="微信" {{if $searchs.os == '微信'}}selected{{/if}}>微信</option>
-                                </select>
-                            </div>
-
-                            <button type="button" class="btn btn-warning js_resetForm">重置</button>
+                            <button type="button" class="btn btn-warning js_resetForm mr-1">重置</button>
 
                             <button type="submit" class="btn btn-primary">搜索</button>
 

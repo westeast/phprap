@@ -27,6 +27,8 @@ class SearchLog extends LoginLog
             'user_id'  => $this->params['user_id'],
         ]);
 
+        $query->andFilterWhere(['like', 'ip', $this->params['ip']]);
+        $query->andFilterWhere(['like', 'location', $this->params['location']]);
         $query->andFilterWhere(['like', 'user_name', $this->params['user_name']]);
         $query->andFilterWhere(['like', 'user_email', $this->params['user_email']]);
 

@@ -39,7 +39,7 @@ class SearchApply extends Apply
         $this->models = $query
             ->offset($pagination->offset)
             ->limit($pagination->limit)
-            ->orderBy('{{%project}}.id DESC')
+            ->orderBy('{{%apply}}.id DESC')
             ->all();
 
         $this->count = $query->count();

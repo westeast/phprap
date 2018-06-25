@@ -68,8 +68,10 @@
                                         {{if $model->status == $model::CHECK_STATUS}}
                                         <a class="btn btn-success btn-xs js_applyBtn" data-url="{{url('home/apply/check', ['id' => $model->id, 'status' => $model::PASS_STATUS])}}"> 通过</a>
                                         <a class="btn btn-danger btn-xs js_applyBtn" data-url="{{url('home/apply/check', ['id' => $model->id, 'status' => $model::REFUSE_STATUS])}}"> 驳回</a>
-                                        {{else}}
-                                        <a class="btn btn-default btn-xs">{{$model->statusLabel}}</a>
+                                        {{else if $model->status == $model::PASS_STATUS}}
+                                        <a class="btn btn-default btn-xs"><i class="fa fa-check"></i> {{$model->statusLabel}}</a>
+                                        {{else if $model->status == $model::REFUSE_STATUS}}
+                                        <a class="btn btn-default btn-xs"><i class="fa fa-times"></i> {{$model->statusLabel}}</a>
                                         {{/if}}
                                     </td>
                                 </tr>
