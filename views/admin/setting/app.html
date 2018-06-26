@@ -73,10 +73,10 @@
 
                             <div class="form-group js_pushTime hidden">
                                 <label>推送间隔(单位秒)</label>
-                                <input class="form-control" name="Config[push_time]" value="{{$config->getField('push_time')}}" placeholder="单位秒" value="3" datatype="n">
+                                <input class="form-control" name="Config[push_time]" value="{{$config->getField('push_time')}}" placeholder="单位秒" value="10" datatype="numrange" min="10" errormsg="推送时间间隔不能小于10秒">
                             </div>
 
-                            <button type="reset" class="btn btn-default mr-2">重置</button>
+                            <button type="reset" class="btn btn-default mr-1">重置</button>
                             <button type="button" class="btn btn-primary js_submit">确认</button>
 
                         </form>
