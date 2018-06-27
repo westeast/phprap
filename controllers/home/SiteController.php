@@ -12,8 +12,6 @@ use Yii;
 class SiteController extends PublicController
 {
 
-    public $checkLogin = false;
-
     /**
      * Displays homepage.
      *
