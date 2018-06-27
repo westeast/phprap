@@ -20,20 +20,18 @@ class PublicController extends Controller
     public function beforeAction($action)
     {
 
-        if(!$this->beforeAction){
-            return true;
-        }
+        if($this->beforeAction){
+            if(!$this->isInstalled()){
+                return $this->redirect(['home/install/step1'])->send();
+            }
 
-        if(!$this->isInstalled()){
-            return $this->redirect(['home/install/step1'])->send();
-        }
+            if($this->checkLogin && Yii::$app->user->isGuest){
+                return $this->redirect(['home/account/login'])->send();
+            }
 
-        if($this->checkLogin && Yii::$app->user->isGuest){
-            return $this->redirect(['home/account/login'])->send();
-        }
-
-        if(!Yii::$app->user->identity->isAdmin){
-            return $this->error('抱歉，您无权访问');
+            if(!Yii::$app->user->identity->isAdmin){
+                return $this->error('抱歉，您无权访问');
+            }
         }
 
         return true;
