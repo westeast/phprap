@@ -1,2 +1,6 @@
-
 /.idea/*
+cache
+debug
+smarty
+logs
+install/install.lock
