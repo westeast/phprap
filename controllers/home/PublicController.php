@@ -35,6 +35,10 @@ class PublicController extends Controller
             return true;
         }
 
+        if(!$this->isInstalled()){
+            return $this->redirect(['home/install/step1'])->send();
+        }
+
         $config = Config::findOne(['type' => 'safe'])->getField();
 
         $ip_white_list = array_filter(explode("\r\n", trim($config->ip_white_list)));
@@ -49,10 +53,6 @@ class PublicController extends Controller
 
         if($ip_black_list && in_array($ip, $ip_black_list)){
             return $this->error('抱歉，该IP不允许访问');
-        }
-
-        if(!$this->isInstalled()){
-            return $this->redirect(['home/install/step1'])->send();
         }
 
         if($this->checkLogin && Yii::$app->user->isGuest){
