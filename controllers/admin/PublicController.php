@@ -20,7 +20,11 @@ class PublicController extends Controller
     public function beforeAction($action)
     {
 
-        if($this->beforeAction && !$this->isInstalled()){
+        if(!$this->beforeAction){
+            return true;
+        }
+
+        if(!$this->isInstalled()){
             return $this->redirect(['home/install/step1'])->send();
         }
 
