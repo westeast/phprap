@@ -245,9 +245,10 @@
     $(function(){
 
         // 退出项目
-        $(".js_quitProject").click(function (event) {
+        $(".js_quitProject").click(function (e) {
             // 阻止事件冒泡
-            event.stopPropagation();
+            var e = e||window.event;
+            e.stopPropagation();
 
             var thisObj = $(this);
             confirm('您确定要退出该项目吗？',function () {
@@ -275,9 +276,10 @@
         });
 
         //查看项目
-        $(".js_viewProject").click(function (event) {
+        $(".js_viewProject").click(function (e) {
 
-            event.stopPropagation();
+            var e = e||window.event;
+            e.stopPropagation();
             window.location.href = $(this).data('url');
 
         });

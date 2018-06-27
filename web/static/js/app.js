@@ -89,10 +89,13 @@ $("[type='reset']").click(function () {
  */
 (function($){
 
-    $("[data-modal]").on('click',function(event){
-        event.stopPropagation(); // 阻止冒泡事件
-        event.preventDefault(); // 兼容标准浏览器
-        window.event.returnValue = false; // 兼容IE6~8
+    $("[data-modal]").on('click',function(e){
+
+        var e = e||window.event;
+
+        e.stopPropagation(); // 阻止冒泡事件
+        e.preventDefault(); // 兼容标准浏览器
+        e.returnValue = false; // 兼容IE6~8
 
         var thisObj = $(this);
 
@@ -145,10 +148,11 @@ $("[type='reset']").click(function () {
             $(modal).modal('show');
         }, 500);
 
-        $(document).delegate("button:submit", 'click',function(event){
+        $(document).delegate("button:submit", 'click',function(e){
 
-            event.stopPropagation(); // 阻止冒泡事件
-            event.preventDefault(); // 兼容标准浏览器
+            var e = e||window.event;
+            e.stopPropagation();
+            e.preventDefault(); // 兼容标准浏览器
             window.event.returnValue = false; // 兼容IE6~8
 
             $(iframe).contents().find("form").find("input:hidden").trigger('click');
