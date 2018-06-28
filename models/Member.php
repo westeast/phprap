@@ -122,31 +122,4 @@ class Member extends Model
         return trim($title, '、');
     }
 
-    /**
-     * 获取更新内容
-     * @param $oldAttributes
-     * @param $dirtyAttributes
-     * @return string
-     */
-    public function getUpdateContent($oldAttributes, $dirtyAttributes)
-    {
-
-        return parent::getUpdateContent($this->getRepalceAttributes($oldAttributes), $this->getRepalceAttributes($dirtyAttributes), $this->user->fullName);
-    }
-
-    /**
-     * 替换更新内容
-     * @param $attributes
-     * @return array
-     */
-    private function getRepalceAttributes($attributes)
-    {
-        return array_map(function ($value) {
-
-            $title = $value ? str_replace($this->find, $this->replace, $value . ',') : '';
-            return trim($title, '、');
-
-        }, $attributes);
-    }
-
 }
