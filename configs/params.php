@@ -1,5 +1,5 @@
 <?php
 return [
-    'static_version' => '1.675' ,
+    'app_version' => '3.0' ,
     'user.passwordResetTokenExpire' => 3600,
 ];

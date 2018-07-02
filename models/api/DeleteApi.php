@@ -2,10 +2,8 @@
 
 namespace app\models\api;
 
-use app\models\Api;
-use app\models\projectLog\SearchLog;
-use app\models\projectLog\StoreLog;
 use Yii;
+use app\models\Api;
 
 class DeleteApi extends Api
 {
@@ -20,6 +18,10 @@ class DeleteApi extends Api
         ];
     }
 
+    /**
+     * 验证登录密码是否正确
+     * @param $attribute
+     */
     public function validatePassword($attribute)
     {
 
@@ -35,6 +37,10 @@ class DeleteApi extends Api
         }
     }
 
+    /**
+     * 删除接口
+     * @return bool
+     */
     public function delete()
     {
 
@@ -54,24 +60,6 @@ class DeleteApi extends Api
         }
 
         if(!$this->save(false)){
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        $log->method      = 'delete';
-        $log->project_id  = $this->module->project_id;
-        $log->module_id   = $this->module->id;
-        $log->api_id      = $this->id;
-        $log->version_id  = $this->module->version->id;
-        $log->version_name  = $this->module->version->name;
-        $log->object_name = 'api';
-        $log->object_id   = $this->id;
-        $log->content     = '删除了 接口 <code>' . $this->title . '</code>';
-
-        if(!$log->store()){
             $transaction->rollBack();
             return false;
         }

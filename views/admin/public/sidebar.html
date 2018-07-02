@@ -8,22 +8,14 @@
             </li>
 
             <li>
-                <a href="{{url('project')}}" {{if $active == 'confi1g'}}class="active"{{/if}}><i class="fa fa-folder-open fa-fw"></i> 项目管理</a>
+                <a href="{{url('admin/project/index')}}" {{if $active == 'project'}}class="active"{{/if}}><i class="fa fa-folder-open fa-fw"></i> 项目管理</a>
             </li>
             <li>
-                <a href="{{url('admin/member')}}" {{if $active == 'member'}}class="active"{{/if}}><i class="fa fa-user fa-fw"></i> 用户管理</a>
-            </li>
-
-            <li>
-                <a href="{{url('history/login')}}" {{if $active == 'config3'}}class="active"{{/if}}><i class="fa fa-history fa-fw"></i> 登录历史</a>
+                <a href="{{url('admin/user/index')}}" {{if $active == 'user'}}class="active"{{/if}}><i class="fa fa-user fa-fw"></i> 用户管理</a>
             </li>
 
             <li>
-                <a href="{{url('admin//db/index')}}" {{if $active == 'config4'}}class="active"{{/if}}><i class="fa fa-database fa-fw"></i> 数据备份</a>
-            </li>
-
-            <li>
-                <a href="{{url('admin/setting/base')}}" {{if $active == 'config'}}class="active"{{/if}}><i class="fa fa-gear fa-fw"></i> 系统设置</a>
+                <a href="{{url('admin/setting/app')}}" {{if $active == 'config'}}class="active"{{/if}}><i class="fa fa-gear fa-fw"></i> 设置管理</a>
             </li>
 
         </ul>

@@ -16,15 +16,15 @@ use Yii;
 class Config extends Model
 {
     /**
-     * {@inheritdoc}
+     * 绑定数据表
      */
     public static function tableName()
     {
-        return 'doc_config';
+        return '{{%config}}';
     }
 
     /**
-     * {@inheritdoc}
+     * 验证规则
      */
     public function rules()
     {

@@ -3,8 +3,9 @@
 namespace app\controllers\home;
 
 use Yii;
+use yii\web\Controller;
 
-class CaptchaController extends PublicController
+class CaptchaController extends Controller
 {
 
     public function actions(){
@@ -25,7 +26,7 @@ class CaptchaController extends PublicController
                 'padding' => 3,
                 'height' => 35,
                 'width'  => 100,
-                'offset' => 1
+                'offset' => 2
             ]
         ];
     }

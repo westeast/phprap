@@ -73,15 +73,6 @@ class Version extends Model
     }
 
     /**
-     * 获取创建者
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCreater()
-    {
-        return $this->hasOne(User::className(),['id'=>'creater_id']);
-    }
-
-    /**
      * 获取项目
      * @return \yii\db\ActiveQuery
      */
@@ -111,7 +102,7 @@ class Version extends Model
 
         $sort = [
             'sort' => SORT_DESC,
-            'id'   => SORT_DESC
+            'id'   => SORT_ASC
         ];
 
         return $this->hasMany(Module::className(), ['version_id' => 'id'])->where($filter)->orderBy($sort);
@@ -135,14 +126,13 @@ class Version extends Model
         return implode('.', $data);
     }
 
-    /**
-     * 检测是否有项目某项权限，如编辑、删除
-     * @param $rule
-     * @return bool
-     */
-    public function hasRule($rule)
+    public function getExportData()
     {
-        return false;
+        $data['project'] = $this->project;
+        $data['version'] = $this;
+
+
+//        return json_encode($data);
     }
 
 }

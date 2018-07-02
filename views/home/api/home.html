@@ -15,11 +15,12 @@
                 <div class="page-header">
                     <h1>接口主页 </h1>
                     <div class="opt-btn">
-
+                        {{if $project->hasRule('api', 'update')}}
                         <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_editApiBtn" data-toggle="tooltip" data-placement="bottom" data-title="编辑接口" data-modal="#js_addApiModal" data-height="500" data-src="{{url('home/api/update', ['id' => $api->encode_id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
-
+                        {{/if}}
+                        {{if $project->hasRule('api', 'export')}}
                         <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-warning" data-toggle="tooltip" data-title="导出当前接口" data-placement="bottom" data-original-title="" title=""><i class="fa fa-fw fa-download"></i>导出</a>
-
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -68,6 +69,27 @@
                                 <!-- /.panel -->
 
                             </div>
+                        </div>
+                        <!--签名方式-->
+                        <div class="row hidden">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        签名方式
+                                    </div>
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+
+
+                                        </div>
+                                        <!-- /.table-responsive -->
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+                                <!-- /.panel -->
+                            </div>
+                            <!-- /.col-lg-6 -->
                         </div>
                         <!-- 接口地址 -->
                         <div class="row">

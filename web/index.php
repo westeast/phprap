@@ -1,5 +1,6 @@
 <?php
 
+error_reporting(0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 // comment out the following two lines when deployed to production

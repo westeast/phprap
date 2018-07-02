@@ -4,37 +4,17 @@ namespace app\controllers\home;
 use app\models\Api;
 use app\models\api\DeleteApi;
 use app\models\api\StoreApi;
-use app\models\Field;
 use app\models\field\StoreField;
 use app\models\Module;
-use app\models\projectLog\SearchLog;
 use app\models\Template;
-use app\models\template\StoreTemplate;
 use Yii;
-use yii\filters\AccessControl;
+use yii\web\Response;
 
 /**
  * Site controller
  */
 class ApiController extends PublicController
 {
-
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['create', 'update', 'select','delete', 'show', 'debug'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ],
-            ],
-
-        ];
-    }
 
     public function actionDebug($id)
     {
@@ -65,10 +45,19 @@ class ApiController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             // 开启事务
             $transaction = Yii::$app->db->beginTransaction();
 
             $api->scenario = 'create';
+
+            // 根据模板添加默认字段
+            $template = Template::findModel(['project_id' => $module->project_id]);
+
+            $api->header_field   = $template->header_field;
+            $api->request_field  = $template->request_field;
+            $api->response_field = $template->response_field;
 
             if(!$api->load($request->post())){
 
@@ -81,25 +70,7 @@ class ApiController extends PublicController
             if(!$api->store()){
 
                 $transaction->rollBack();
-                return ['status' => 'error', 'model' => $api];
-
-            }
-
-            // 添加默认字段
-            $field    = StoreField::findModel();
-            $template = Template::findModel(['project_id' => $module->project_id]);
-
-            $field->scenario = 'create';
-
-            $field->api_id = $api->id;
-            $field->header_json  = json_encode($template->headerAttributes, JSON_UNESCAPED_UNICODE);
-            $field->request_json = json_encode($template->requestAttributes, JSON_UNESCAPED_UNICODE);
-            $field->response_json  = json_encode($template->responseAttributes, JSON_UNESCAPED_UNICODE);
-
-            if(!$field->store()){
-
-                $transaction->rollBack();
-                return ['status' => 'error', 'model' => $field];
+                return ['status' => 'error', 'message' => $api->getErrorMessage(), 'label' => $api->getErrorLabel()];
 
             }
 
@@ -130,6 +101,8 @@ class ApiController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             // 开启事务
             $transaction = Yii::$app->db->beginTransaction();
 
@@ -144,7 +117,7 @@ class ApiController extends PublicController
             if(!$api->store()){
 
                 $transaction->rollBack();
-                return ['status' => 'error', 'model' => $api];
+                return ['status' => 'error', 'message' => $api->getErrorMessage(), 'label' => $api->getErrorLabel()];
 
             }
 
@@ -162,6 +135,54 @@ class ApiController extends PublicController
     }
 
     /**
+     * 编辑字段
+     * @param $id
+     * @return string
+     */
+    public function actionField($id)
+    {
+
+        $request = Yii::$app->request;
+
+        $api = StoreApi::findModel(['encode_id' => $id]);
+
+        if($request->isPost){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            // 开启事务
+            $transaction = Yii::$app->db->beginTransaction();
+
+            $api->scenario = 'update';
+
+            if(!$api->load($request->post())){
+
+                return ['status' => 'error', 'message' => '加载数据失败'];
+
+            }
+
+            if(!$api->store()){
+
+                $transaction->rollBack();
+                return ['status' => 'error', 'message' => $api->getErrorMessage(), 'label' => $api->getErrorLabel()];
+
+            }
+
+            // 事务提交
+            $transaction->commit();
+
+            return ['status' => 'success', 'message' => '编辑成功'];
+
+        }
+
+        $project = $api->module->project;
+
+        $project->current_version = $api->module->version;
+
+        return $this->display('/home/field/create', ['api' => $api, 'project' => $project]);
+    }
+
+    /**
      * 删除接口
      * @param $id
      * @return array|string
@@ -174,6 +195,8 @@ class ApiController extends PublicController
         $api = DeleteApi::findModel(['encode_id' => $id]);
 
         if($request->isPost){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
             if(!$api->load($request->post())){
 
@@ -189,7 +212,7 @@ class ApiController extends PublicController
 
             }
 
-            return ['status' => 'error', 'model' => $api];
+            return ['status' => 'error', 'message' => $api->getErrorMessage(), 'label' => $api->getErrorLabel()];
 
         }
 
@@ -207,19 +230,10 @@ class ApiController extends PublicController
 
         $api = Api::findModel(['encode_id' => $id]);
 
-        if(!$api->id || !$api->hasRule('look')){
-            return $this->error('抱歉，您无权查看');
-        }
-
-
         $project = $api->module->project;
 
         // 获取当前版本
         $project->current_version = $api->module->version;
-
-        $params = [
-            'api_id'  => $api->id
-        ];
 
         switch ($tab) {
             case 'home':
@@ -231,16 +245,12 @@ class ApiController extends PublicController
             case 'debug':
                 $view  = '/home/api/debug';
                 break;
-            case 'log':
-                $model = SearchLog::findModel()->search($params);
-                $view  = '/home/log/api';
-                break;
             default:
                 $view  = '/home/api/home';
                 break;
         }
 
-        return $this->display($view, ['project' => $project, 'api' => $api, 'model' => $model]);
+        return $this->display($view, ['project' => $project, 'api' => $api]);
 
     }
 }

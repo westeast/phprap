@@ -14,8 +14,9 @@
                 <div class="page-header">
                     <h1>项目成员 </h1>
                     <div class="opt-btn">
+                        {{if $project->hasRule('member', 'create')}}
                         <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success" data-title='添加成员' data-modal="#js_addMemberModal" data-height="300" data-src="{{url('member/create', ['project_id' => $project->encode_id])}}"><i class="fa fa-fw fa-plus"></i>添加</a>
-
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -43,7 +44,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {{foreach $model->models as $member}}
+                                {{foreach $member->models as $member}}
 
                                 <tr>
                                     <td>{{$member->user->fullName}}</td>
@@ -54,10 +55,14 @@
                                     <td>{{$member->updated_at}}</td>
                                     <td class="hidden-xs">
 
-                                        <a type="button" class="btn btn-success btn-xs js_addMemberBtn" data-title="编辑权限" data-modal="#js_addMemberModal" data-height="300" data-src="{{url('home/member/update', ['id' => $member->encode_id])}}"><i class="fa fa-fw fa-key"></i>权限</a>
-
+                                        {{if $project->hasRule('member', 'update')}}
+                                        <a type="button" class="btn btn-success btn-xs js_addMemberBtn" data-title="编辑成员" data-modal="#js_addMemberModal" data-height="370" data-src="{{url('home/member/update', ['id' => $member->encode_id])}}"><i class="fa fa-fw fa-key"></i>编辑</a>
+                                        {{else}}
+                                        <a type="button" class="btn btn-success btn-xs js_lookMemberBtn" data-title="查看成员" data-modal="#js_lookMemberModal" data-height="370" data-src="{{url('home/member/rule', ['id' => $member->encode_id])}}"><i class="fa fa-fw fa-eye"></i>查看</a>
+                                        {{/if}}
+                                        {{if $project->hasRule('member', 'remove')}}
                                         <a type="button" class="btn btn-danger btn-xs js_removerMemberBtn" data-url="{{url('home/member/remove', ['id' => $member->encode_id])}}"><i class="fa fa-fw fa-sign-out"></i>移除</a>
-
+                                        {{/if}}
                                     </td>
                                 </tr>
 
@@ -65,7 +70,7 @@
 
                                 </tbody>
                             </table>
-                            {{$model->pages}}
+                            {{$member->pages}}
                         </div>
                     </div>
                     <!-- /.panel-body -->
@@ -98,6 +103,25 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 <button type="submit" class="btn btn-primary js_submit">确认</button>
+            </div>
+
+        </div>
+
+    </div><!-- /.modal-dialog -->
+</div>
+
+<!--查看成员模态框-->
+<div class="modal fade" id="js_lookMemberModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">查看成员</h4>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="js_lookMemberIframe" scrolling="no" src=""></iframe>
+
             </div>
 
         </div>

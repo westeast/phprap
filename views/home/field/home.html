@@ -32,9 +32,9 @@
                     <h1>接口字段 </h1>
                     <div class="opt-btn">
 
-                        <a href="" class="btn hidden-xs btn-sm btn-warning mr-2" data-toggle="tooltip" data-title="导出当前版本" data-placement="bottom"><i class="fa fa-fw fa-upload"></i>导入</a>
-
-                        <a href="javascript:;" class="btn btn-sm hidden-xs btn-success js_editApiBtn" data-url="{{url('home/field/update', ['id' => $api->field->encode_id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
+                        {{if $project->hasRule('api', 'update')}}
+                        <a href="javascript:;" class="btn btn-sm hidden-xs btn-success js_editFieldBtn" data-url="{{url('home/api/field', ['id' => $api->encode_id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
+                        {{/if}}
 
                     </div>
                 </div>
@@ -64,14 +64,16 @@
                                                 <thead>
                                                 <tr>
                                                     <th width="150px">参数名</th>
+                                                    <th width="150px">参数类型</th>
                                                     <th width="320px">参数值</th>
                                                     <th>备注说明</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {{foreach $api->field->headerAttributes as $header}}
+                                                {{foreach $api->headerAttributes as $header}}
                                                 <tr>
                                                     <td>{{$header.name}}</td>
+                                                    <td>{{$api->field->typeLabels[$header.type]}}</td>
                                                     <td>{{$header.value}}</td>
                                                     <td>{{$header.remark}}</td>
                                                 </tr>
@@ -110,7 +112,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {{foreach $api->field->requestAttributes as $request}}
+                                                {{foreach $api->requestAttributes as $request}}
                                                 <tr class="">
                                                     <td>{{$request.name}}</td>
                                                     <td>{{$request.title}}</td>
@@ -152,7 +154,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {{foreach $api->field->responseAttributes as $response}}
+                                                {{foreach $api->responseAttributes as $response}}
                                                 <tr class="level{{$response.level}}">
                                                     <td>
                                                         {{if $response.level}}
@@ -227,7 +229,8 @@
 
 <script>
     $(function () {
-        $(".js_editApiBtn").on('click', function () {
+        // 编辑字段
+        $(".js_editFieldBtn").on('click', function () {
             var thisObj = $(this);
             var url = thisObj.data('url');
             thisObj.attr("disabled", "disabled");
@@ -242,41 +245,5 @@
 
 <script>
 
-    $(function () {
-
-        //刷新数据
-        $(document).delegate('.js_refreshField', 'click',function(event){
-            // 阻止事件冒泡
-            event.stopPropagation();
-
-            var thisObj = $(this);
-
-            var id  = thisObj.data('id');
-
-            var url = "{{url('field/refresh')}}";
-
-            thisObj.attr("disabled", "disabled");
-
-            setTimeout(function () {
-                $.post(url, { api_id:id }, function(json){
-
-                    if(json.code == 200){
-
-                        thisObj.attr("disabled", "disabled");
-
-                        $(".panel-json").load("{{url('field/json')}}", {'api_id':id});
-
-                    }else{
-
-                        alert(json.msg, 2000);
-
-                    }
-
-                }, 'json');
-            }, 2000);
-
-        });
-
-    })
 </script>
 {{include_file name='home/public/footer'}}

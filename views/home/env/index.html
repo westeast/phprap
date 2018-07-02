@@ -1,4 +1,4 @@
-{{include_file name='home/public/header' title='项目版本'}}
+{{include_file name='home/public/header' title='项目环境'}}
 
 </head>
 
@@ -14,8 +14,9 @@
                 <div class="page-header">
                     <h1>项目环境 </h1>
                     <div class="opt-btn">
+                        {{if $project->hasRule('env', 'create')}}
                         <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_addEnvBtn" data-modal="#js_addEnvModal" data-height="210" data-title='添加环境' data-src="{{url('home/env/create', ['project_id' => $project->encode_id])}}"><i class="fa fa-fw fa-plus"></i>添加</a>
-
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -36,29 +37,31 @@
 
                                 <thead>
                                 <tr>
-                                    <th>环境标识符</th>
                                     <th>环境名称</th>
                                     <th>环境根路径</th>
-                                    <th>环境创建人</th>
+                                    <th>创建人昵称/账号</th>
                                     <th class="datetime">创建时间</th>
+                                    {{if $project->hasRule('env', 'update') || $project->hasRule('env', 'delete')}}
                                     <th class="hidden-xs" width="130px">操作面板</th>
-
+                                    {{/if}}
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {{foreach $project->envs as $env}}
                                 <tr>
-                                    <td>{{$env->name}}</td>
-                                    <td>{{$env->title}}</td>
+                                    <td>{{$env->title}}({{$env->name}})</td>
                                     <td><code>{{$env->base_url}}</code></td>
-                                    <td>{{$env->creater->name}}</td>
+                                    <td>{{$env->creater->fullName}}</td>
                                     <td>{{$env->created_at}}</td>
                                     <td class="hidden-xs">
 
+                                        {{if $project->hasRule('env', 'update')}}
                                         <a class="btn btn-success btn-xs js_addEnvBtn" data-title="编辑环境" data-modal="#js_addEnvModal" data-height="210" data-src="{{url('home/env/update', ['id' => $env->encode_id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
+                                        {{/if}}
 
+                                        {{if $project->hasRule('env', 'delete')}}
                                         <a class="btn btn-danger btn-xs js_deleteEnvBtn" data-url="{{url('home/env/delete', ['id' => $env->encode_id])}}"><i class="fa fa-fw fa-trash"></i>删除</a>
-
+                                        {{/if}}
                                     </td>
                                 </tr>
                                 {{/foreach}}
@@ -119,7 +122,7 @@
 
                 $.post(url,{ 'csrf-phprap':csrf }, function (json) {
 
-                    if(json.status = 'success'){
+                    if(json.status == 'success'){
 
                         alert(json.message, 'success', function () {
                             window.location.reload();

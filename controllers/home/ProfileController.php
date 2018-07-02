@@ -3,44 +3,15 @@
 namespace app\controllers\home;
 
 use app\models\account\ProfileForm;
-use app\models\account\RegisterForm;
-use app\models\Config;
+use app\models\account\UpdateForm;
+use app\models\loginLog\SearchLog;
 use Yii;
-use yii\debug\models\search\Debug;
-use yii\debug\Module;
-use yii\debug\Panel;
+
 use yii\helpers\Url;
 use yii\web\Response;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-
-use app\models\account\LoginForm;
 
 class ProfileController extends PublicController
 {
-
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['home','account','notify'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-//                    'logout' => ['post'],
-                ],
-            ],
-
-        ];
-    }
 
     public function actionHome()
     {
@@ -58,7 +29,11 @@ class ProfileController extends PublicController
 
         if($request->isPost){
 
-            $model = new ProfileForm();
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            $model = new UpdateForm();
+
+            $model->user_id = $user->id;
 
             if(!$model->load($request->post())){
 
@@ -66,19 +41,41 @@ class ProfileController extends PublicController
 
             }
 
-            if ($model->profile()) {
+            if ($model->store()) {
+
+                // 修改密码退出登录
+                if($model->getOldAttribute('PASSWORD') != $model->password){
+                    Yii::$app->user->logout();
+                }
 
                 return ['status' => 'success', 'message' => '修改成功'];
 
             } else {
 
-                return ['status' => 'error', 'model' => $model];
+                return ['status' => 'error', 'message' => $model->getErrorMessage(), 'label' => $model->getErrorLabel()];
 
             }
 
         }
 
         return $this->display('/home/account/profile', ['user' => $user]);
+
+    }
+
+    public function actionLog()
+    {
+
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['home/account/login', 'callback' => Url::current()]);
+        }
+
+        $params = Yii::$app->request->queryParams;
+
+        $params['user_id'] = Yii::$app->user->identity->id;
+
+        $model = SearchLog::findModel()->search($params);
+
+        return $this->display('/home/log/login', ['model' => $model]);
 
     }
 

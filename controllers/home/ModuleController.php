@@ -52,6 +52,8 @@ class ModuleController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             $module->scenario = 'create';
 
             if(!$module->load($request->post())){
@@ -88,6 +90,8 @@ class ModuleController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             $module->scenario = 'update';
 
             if(!$module->load($request->post())){
@@ -102,7 +106,7 @@ class ModuleController extends PublicController
 
             }
 
-            return ['status' => 'error', 'model' => $module];
+            return ['status' => 'error', 'message' => $module->getErrorMessage(), 'label' => $module->getErrorLabel()];
 
         }
 
@@ -124,6 +128,8 @@ class ModuleController extends PublicController
 
         if($request->isPost){
 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
             if(!$module->load($request->post())){
 
                 return ['status' => 'error', 'message' => '加载数据失败'];
@@ -136,7 +142,7 @@ class ModuleController extends PublicController
 
             }
 
-            return ['status' => 'error', 'model' => $module];
+            return ['status' => 'error', 'message' => $module->getErrorMessage(), 'label' => $module->getErrorLabel()];
 
         }
 

@@ -2,10 +2,9 @@
 
 namespace app\models\project;
 
-use app\models\Project;
-use app\models\projectLog\StoreLog;
-use app\models\User;
 use Yii;
+use app\models\Project;
+use app\models\User;
 
 class TransferProject extends Project
 {
@@ -81,20 +80,6 @@ class TransferProject extends Project
         }
 
         if(!$this->save(false)){
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        $log->method      = 'transfer';
-        $log->project_id  = $this->id;
-        $log->object_name = 'project';
-        $log->object_id   = $this->id;
-        $log->content     = '项目 <code>' . $this->title . '</code>' . ' 转让给 ' . $user->fullName;
-
-        if(!$log->store()){
             $transaction->rollBack();
             return false;
         }

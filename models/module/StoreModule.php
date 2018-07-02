@@ -2,9 +2,8 @@
 
 namespace app\models\module;
 
-use app\models\Module;
-use app\models\projectLog\StoreLog;
 use Yii;
+use app\models\Module;
 
 class StoreModule extends Module
 {
@@ -24,12 +23,12 @@ class StoreModule extends Module
             [['encode_id'], 'unique'],
             ['title', 'validateTitle'],
 
-            [['!created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
-            [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
-            [['!encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
-            [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
+            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on' => 'create'],
+            [['creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
+            [['encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
+            [['status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
 
-            [['!encode_id', '!project_id', '!version_id', 'title', '!status', '!creater_id'], 'required', 'on' => ['create', 'update']],
+            [['encode_id', 'project_id', 'version_id', 'title', 'status', 'creater_id'], 'required', 'on' => ['create', 'update']],
 
         ];
 
@@ -44,7 +43,6 @@ class StoreModule extends Module
         $query = self::find();
 
         $query->andFilterWhere([
-            'project_id' => $this->project_id,
             'version_id' => $this->version_id,
             'status' => self::ACTIVE_STATUS,
             'title'  => $this->title,
@@ -60,6 +58,9 @@ class StoreModule extends Module
 
     }
 
+    /**
+     * @return bool保存模块
+     */
     public function store()
     {
 
@@ -70,43 +71,8 @@ class StoreModule extends Module
             return false;
         }
 
-        // 判断是否有更新
-        $oldAttributes   = $this->getOldAttributes();
-        $dirtyAttributes = $this->getDirtyAttributes();
-
-        if(!$dirtyAttributes){
-            return true;
-        }
-
         if(!$this->save(false)){
 
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        if($this->scenario == 'create'){
-            $log->method  = 'create';
-            $log->content = '创建了 模块 <code>' . $this->title . '</code>';
-
-        }elseif($this->scenario == 'update'){
-
-            $log->method  = 'update';
-
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, $oldAttributes['title']);
-
-        }
-
-        $log->project_id   = $this->project_id;
-        $log->module_id    = $this->id;
-        $log->version_id   = $this->version->id;
-        $log->version_name = $this->version->name;
-        $log->object_name  = 'module';
-        $log->object_id    = $this->id;
-
-        if(!$log->store()){
             $transaction->rollBack();
             return false;
         }

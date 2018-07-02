@@ -14,6 +14,9 @@ use Yii;
  * @property string $request_method 请求方式
  * @property string $response_format 响应格式
  * @property string $uri 接口地址
+ * @property string $header_field header字段，json格式
+ * @property string $request_field 请求字段，json格式
+ * @property string $response_field 响应字段，json格式
  * @property string $remark 接口简介
  * @property int $status 接口状态
  * @property int $sort 接口排序
@@ -24,6 +27,10 @@ use Yii;
 class Api extends Model
 {
 
+    /**
+     * 请求方式标签
+     * @var array
+     */
     public $requestMethodLabels = [
         'get' => 'GET',
         'post' => 'POST',
@@ -31,11 +38,16 @@ class Api extends Model
         'delete' => 'DELETE',
     ];
 
+    /**
+     * 响应格式标签
+     * @var array
+     */
     public $responseFormatLabels = [
         'json_object'=> 'JSON对象',
         'json_array' => 'JSON数组',
         'xml' => 'XML',
     ];
+
 
     /**
      * 绑定数据表
@@ -55,6 +67,7 @@ class Api extends Model
             [['module_id', 'status', 'sort', 'creater_id'], 'integer'],
             [['encode_id', 'request_method', 'response_format'], 'string', 'max' => 20],
             [['title', 'uri', 'remark'], 'string', 'max' => 250],
+            [['header_field', 'request_field', 'response_field'], 'string'],
             [['encode_id'], 'unique'],
 
             [['created_at', 'updated_at'], 'safe'],
@@ -79,6 +92,9 @@ class Api extends Model
             'request_method' => '请求方式',
             'response_format' => '响应格式',
             'uri' => '接口地址',
+            'header_filed' => 'Header字段',
+            'request_field' => '请求字段',
+            'response_field' => '响应字段',
             'remark' => '接口简介',
             'status' => '接口状态',
             'sort' => '接口排序',
@@ -107,15 +123,6 @@ class Api extends Model
     }
 
     /**
-     * 获取创建者
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCreater()
-    {
-        return $this->hasOne(User::className(),['id'=>'creater_id']);
-    }
-
-    /**
      * 获取所属模块
      * @return \yii\db\ActiveQuery
      */
@@ -125,23 +132,47 @@ class Api extends Model
     }
 
     /**
-     * 获取关联字段
-     * @return \yii\db\ActiveQuery
+     * 获取header数组
+     * @return array
      */
-    public function getField()
+    public function getHeaderAttributes()
     {
-        return $this->hasOne(Field::className(),['api_id'=>'id']);
+        return json_decode($this->header_field, true);
+
     }
 
     /**
-     * 判断是否有接口操作权限
-     * @param $rule
-     * @param int $user_id
+     * 获取请求参数数组
+     * @return array
+     */
+    public function getRequestAttributes()
+    {
+        return json_decode($this->request_field, true);
+    }
+
+    /**
+     * 获取响应参数数组
+     * @return array
+     */
+    public function getResponseAttributes()
+    {
+        return json_decode($this->response_field, true);
+    }
+
+    /**
+     * 判断字段是否是符合类型
+     * @param $field
      * @return bool
      */
-    public function hasRule($rule, $user_id = 0)
+    public function isComplexType($type)
     {
-        // todo 判断是否具有接口操作权限
-        return true;
+        return in_array($type, ['array', 'object']) ? true : false;
+
     }
+
+    public function getField()
+    {
+        return Field::findModel();
+    }
+
 }

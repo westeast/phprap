@@ -1,4 +1,4 @@
-{{include_file name='public/header' title='用户管理'}}
+{{include_file name='home/public/header' title='用户管理'}}
 
 </head>
 
@@ -7,35 +7,36 @@
 <div id="wrapper">
 
     <!-- Navigation -->
-    {{include_file name='public/nav' sidebar='sidebar'}}
+    {{include_file name='home/public/nav' sidebar='admin/public/sidebar' active='user'}}
     <div id="page-wrapper">
+
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">用户管理</h1>
-
                 <div class="search">
                     <div class="well">
-                    <form class="form-inline" action="{{url()}}" method="get">
-                        <div class="form-group">
-                            <label>昵称/账号</label>
-                            <input type="text" name="search[name]" class="form-control" placeholder="支持模糊查询" value="{{$search.name}}">
-                        </div>
-                        <div class="form-group">
-                            <label>注册设备</label>
-                            <select class="form-control" name="search[device]">
-                                {{$devices = \app\user::get_device_list('title')}}
-                                <option value="">不限</option>
-                                {{foreach $devices as $k => $device}}
-                                <option value="{{$k}}" {{if $k == $search.device}}selected{{/if}}>{{$device}}</option>
-                                {{/foreach}}
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">搜索</button>
-                    </form>
-                </div>
 
-                </div>
+                        <form class="form-inline" action="{{url()}}" method="get">
+                            <div class="form-group">
+                                <label>用户昵称/邮箱</label>
+                                <input name="keywords" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.keywords}}">
+                            </div>
 
+                            <div class="form-group">
+                                <label>用户状态</label>
+                                <select class="form-control" name="status">
+                                    <option value="0">不限</option>
+                                    <option value="{{$model::ACTIVE_STATUS}}" {{if $model.params.status == $model::ACTIVE_STATUS}}selected{{/if}}>正常</option>
+                                    <option value="{{$model::DISABLE_STATUS}}" {{if $model.params.status == $model::DISABLE_STATUS}}selected{{/if}}>冻结</option>
+                                </select>
+                            </div>
+
+                            <button type="reset" class="btn btn-warning mr-1">重置</button>
+                            <button type="submit" class="btn btn-primary">搜索</button>
+                        </form>
+
+                    </div>
+                </div>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -47,54 +48,47 @@
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover">
+                            <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>用户昵称</th>
-                                    <th>登录账号</th>
-                                    <th>注册渠道</th>
+                                    <th>登录昵称/账号</th>
                                     <th>创建项目</th>
                                     <th>参与项目</th>
                                     <th>注册地点</th>
-                                    <th>状态</th>
-                                    <th>注册时间</th>
+                                    <th>启用状态</th>
+                                    <th class="datetime">注册时间</th>
 
-                                    <th>操作面板</th>
+                                    <th width="95px">操作面板</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
-                                {{foreach $users as $user}}
-                                {{$user_id = $user.id}}
-                                {{$device  = $user.device}}
+                                {{foreach $model->models as $model}}
                                 <tr>
-                                    <td >{{$user.name}}</td>
-                                    <td >{{$user.email}}</td>
-                                    <td >{{\app\user::get_device_list('icon', $device)}}</td>
-                                    <td ><a href="{{url("admin/project/index")}}?creater_id={{$user_id}}" data-toggle="tooltip" title="点击查看具体创建项目">{{\app\user::get_create_project_num($user_id)}}</a></td>
-                                    <td ><a href="{{url("admin/project/index")}}?joiner_id={{$user_id}}" data-toggle="tooltip" title="点击查看具体参与项目">{{\app\user::get_join_project_num($user_id)}}</a></td>
-                                    <td >{{$user.address}}</td>
-                                    <td >
-                                        {{if $user.status}}
+                                    <td>{{$model->fullName}}</td>
+                                    <td><a href="{{url('admin/project/index', ['creater_id' => $model->id])}}" data-toggle="tooltip" title="" data-original-title="点击查看创建项目">{{$model->getMyCreatedProjects()->count()}}</a></td>
+                                    <td><a href="{{url('admin/project/index', ['joiner_id' => $model->id])}}" data-toggle="tooltip" title="" data-original-title="点击查看参与项目">{{$model->getMyJoinedProjects()->count()}}</a></td>
+                                    <td>{{$model->location}}</td>
+                                    <td>
+                                        {{if $model->status == $model::ACTIVE_STATUS}}
                                         <i class="fa fa-check"></i>
                                         {{else}}
                                         <i class="fa fa-times"></i>
                                         {{/if}}
                                     </td>
 
-                                    <td >{{$user.add_time}}</td>
-                                    <td style="width: 18%;">
-                                        {{if $user.status}}
-                                        <a type="button" class="btn btn-danger btn-xs js_changeStatusBtn" data-id="{{$user_id}}" data-option="冻结" {{if $user.type == 2}}disabled{{/if}}>冻结用户</a>
+                                    <td>{{$model->created_at}}</td>
+                                    <td>
+                                        {{if $model->status == $model::ACTIVE_STATUS}}
+                                        <a type="button" class="btn btn-danger btn-xs js_statusBtn mr-1" data-url="{{url('admin/user/update', ['status' => $model::DISABLE_STATUS, 'id' => $model->id])}}" data-option="冻结">冻结</a>
                                         {{else}}
-                                        <a type="button" class="btn btn-success btn-xs js_changeStatusBtn" data-id="{{$user_id}}" data-option="激活" {{if $user.type == 2}}disabled{{/if}}>激活用户</a>
+                                        <a type="button" class="btn btn-success btn-xs js_statusBtn mr-1" data-url="{{url('admin/user/update', ['status' => $model::ACTIVE_STATUS, 'id' => $model->id])}}" data-option="恢复">恢复</a>
                                         {{/if}}
-                                        <a type="button" class="btn btn-warning btn-xs js_resetPasswordBtn" data-id="{{$user_id}}">重置密码</a>
-
+                                        <a type="button" class="btn btn-warning btn-xs" data-modal="#js_iframeModal" data-title="编辑用户" data-height="290" data-src="{{url('admin/user/update', [
+                                        'id' => $model->id])}}">编辑</a>
                                     </td>
                                 </tr>
                                 {{/foreach}}
-                                
+
                                 </tbody>
                             </table>
                         </div>
@@ -105,7 +99,7 @@
                 <!-- /.panel -->
             </div>
             <div class="col-sm-12">
-                {{include_file name='public/page'}}
+                {{$model->pages}}
             </div>
 
             <!-- /.col-lg-6 -->
@@ -114,57 +108,63 @@
 
     </div>
     <!-- /#wrapper -->
+
+    <!-- 弹出模态框 -->
+    <div class="modal fade" id="js_iframeModal" tabindex="1" role="dialog">
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">编辑用户</h4>
+                </div>
+                <div class="modal-body">
+
+                    <iframe scrolling="no" src=""></iframe>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary js_submit">确认</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <hr>
-    <p class="text-center">{{get_config('copyright')}}</p>
+    <p class="text-center">{{config('copyright')}}  已运行<span class="pass-time"></span></p>
+
     <script>
-        //更改用户状态
-        $(".js_changeStatusBtn").click(function(event){
+        $(function () {
+            $(".js_statusBtn").click(function () {
+                var thisObj = $(this);
+                confirm('您确定要'+thisObj.data('option')+'该用户吗？',function () {
+                    var url = thisObj.data('url');
+                    var csrf = "{{csrf_token()}}";
 
-            var userId = $(this).data('id');
-            var option = $(this).data('option');
+                    thisObj.attr("disabled", "disabled");
 
-            var url = "{{url('admin/user/change_status')}}";
+                    $.post(url,{ 'csrf-phprap':csrf,'UpdateForm[status]':20 }, function (json) {
 
-            confirm('您确认要'+option+'该用户？', function(){
+                        if(json.status == 'success'){
 
-                $.post(url, { user_id:userId }, function(json){
+                            alert(json.message, 'success', function () {
+                                window.location.reload();
+                            });
 
-                    alert(json.msg, 1000, function () {
-                        window.location.reload();
+                        }else{
+
+                            thisObj.removeAttr("disabled");
+                            alert(json.message, 'error');
+
+                        }
                     });
-
-                }, 'json');
+                });
             });
-
-        });
-
-        //重置密码
-        $(".js_resetPasswordBtn").click(function(){
-
-            var userId = $(this).data('id');
-
-            var url = "{{url('admin/user/reset_password')}}";
-
-            var defaultPassword = "{{$default_password}}";
-
-            confirm('您确认要将登录密码重置为'+defaultPassword+'?<br>(系统设置里可以修改重置默认密码)', function(){
-
-                $.post(url, { user_id:userId }, function(json){
-
-                    if(json.code == 200){
-
-                        alert(json.msg, 500);
-
-                    }else{
-
-                        alert(json.msg, 2000);
-
-                    }
-
-                }, 'json');
-            });
-
         });
     </script>
 
-    {{include_file name='public/footer'}}
+    {{include_file name='admin/public/footer'}}

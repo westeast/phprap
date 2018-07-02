@@ -36,7 +36,7 @@ function addField(object, type) {
     }
 
     if(TrObj.length > 0){
-        cloneObj.find("input.js_level").val(level + 1);
+        cloneObj.find("input.js_level").val(level + 1).data('level', level + 1);
         TrObj.after(cloneObj).next('tr').find('input.js_name').css('padding-left', pl + 'px').focus();
     }else{
 

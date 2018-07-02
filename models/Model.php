@@ -7,7 +7,6 @@ use Yii;
 class Model extends \yii\db\ActiveRecord
 {
 
-    public $model;
     public $models;
     public $pages;
     public $params;
@@ -40,7 +39,7 @@ class Model extends \yii\db\ActiveRecord
      * 获取错误字段
      * @return int|null|string
      */
-    public function getLabel()
+    public function getErrorLabel()
     {
         return key($this->getFirstErrors());
     }
@@ -49,7 +48,7 @@ class Model extends \yii\db\ActiveRecord
      * 获取错误信息
      * @return mixed
      */
-    public function getError()
+    public function getErrorMessage()
     {
 
         return current($this->getFirstErrors());
@@ -63,6 +62,25 @@ class Model extends \yii\db\ActiveRecord
     public function createEncodeId()
     {
         return mt_rand(1000, 9999) . date('His');
+    }
+
+    /**
+     * 获取创建者
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreater()
+    {
+        return $this->hasOne(User::className(),['id'=>'creater_id']);
+    }
+
+    /**
+     * 获取友好的时间，如5分钟前
+     * @return string
+     */
+    public function getFriendTime($time = null)
+    {
+        $time = $time ? strtotime($time) : time();
+        return Yii::$app->formatter->asRelativeTime($time);
     }
 
     /**
@@ -91,6 +109,40 @@ class Model extends \yii\db\ActiveRecord
         }
 
         return trim($content, ',');
+    }
+
+    /**
+     * 获取ip地理位置
+     * @param null $ip
+     * @return string
+     */
+    public function getLocation($ip = null)
+    {
+        if(!$ip){
+
+            $ip = Yii::$app->request->userIP;
+        }
+
+        $url = "http://ip.taobao.com/service/getIpInfo.php?ip=".$ip;
+        //调用淘宝接口获取信息
+        $json = file_get_contents($url);
+
+        $data = json_decode($json, true);
+
+        if ($data['code']) {
+
+            return $data['data'];
+
+        } else {
+
+            $country = $data['data']['country'];
+            $province = $data['data']['region'];
+            $city = $data['data']['city'];
+            $area = $data['data']['area'];
+
+            return $country . ' ' . $province . ' ' . $city . ' ' . $area;
+
+        }
     }
 
 }

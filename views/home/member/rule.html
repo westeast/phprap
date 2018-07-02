@@ -1,0 +1,223 @@
+{{include_file name='home/public/header' title='成员管理'}}
+<style>
+    body {
+        background-color: #ffffff;
+    }
+
+    table a{
+        margin-top: 10px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- /.row -->
+    <div class="row">
+
+        <fieldset>
+            <div class="alert alert-dismissable alert-warning">
+                <i class="fa fa-fw fa-info-circle"></i>&nbsp;
+                成员隶属于项目，该成员具有项目所有版本的下列权限
+            </div>
+
+            <div class="form-group">
+                <label>成员信息</label>
+
+                <input type="text" readonly class="form-control" datatype="*1-250" value="{{$member->user->fullName}}">
+            </div>
+
+            <div class="form-group">
+                <label>项目权限</label>
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" value="look">查看项目
+                </label>
+
+                {{if $member->hasRule('project', 'update')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >编辑项目
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('project', 'template')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >编辑模板
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('project', 'transfer')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >转让项目
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('project', 'delete')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >删除项目
+                </label>
+                {{/if}}
+
+            </div>
+
+            <div class="form-group">
+                <label>版本权限</label>
+
+                {{if $member->hasRule('version', 'look')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >查看版本
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('version', 'create')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >新增版本
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('version', 'update')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >编辑版本
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('version', 'export')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >导出版本
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('version', 'delete')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >删除版本
+                </label>
+                {{/if}}
+
+            </div>
+
+            <div class="form-group">
+                <label>环境权限</label>
+
+                {{if $member->hasRule('env', 'look')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >查看环境
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('env', 'create')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >新增环境
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('env', 'update')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >编辑环境
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('env', 'delete')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >删除环境
+                </label>
+                {{/if}}
+
+            </div>
+
+            <div class="form-group">
+                <label>模块权限</label>
+
+                {{if $member->hasRule('module', 'look')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >查看模块
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('module', 'create')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >新增模块
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('module', 'update')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >编辑模块
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('module', 'delete')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >删除模块
+                </label>
+                {{/if}}
+
+            </div>
+
+            <div class="form-group">
+                <label>接口权限</label>
+
+                {{if $member->hasRule('api', 'look')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >查看接口
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('api', 'create')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >新增接口
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('api', 'update')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >编辑接口
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('api', 'delete')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >删除接口
+                </label>
+                {{/if}}
+
+            </div>
+
+            <div class="form-group">
+                <label>成员权限</label>
+
+                {{if $member->hasRule('member', 'look')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >查看成员
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('member', 'create')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >新增成员
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('member', 'update')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >编辑成员
+                </label>
+                {{/if}}
+
+                {{if $member->hasRule('member', 'remove')}}
+                <label class="checkbox-inline">
+                    <input class="js_projectRule" onclick="return false;" checked type="checkbox" >移除成员
+                </label>
+                {{/if}}
+
+            </div>
+
+            </fieldset>
+
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#wrapper -->
+
+{{include_file name='home/public/footer'}}

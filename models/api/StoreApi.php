@@ -2,11 +2,8 @@
 
 namespace app\models\api;
 
-use app\models\projectLog\StoreLog;
 use Yii;
-use yii\db\Exception;
 use app\models\Api;
-use app\models\history\StoreHistory;
 
 class StoreApi extends Api
 {
@@ -23,6 +20,7 @@ class StoreApi extends Api
             [['created_at', 'updated_at'], 'safe'],
             [['encode_id', 'request_method', 'response_format'], 'string', 'max' => 20],
             [['title', 'uri', 'remark'], 'string', 'max' => 250],
+            [['header_field', 'request_field', 'response_field'], 'string'],
             [['encode_id'], 'unique'],
             ['title', 'validateTitle'],
 
@@ -76,51 +74,7 @@ class StoreApi extends Api
             return false;
         }
 
-        // 判断是否有更新
-        $oldAttributes   = $this->getOldAttributes();
-        $dirtyAttributes = $this->getDirtyAttributes();
-
-        if(!$dirtyAttributes){
-            return true;
-        }
-
         if(!$this->save(false)){
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        if($this->scenario == 'create'){
-
-            $log->method  = 'create';
-            $log->content = '创建了 接口 <code>' . $this->title . '</code>';
-
-        }elseif($this->scenario == 'update'){
-
-            $log->method  = 'update';
-
-            if(isset($dirtyAttributes['request_method'])){
-
-                $oldAttributes['request_method']   = $this->requestMethodLabels[$oldAttributes['request_method']];
-                $dirtyAttributes['request_method'] = $this->requestMethodLabels[$dirtyAttributes['request_method']];
-            }
-
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes);
-
-        }
-
-        $log->project_id  = $this->module->project_id;
-        $log->module_id   = $this->module->id;
-        $log->api_id       = $this->id;
-        $log->version_id  = $this->module->version->id;
-        $log->version_name = $this->module->version->name;
-        $log->object_name = 'api';
-        $log->object_id   = $this->id;
-
-        if(!$log->store()){
-
             $transaction->rollBack();
             return false;
         }

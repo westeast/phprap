@@ -2,7 +2,6 @@
 
 namespace app\models\project;
 
-use app\models\projectLog\StoreLog;
 use Yii;
 use app\models\Project;
 
@@ -15,8 +14,8 @@ class StoreProject extends Project
     public function rules()
     {
         return [
-            [['allow_search', 'sort'], 'filter', 'filter' => 'intval'], //此规则必须，否则就算模型里该字段没有修改，也会出现在脏属性里
-            [['sort', 'allow_search', 'status', 'creater_id'], 'integer'],
+            [['type', 'sort'], 'filter', 'filter' => 'intval'], //此规则必须，否则就算模型里该字段没有修改，也会出现在脏属性里
+            [['sort', 'type', 'status', 'creater_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['encode_id'], 'string', 'max' => 10],
             [['title', 'remark'], 'string', 'max' => 250],
@@ -27,8 +26,9 @@ class StoreProject extends Project
             [['!creater_id'], 'default', 'value' => Yii::$app->user->identity->id, 'on' => 'create'],
             [['!encode_id'], 'default', 'value'  => $this->createEncodeId(), 'on' => 'create'],
             [['!status'], 'default', 'value'  => self::ACTIVE_STATUS, 'on' => 'create'],
+            [['!type'], 'default', 'value'  => self::AUTH_TYPE, 'on' => 'create'],
 
-            [['!encode_id', 'title', 'allow_search', '!status', '!creater_id'], 'required', 'on' => ['create', 'update']],
+            [['!encode_id', 'title', 'type', '!status', '!creater_id'], 'required', 'on' => ['create', 'update']],
 
         ];
     }
@@ -71,45 +71,7 @@ class StoreProject extends Project
             return false;
         }
 
-        // 判断是否有更新
-        $oldAttributes   = $this->getOldAttributes();
-        $dirtyAttributes = $this->getDirtyAttributes();
-
-        if(!$dirtyAttributes){
-            return true;
-        }
-
         if(!$this->save(false)){
-            $transaction->rollBack();
-            return false;
-        }
-
-        // 记录日志
-        $log = StoreLog::findModel();
-
-        if($this->scenario == 'create'){
-            $log->method  = 'create';
-            $log->content = '创建了 项目 <code>' . $this->title . '</code>';
-
-        }elseif($this->scenario == 'update'){
-
-            $log->method  = 'update';
-
-            if(isset($dirtyAttributes['allow_search'])){
-
-                $oldAttributes['allow_search']   = $this->allowSearchLabels[$oldAttributes['allow_search']];
-                $dirtyAttributes['allow_search'] = $this->allowSearchLabels[$dirtyAttributes['allow_search']];
-            }
-
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, $oldAttributes['title']);
-
-        }
-
-        $log->project_id  = $this->id;
-        $log->object_name = 'project';
-        $log->object_id   = $this->id;
-
-        if(!$log->store()){
             $transaction->rollBack();
             return false;
         }

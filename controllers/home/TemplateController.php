@@ -15,23 +15,6 @@ use yii\web\Response;
 class TemplateController extends PublicController
 {
 
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['update'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ],
-            ],
-
-        ];
-    }
-
     /**
      * 更新模板
      * @param $id
@@ -51,11 +34,9 @@ class TemplateController extends PublicController
 
         $template = StoreTemplate::findModel(['project_id' => $project->id]);
 
-        if(!$request->isAjax){
-//            return $this->error('非法请求');
-        }
-
         if($request->isPost){
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
             $template->scenario = 'update';
 
@@ -67,8 +48,6 @@ class TemplateController extends PublicController
 
             $template->project_id = $project->id;
 
-//            dump($template->attributes);exit;
-
             if ($template->store()) {
 
                 return ['status' => 'success', 'message' => '保存成功'];
@@ -79,32 +58,8 @@ class TemplateController extends PublicController
 
         }
 
-        $this->afterAction = false;
-
         return $this->display('create', ['project' => $project, 'model' => $template]);
 
-    }
-
-    /**
-     * 将表单传递过来的二维数组键值互换后转成json
-     * @param $array
-     * @return string
-     */
-    private function array2json($array)
-    {
-        if(!$array){
-            return '';
-        }
-        $data = [];
-
-        foreach ($array as $k => $v) {
-
-            foreach ($v as $k1 => $v1) {
-                $data[$k1][$k] = $v1;
-            }
-        }
-
-        return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
 }

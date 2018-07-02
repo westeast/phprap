@@ -146,6 +146,21 @@ if (!function_exists('uuid')){
     }
 }
 
+/**
+ * 获取系统安装时间
+ */
+if (!function_exists('getInstalledTime')){
+    function getInstalledTime()
+    {
+        $file = Yii::getAlias("@runtime") .'/install/install.lock';
+        if(file_exists($file)){
+            $install = file_get_contents($file);
+            return json_decode($install, true)['installed_at'];
+        }
+    }
+
+}
+
 
 
 

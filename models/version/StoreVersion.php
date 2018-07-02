@@ -2,9 +2,11 @@
 
 namespace app\models\version;
 
-use app\models\projectLog\StoreLog;
-use app\models\Version;
+use app\models\api\StoreApi;
+use app\models\Module;
+use app\models\module\StoreModule;
 use Yii;
+use app\models\Version;
 
 class StoreVersion extends Version
 {
@@ -63,20 +65,15 @@ class StoreVersion extends Version
         // 开启事务
         $transaction = Yii::$app->db->beginTransaction();
 
-        if($this->scenario == 'create'){
-            $this->parent_id = self::findModel(['encode_id' => $this->parent_id])->id;
+        if($this->scenario == 'create' && $this->parent_id){
+
+            $parent_version = self::findModel(['encode_id' => $this->parent_id]);
+
+            $this->parent_id = $parent_version->id;
         }
 
         if(!$this->validate()){
             return false;
-        }
-
-        // 判断是否有更新
-        $oldAttributes   = $this->getOldAttributes();
-        $dirtyAttributes = $this->getDirtyAttributes();
-
-        if(!$dirtyAttributes){
-            return true;
         }
 
         if(!$this->save()){
@@ -84,33 +81,41 @@ class StoreVersion extends Version
             return false;
         }
 
-        // 记录日志
-        $log = StoreLog::findModel();
+        if($this->scenario == 'create' && $parent_version->id){
+            // 循环插入模块
+            foreach ($parent_version->modules as $module) {
 
-        if($this->scenario == 'create'){
+                $_module = StoreModule::findModel();
 
-            $log->method  = 'create';
-            $log->version_name = $this->name;
+                $_module->setAttributes($module->attributes);
 
-            $log->content = '创建了 版本 <code>' . $this->name . '</code>';
+                $_module->encode_id  = $this->createEncodeId();
+                $_module->version_id = $this->id;
 
-        }elseif($this->scenario == 'update'){
-            $log->method  = 'update';
+                if(!$_module->store()){
+                    $transaction->rollBack();
+                    return false;
+                }
 
-            $log->version_name = $oldAttributes['name'];
+                // 循环插入接口
+                foreach ($module->apis as $api) {
+                    $_api = StoreApi::findModel();
 
-            $log->content = $this->getUpdateContent($oldAttributes, $dirtyAttributes, '版本V' . $oldAttributes['name']);
+                    $_api->setAttributes($api->attributes);
 
-        }
+                    $_api->encode_id = $this->createEncodeId();
+                    $_api->module_id = $_module->id;
 
-        $log->project_id   = $this->project_id;
-        $log->version_id   = $this->id;
-        $log->object_name  = 'version';
-        $log->object_id    = $this->id;
+                    if(!$_api->store()){
 
-        if(!$log->store()){
-            $transaction->rollBack();
-            return false;
+                        $transaction->rollBack();
+                        return false;
+                    }
+
+                }
+
+            }
+
         }
 
         // 事务提交

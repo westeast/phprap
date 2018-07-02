@@ -10,9 +10,9 @@ use Yii;
  * @property int $id
  * @property string $encode_id 加密id
  * @property int $project_id 项目id
- * @property string $header_json header模板，json格式
- * @property string $request_json 请求模板，json格式
- * @property string $response_json 响应模板，json格式
+ * @property string $header_field header字段，json格式
+ * @property string $request_field 请求字段，json格式
+ * @property string $response_field 响应字段，json格式
  * @property int $status 模板状态
  * @property int $creater_id 创建者id
  * @property string $created_at 创建时间
@@ -26,15 +26,15 @@ class Template extends Module
      * @var array
      */
     public $defaultAttributes = [
-        'header'  => [
+        'header_field'  => [
             ['name' => 'Content-Type', 'title' => '', 'value' => 'application/json;charset=utf-8', 'remark' => ''],
             ['name' => 'Accept', 'title' => '', 'value' => 'application/json', 'remark' => ''],
         ],
-        'request' => [
+        'request_field' => [
             ['name' => 'token', 'title' => '令牌', 'type' => 'string', 'required' => 10, 'default' => '' ,'remark' => ''],
         ],
-        'response'=> [
-            ['name' => 'code', 'title' => '返回状态码', 'type' => 'number', 'mock' => ''],
+        'response_field'=> [
+            ['name' => 'code', 'title' => '返回状态码', 'type' => 'integer', 'mock' => ''],
             ['name' => 'message', 'title' => '返回信息', 'type' => 'string', 'mock' => ''],
             ['name' => 'data', 'title' => '数据实体', 'type' => 'array', 'mock' => '']
         ],
@@ -57,8 +57,7 @@ class Template extends Module
 
         return [
             [['project_id', 'status', 'creater_id'], 'integer'],
-            [['heade_json', 'request_json', 'response_json'], 'string'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['header_field', 'request_field', 'response_field'], 'string'],
             [['encode_id'], 'string', 'max' => 10],
             [['project_id'], 'unique'],
             [['encode_id'], 'unique'],
@@ -67,7 +66,7 @@ class Template extends Module
             [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
             [['status'], 'default', 'value'  => self::ACTIVE_STATUS],
 
-            [['encode_id', 'project_id', 'header_json', 'request_json', 'response_json', 'status', 'creater_id'], 'required'],
+            [['encode_id', 'project_id', 'header_field', 'request_field', 'response_field', 'status', 'creater_id'], 'required'],
         ];
 
     }
@@ -81,9 +80,9 @@ class Template extends Module
             'id' => 'ID',
             'encode_id' => '加密id',
             'project_id' => '项目id',
-            'header_json' => 'header模板',
-            'request_json' => '请求模板',
-            'response_json' => '响应模板',
+            'header_field' => 'header字段',
+            'request_field' => '请求字段',
+            'response_field' => '响应字段',
             'status' => '模板状态',
             'creater_id' => '创建者id',
             'created_at' => '创建时间',
@@ -92,21 +91,12 @@ class Template extends Module
     }
 
     /**
-     * 获取字段模型
-     * @return array
-     */
-    public function getField()
-    {
-        return Field::findModel();
-    }
-
-    /**
      * 获取header参数数组
      * @return array
      */
     public function getHeaderAttributes()
     {
-        return json_decode($this->header_json, true);
+        return json_decode($this->header_field, true);
 
     }
 
@@ -116,7 +106,7 @@ class Template extends Module
      */
     public function getRequestAttributes()
     {
-        return json_decode($this->request_json, true);
+        return json_decode($this->request_field, true);
     }
 
     /**
@@ -125,7 +115,12 @@ class Template extends Module
      */
     public function getResponseAttributes()
     {
-        return json_decode($this->response_json, true);
+        return json_decode($this->response_field, true);
+    }
+
+    public function getField()
+    {
+        return Field::findModel();
     }
 
 }

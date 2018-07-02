@@ -1,0 +1,131 @@
+{{include_file name='home/public/header' title='申请管理'}}
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    {{include_file name='home/public/nav' sidebar='home/account/sidebar' active='apply'}}
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">申请管理</h1>
+                <div class="search">
+                    <div class="well">
+
+                        <form class="form-inline" action="{{url()}}" method="get">
+                            <div class="form-group">
+                                <label>申请人</label>
+                                <input name="title" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.title}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>项目名</label>
+                                <input name="name" type="text" class="form-control" placeholder="支持模糊查询" value="{{$model.params.name}}">
+                            </div>
+
+                            <button type="reset" class="btn btn-warning mr-1">重置</button>
+                            <button type="submit" class="btn btn-primary">搜索</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>申请人昵称/邮箱</th>
+                                    <th>申请加入的项目</th>
+                                    <th class="datetime">申请时间</th>
+                                    <th class="datetime">处理时间</th>
+                                    <th width="100px;">操作面板</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{foreach $model->models as $model}}
+                                <tr>
+                                    <td >
+                                        {{$model->applier->fullName}}
+                                    </td>
+
+                                    <td >{{$model->project->title}}</td>
+                                    <td >{{$model->created_at}}</td>
+                                    <td >{{$model->checked_at}}</td>
+                                    <td >
+                                        {{if $model->status == $model::CHECK_STATUS}}
+                                        <a class="btn btn-success btn-xs js_applyBtn" data-url="{{url('home/apply/check', ['id' => $model->id, 'status' => $model::PASS_STATUS])}}"> 通过</a>
+                                        <a class="btn btn-danger btn-xs js_applyBtn" data-url="{{url('home/apply/check', ['id' => $model->id, 'status' => $model::REFUSE_STATUS])}}"> 驳回</a>
+                                        {{else if $model->status == $model::PASS_STATUS}}
+                                        <a class="btn btn-default btn-xs"><i class="fa fa-check"></i> {{$model->statusLabel}}</a>
+                                        {{else if $model->status == $model::REFUSE_STATUS}}
+                                        <a class="btn btn-default btn-xs"><i class="fa fa-times"></i> {{$model->statusLabel}}</a>
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                                {{/foreach}}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <div class="col-sm-12">
+                {{$model->pages}}
+            </div>
+
+            <!-- /.col-lg-6 -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    <hr>
+    <p class="text-center">{{config('copyright')}}</p>
+
+    <script>
+        $(function () {
+            $(".js_applyBtn").click(function () {
+                var thisObj = $(this);
+                confirm('您确定要'+thisObj.text()+' 该申请吗？',function () {
+                    var url = thisObj.data('url');
+                    var csrf = "{{csrf_token()}}";
+
+                    thisObj.attr("disabled", "disabled");
+
+                    $.post(url,{ 'csrf-phprap':csrf }, function (json) {
+
+                        if(json.status == 'success'){
+
+                            alert(json.message, 'success', function () {
+                                window.location.reload();
+                            });
+
+                        }else{
+
+                            thisObj.removeAttr("disabled");
+                            alert(json.message, 'error');
+
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    {{include_file name='home/public/footer'}}

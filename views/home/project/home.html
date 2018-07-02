@@ -15,9 +15,15 @@
                     <h1>项目主页 </h1>
                     <div class="opt-btn">
 
-                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_addProjectBtn mr-2" data-toggle="tooltip" data-placement="bottom" data-modal="#js_addProjectModal" data-title="编辑项目" data-height="310" data-src="{{url('home/project/update', ['id' => $project->encode_id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
+                        {{if $project->hasRule('project', 'update')}}
+                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-success js_addProjectBtn mr-2" data-toggle="tooltip" data-placement="bottom" data-modal="#js_addProjectModal" data-title="编辑项目" data-height="250" data-src="{{url('home/project/update', ['id' => $project->encode_id])}}"><i class="fa fa-fw fa-edit"></i>编辑</a>
+                        {{/if}}
 
-                        <a href="" class="btn hidden-xs btn-sm btn-warning" data-toggle="tooltip" data-title="导出当前版本" data-placement="bottom"><i class="fa fa-fw fa-download"></i>导出</a>
+                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-info mr-2 js_copyUrl" data-clipboard-text="{{$project->getUrl(true)}}"  data-toggle="tooltip" data-title="复制项目地址" data-placement="bottom"><i class="fa fa-fw fa-copy"></i>复制</a>
+
+                        {{if $project->hasRule('version', 'export')}}
+                        <a href="javascript:void(0);" class="btn hidden-xs btn-sm btn-warning" data-toggle="tooltip" data-title="导出当前版本" data-placement="bottom"><i class="fa fa-fw fa-download"></i>导出</a>
+                        {{/if}}
 
                     </div>
                 </div>
@@ -47,17 +53,17 @@
                                     <!-- /.panel-heading -->
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-7">
                                                 <p class="text-muted"><label>项目名称：</label>{{$project->title}}</p>
                                                 <p class="text-muted"><label>项目创建人：</label>{{$project->creater->fullName}}</p>
-                                                <p class="text-muted"><label>搜索状态：</label>{{$project->allowSearchLabel}}</p>
+                                                <p class="text-muted"><label>项目类型：</label>{{$project->typeLabel}}</p>
                                                 <p class="text-muted"><label>创建时间：</label>{{$project->created_at}}</p>
                                                 <p class="text-muted"><label>更新时间：</label>{{$project->updated_at}}</p>
                                                 <p class="text-muted"><label>项目描述：</label><span style="word-break:break-all">{{$project->remark}}</span></p>
                                             </div>
                                             <!-- /.col-lg-4 (nested) -->
-                                            <div class="col-lg-6">
-                                                <div id="total-project" style="height:200px;"></div>
+                                            <div class="col-lg-5">
+                                                <div id="project-statistics" style="height:290px;margin: -50px -30px -35px 0"></div>
                                             </div>
                                             <!-- /.col-lg-8 (nested) -->
                                         </div>
@@ -83,7 +89,7 @@
                                     <!-- /.panel-heading -->
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-7">
                                                 {{$parent_name = $project->currentVersion->parent->name}}
                                                 <p class="text-muted"><label>当前版本：</label>
                                                     {{$project->currentVersion->name}}
@@ -102,9 +108,8 @@
                                                 <p class="text-muted"><label>更新摘要：</label><span style="word-break:break-all">{{$project->currentVersion->remark}}</span></p>
                                             </div>
                                             <!-- /.col-lg-4 (nested) -->
-                                            <div class="col-lg-6">
-                                                <div id="total-version" style="height:200px;"></div>
-
+                                            <div class="col-lg-5">
+                                                <div id="version-statistics" style="height:290px;margin: -50px -30px -35px 0"></div>
                                             </div>
                                             <!-- /.col-lg-8 (nested) -->
                                         </div>
@@ -153,7 +158,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="submit" class="btn btn-primary js_submit">提交</button>
+                <button type="submit" class="btn btn-primary js_submit">确认</button>
             </div>
 
         </div>
@@ -162,83 +167,18 @@
 
 </div>
 
-<script src="http://capital.juzifenqi.com/static/js/echarts.min.js?v=1.0"></script>
+<script src="https://cdn.bootcss.com/clipboard.js/1.6.1/clipboard.min.js"></script>
 
 <script>
-    $(function(){
 
-        // 基于准备好的dom，初始化echarts实例
-        var totalProject = echarts.init(document.getElementById('total-project'));
-
-        var option = {
-
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-
-            series : [
-                {
-                    name: '数据统计',
-                    type: 'pie',
-                    radius : '85%',
-                    center: ['40%', '50%'],
-                    data:[
-                        {value:335, name:'版本数量'},
-                        {value:310, name:'环境数量'},
-                        {value:234, name:'模块数量'},
-                        {value:135, name:'接口数量'},
-                        {value:1548, name:'成员数量'}
-                    ],
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }
-            ]
-        };
-
-        totalProject.setOption(option);
-
-        // 基于准备好的dom，初始化echarts实例
-        var totalVersion = echarts.init(document.getElementById('total-version'));
-
-        var option = {
-
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-
-            series : [
-                {
-                    name: '数据统计',
-                    type: 'pie',
-                    radius : '85%',
-                    center: ['40%', '50%'],
-                    data:[
-                        {value:335, name:'版本数量'},
-                        {value:310, name:'环境数量'},
-                        {value:234, name:'模块数量'},
-                        {value:135, name:'接口数量'},
-                        {value:1548, name:'成员数量'}
-                    ],
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }
-            ]
-        };
-
-        totalVersion.setOption(option);
-
+    // 复制链接
+    var clipboard = new Clipboard('.js_copyUrl');
+    clipboard.on('success', function(e) {
+        alert('地址复制成功', 'success');
+        e.clearSelection();
+    });
+    clipboard.on('error', function() {
+        alert('地址复制失败，请手动复制', 'error');
     });
 
 </script>
